@@ -6,7 +6,7 @@
   - _Requirements: 1.7_
 - [x] 3. Minimal Night Shift game and Triage Desk calculator
   - _Requirements: 2.1, 2.2, 3.1–3.3_
-- [ ] 4. Pediatric danger-zone thresholds + property test P7
+- [x] 4. Pediatric danger-zone thresholds + property test P7
   - _Requirements: 1.8_
 - [ ] 5. Expand case bank to >= 20 monsters (>= 3 per level), add `teachingPoint` to each, shuffle per night
   - _Requirements: 2.4_

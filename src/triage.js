@@ -40,9 +40,30 @@ export function validate(p) {
   return errors;
 }
 
+// Pediatric danger-zone vital signs (ESI v4 decision point D, age <= 8 years).
+// Source: ESI Implementation Handbook v4 (AHRQ / ENA), decision point D danger-zone vitals table:
+//   < 3 months: HR > 180, RR > 50;  3 months - 3 years: HR > 160, RR > 40;
+//   3 - 8 years: HR > 140, RR > 30;  SpO2 < 92% at every age.
+// Band edges (exactly 3 months, exactly 3 years) fall into the older band, which has the lower,
+// more sensitive thresholds: when in doubt, choose the more urgent reading.
+export const PEDIATRIC_DANGER = [
+  { maxAgeYears: 0.25, label: 'age < 3 months', hr: 180, rr: 50, spo2: 92 },
+  { maxAgeYears: 3, label: 'age 3 months to 3 years', hr: 160, rr: 40, spo2: 92 },
+  { maxAgeYears: 8, label: 'age 3 to 8 years', hr: 140, rr: 30, spo2: 92 },
+];
+
+// Danger-zone thresholds for a given age in years: the pediatric band for age <= 8, else adult.
+export function dangerThresholds(ageYears) {
+  const [infant, toddler, child] = PEDIATRIC_DANGER;
+  if (ageYears < infant.maxAgeYears) return infant;
+  if (ageYears < toddler.maxAgeYears) return toddler;
+  if (ageYears <= child.maxAgeYears) return child;
+  return { label: 'adult, age > 8 years', ...ADULT_DANGER };
+}
+
 export function isDangerZone(p) {
-  // Starter: adult thresholds only. Pediatric thresholds are task 4 in the spec.
-  return p.hr > ADULT_DANGER.hr || p.rr > ADULT_DANGER.rr || p.spo2 < ADULT_DANGER.spo2;
+  const t = dangerThresholds(p.ageYears);
+  return p.hr > t.hr || p.rr > t.rr || p.spo2 < t.spo2;
 }
 
 export function triage(p) {
@@ -78,7 +99,7 @@ export function triage(p) {
   if (p.resources >= 2) {
     // Decision point D: danger-zone vitals -> consider level 2.
     if (dangerZone) {
-      reasons.push('2+ resources with danger-zone vital signs');
+      reasons.push(`2+ resources with danger-zone vital signs (${dangerThresholds(p.ageYears).label} thresholds)`);
       return { level: 2, reasons, dangerZone };
     }
     reasons.push(`${p.resources} resources expected`);
