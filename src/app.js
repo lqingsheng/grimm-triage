@@ -5,7 +5,6 @@ import { portraitSvg } from './portraits.js';
 import { t, levelName, caseText, translateReason, translateError, normalizeLang, STORAGE_KEY, DEFAULT_LANG } from './i18n.js';
 
 const $ = (s) => document.querySelector(s);
-const COLORS = { 1: 'var(--l1)', 2: 'var(--l2)', 3: 'var(--l3)', 4: 'var(--l4)', 5: 'var(--l5)' };
 
 // ---- language ----
 // The choice is kept in localStorage; storage can be unavailable (private mode, file://), so fail soft.
@@ -18,7 +17,8 @@ function saveLang(value) {
 let lang = loadLang();
 const tr = (key, vars) => t(key, lang, vars);
 
-const badge = (lvl) => `<span class="badge" style="background:${COLORS[lvl]}">${tr('level.badge', { level: lvl, name: levelName(lvl, lang) })}</span>`;
+// Badge colours (and a text colour with WCAG AA contrast on each) live in styles.css as .badge.lv1..lv5.
+const badge = (lvl) => `<span class="badge lv${lvl}">${tr('level.badge', { level: lvl, name: levelName(lvl, lang) })}</span>`;
 const reasonsText = (reasons) => reasons.map((r) => translateReason(r, lang)).join(tr('game.reasonSep'));
 
 // Static text in index.html: data-i18n sets textContent, data-i18n-aria sets aria-label.
@@ -48,7 +48,10 @@ document.querySelectorAll('.lang-toggle button').forEach((b) =>
 // ---- mode switch ----
 document.querySelectorAll('nav button').forEach((b) =>
   b.addEventListener('click', () => {
-    document.querySelectorAll('nav button').forEach((x) => x.classList.toggle('active', x === b));
+    document.querySelectorAll('nav button').forEach((x) => {
+      x.classList.toggle('active', x === b);
+      x.setAttribute('aria-pressed', String(x === b));
+    });
     $('#game').hidden = b.dataset.mode !== 'game';
     $('#calc').hidden = b.dataset.mode !== 'calc';
   }),
@@ -115,7 +118,7 @@ function renderCaseCard() {
   $('#caseNo').textContent = tr('game.caseNo', { n: idx + 1, total: nightCases.length });
   const art = portraitSvg(c.id, lang) || `<span class="emoji" aria-hidden="true">${c.emoji}</span>`;
   $('#caseCard').innerHTML = `<div class="card-head"><div class="portrait">${art}</div>
-    <div class="who">${text.name}</div></div><p>${text.story}</p>${vitalsHtml(c.patient)}`;
+    <div class="who" id="caseName">${text.name}</div></div><p>${text.story}</p>${vitalsHtml(c.patient)}`;
 }
 
 function renderFeedback() {
@@ -135,14 +138,17 @@ function renderNextButton() {
 function renderCase() {
   current = null;
   setEffect(null);
+  renderLevelButtons();
   renderCaseCard();
   renderFeedback();
   renderNextButton();
 }
 
+// Once a case is answered the level buttons stay focusable but report aria-disabled, so screen
+// reader users hear that the choice is locked until the next patient.
 function renderLevelButtons() {
   $('#levelButtons').innerHTML = [1, 2, 3, 4, 5]
-    .map((l) => `<button data-level="${l}" aria-label="${tr('level.button', { level: l, name: levelName(l, lang) })}">${l}<br><small>${levelName(l, lang)}</small></button>`)
+    .map((l) => `<button type="button" data-level="${l}"${current ? ' aria-disabled="true"' : ''} aria-label="${tr('level.button', { level: l, name: levelName(l, lang) })}">${l}<br><small>${levelName(l, lang)}</small></button>`)
     .join('');
 }
 
@@ -158,7 +164,10 @@ $('#levelButtons').addEventListener('click', (e) => {
   renderScore();
   renderFeedback();
   setEffect(effectFor(s));
+  renderLevelButtons();
   renderNextButton();
+  // Keyboard flow: the role="status" feedback is announced, and Enter/Space goes straight on.
+  $('#nextCase').focus();
 });
 
 function missedHtml(m) {
@@ -215,6 +224,9 @@ $('#nextCase').addEventListener('click', () => {
   if (idx === nightCases.length - 1) { renderReport(); return; }
   idx += 1;
   renderCase();
+  // The Next button hides itself, so move focus to the new patient (named "Patient n of N, name");
+  // Tab then reaches the level buttons.
+  $('#caseCard').focus();
 });
 
 // ---- calculator ----
@@ -249,6 +261,5 @@ $('#calcForm').addEventListener('submit', (e) => {
 
 // ---- start ----
 applyStaticStrings();
-renderLevelButtons();
 renderScore();
 renderCase();

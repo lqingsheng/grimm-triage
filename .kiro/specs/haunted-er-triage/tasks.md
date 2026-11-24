@@ -18,8 +18,8 @@
   - _Requirements: 4.1_
 - [x] 9. English / 中文 toggle with a strings table
   - _Requirements: 5.2_
-- [ ] 10. PWA: manifest + service worker for offline use
+- [x] 10. PWA: manifest + service worker for offline use
   - _Requirements: 5.3_
-- [ ] 11. Accessibility pass: contrast check, focus order, screen-reader labels
+- [x] 11. Accessibility pass: contrast check, focus order, screen-reader labels
   - _Requirements: 4.2, 4.3_
 - [ ] 12. Deploy to Vercel; add live URL and screenshots to README

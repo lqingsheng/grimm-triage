@@ -17,6 +17,19 @@ npm test        # unit + property-based tests
 npm start       # serves the static site
 ```
 
+## Offline (PWA)
+After the first visit the game and calculator work with no network: `sw.js` precaches `index.html`, `styles.css`, the manifest, icons and every file in `src/`. It can be installed to a home screen (`manifest.webmanifest`). All paths are relative, so it works at a domain root (Vercel) or in a sub-folder.
+
+When you change any precached file, bump `CACHE_VERSION` in `sw.js`; the new worker installs a fresh cache and deletes the old one on activate. Adding a file to `src/` without listing it in `PRECACHE_URLS` fails `npm test`.
+
+## Accessibility
+Target: WCAG 2.2 AA, in English and 中文.
+- Every text colour, ESI badge and level-button outline meets AA contrast (`test/a11y.test.js` checks the theme tokens).
+- One visible 3px focus ring; logical focus order: skip link → language → mode → level buttons → *Next patient* → the next patient card.
+- The whole game, shift report and calculator work with the keyboard alone (Tab, Enter, Space).
+- Buttons, inputs, portraits, landmarks and the `role="status"` feedback regions all have translated labels.
+- Checked with axe-core 4.10.2 in headless Chromium in both languages, with and without reduced motion, across a full night of cases, the shift report and the calculator: 0 violations.
+
 ## How Kiro was used
 - **Spec-driven development:** `.kiro/specs/haunted-er-triage/` (EARS requirements → design → tasks).
 - **Steering:** product, tech, structure, and a file-scoped `clinical-safety.md` that loads only when the engine is edited.
