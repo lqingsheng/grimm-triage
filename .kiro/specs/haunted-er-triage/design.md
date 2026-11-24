@@ -18,7 +18,7 @@ Output: `{ level, reasons[], dangerZone }`. Errors: `TypeError` with all field m
 Night start → shuffle cases → for each: render card → player picks level → reveal (badge, reasons, points, effect) → next → shift report.
 
 ## Data model (case)
-`{ id, name, emoji, story, patient, teachingPoint? }` — `patient` matches the engine input.
+`{ id, name, emoji, story, patient, expectedLevel, teachingPoint }` — `patient` matches the engine input; `expectedLevel` is the author's intended ESI level, checked against `triage()` by a unit test.
 
 ## Theme tokens
 `--bg --ink --blood --ecto --pumpkin --l1..--l5`. Motion only via CSS; disabled under `prefers-reduced-motion`.

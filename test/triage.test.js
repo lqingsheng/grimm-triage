@@ -15,9 +15,22 @@ test('unresponsive is level 1', () => assert.equal(triage({ ...base, avpu: 'U' }
 test('SpO2 80 is level 1', () => assert.equal(triage({ ...base, spo2: 80 }).level, 1));
 test('invalid input throws', () => assert.throws(() => triage({ ...base, avpu: 'X' }), TypeError));
 
-test('monster cases resolve to the intended levels', () => {
-  const expected = { 'vampire-bleed': 2, 'mummy-dehydration': 2, 'werewolf-sprain': 4, 'ghost-unresponsive': 1, 'witch-chestpain': 2, 'skeleton-refill': 5, 'pumpkin-fever': 2 };
-  for (const c of CASES) assert.equal(triage(c.patient).level, expected[c.id], c.id);
+test('every monster case triages to its expected level', () => {
+  for (const c of CASES) {
+    assert.ok([1, 2, 3, 4, 5].includes(c.expectedLevel), `${c.id}: expectedLevel must be 1-5`);
+    assert.equal(triage(c.patient).level, c.expectedLevel, c.id);
+  }
+});
+
+test('case bank meets requirement 2.4: >= 20 cases, >= 3 per level, >= 4 pediatric, all with teaching points', () => {
+  assert.ok(CASES.length >= 20, `only ${CASES.length} cases`);
+  assert.equal(new Set(CASES.map((c) => c.id)).size, CASES.length, 'case ids must be unique');
+  for (const level of [1, 2, 3, 4, 5]) {
+    const n = CASES.filter((c) => c.expectedLevel === level).length;
+    assert.ok(n >= 3, `level ${level} has only ${n} cases`);
+  }
+  assert.ok(CASES.filter((c) => c.patient.ageYears <= 8).length >= 4, 'need at least 4 pediatric cases');
+  for (const c of CASES) assert.ok(typeof c.teachingPoint === 'string' && c.teachingPoint.trim().length > 0, `${c.id}: missing teachingPoint`);
 });
 
 test('scoring penalises under-triage more than over-triage', () => {
