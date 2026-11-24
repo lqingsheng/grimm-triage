@@ -5,6 +5,7 @@
 //   patient       - engine input (see src/triage.js)
 //   expectedLevel - the ESI level the case author intends; test/triage.test.js checks triage() agrees
 //   teachingPoint - one short, clinically accurate lesson shown after the case
+// Each case's SVG portrait lives in src/portraits.js under the same id (test/portraits.test.js checks this).
 //
 // Resource counting follows the ESI Implementation Handbook v4: labs (any number) = 1, each imaging
 // modality = 1, IV fluids = 1, IV/IM/nebulised meds = 1, specialty consult = 1, simple procedure
