@@ -48,3 +48,61 @@ test('P5: worsening SpO2 never makes triage less urgent', () => {
 test('P6: more expected resources never makes triage less urgent', () => {
   fc.assert(fc.property(patientArb, (p) => triage({ ...p, resources: p.resources + 1 }).level <= triage(p).level));
 });
+
+// ---- P7: pediatric danger-zone thresholds (requirement 1.8) ----
+// Source: ESI Implementation Handbook v4, decision point D pediatric danger-zone vitals.
+const pedsBand = (age) => (age < 0.25 ? { hr: 180, rr: 50 } : age < 3 ? { hr: 160, rr: 40 } : { hr: 140, rr: 30 });
+
+const pediatricArb = fc.record({
+  ageYears: fc.oneof(
+    fc.double({ min: 0, max: 0.2499, noNaN: true }),
+    fc.double({ min: 0.25, max: 2.999, noNaN: true }),
+    fc.double({ min: 3, max: 8, noNaN: true }),
+    fc.constantFrom(0, 0.25, 3, 8),
+  ),
+  avpu: fc.constantFrom('A', 'V', 'P', 'U'),
+  newConfusion: fc.boolean(),
+  hr: fc.integer({ min: 40, max: 240 }),
+  rr: fc.integer({ min: 8, max: 80 }),
+  sbp: fc.integer({ min: 40, max: 160 }),
+  spo2: fc.integer({ min: 50, max: 100 }),
+  tempC: fc.double({ min: 30, max: 43, noNaN: true }),
+  pain: fc.integer({ min: 0, max: 10 }),
+  highRisk: fc.boolean(),
+  needsLifesaving: fc.boolean(),
+  resources: fc.integer({ min: 0, max: 6 }),
+});
+
+test('P7a: age <= 8 uses the pediatric danger-zone band for that age, never the adult one', () => {
+  fc.assert(fc.property(pediatricArb, (p) => {
+    const t = pedsBand(p.ageYears);
+    const expected = p.hr > t.hr || p.rr > t.rr || p.spo2 < 92;
+    return triage(p).dangerZone === expected;
+  }));
+});
+
+test('P7b: a stable child with 2+ resources is level 2 exactly when vitals are in the pediatric danger zone', () => {
+  const stable = pediatricArb.map((p) => ({ ...p, avpu: 'A', newConfusion: false, highRisk: false, needsLifesaving: false, pain: 0, sbp: 100, spo2: Math.max(85, p.spo2), resources: Math.max(2, p.resources) }));
+  fc.assert(fc.property(stable, (p) => {
+    const r = triage(p);
+    return r.level === (r.dangerZone ? 2 : 3);
+  }));
+});
+
+test('P7c: in children, rising HR or RR never makes triage less urgent', () => {
+  fc.assert(fc.property(pediatricArb, fc.integer({ min: 1, max: 60 }), (p, rise) =>
+    triage({ ...p, hr: p.hr + rise }).level <= triage(p).level &&
+    triage({ ...p, rr: p.rr + rise }).level <= triage(p).level));
+});
+
+test('P7d: safety properties P1, P3-P6 also hold for children', () => {
+  fc.assert(fc.property(pediatricArb, fc.integer({ min: 1, max: 30 }), (p, drop) => {
+    const r = triage(p);
+    return Number.isInteger(r.level) && r.level >= 1 && r.level <= 5 && r.reasons.length > 0 &&
+      triage({ ...p, avpu: 'U' }).level === 1 &&
+      triage({ ...p, needsLifesaving: true }).level === 1 &&
+      triage({ ...p, highRisk: true }).level <= r.level &&
+      triage({ ...p, spo2: Math.max(50, p.spo2 - drop) }).level <= r.level &&
+      triage({ ...p, resources: p.resources + 1 }).level <= r.level;
+  }));
+});
