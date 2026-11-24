@@ -11,7 +11,7 @@
 //
 // Resource counting follows the ESI Implementation Handbook v4: labs (any number) = 1, each imaging
 // modality = 1, IV fluids = 1, IV/IM/nebulised meds = 1, specialty consult = 1, simple procedure
-// (e.g. laceration repair) = 1, complex procedure (e.g. procedural sedation) = 1.
+// (e.g. laceration repair) = 1, complex procedure (e.g. procedural sedation) = 2.
 // Not resources: history and exam, oral meds, prescription refills, tetanus immunisation,
 // simple wound care, splints, crutches.
 export const CASES = [
@@ -235,13 +235,13 @@ export const CASES = [
     name: 'Frankie Jr., 5',
     emoji: '🦴',
     story: 'Fell off the castle battlements onto an outstretched hand. Wrist bent the wrong way, fingers pink and warm. Splinted, pain 5/10.',
-    patient: { ageYears: 5, avpu: 'A', newConfusion: false, hr: 130, rr: 26, sbp: 102, spo2: 99, tempC: 36.9, pain: 5, highRisk: false, needsLifesaving: false, resources: 2 },
+    patient: { ageYears: 5, avpu: 'A', newConfusion: false, hr: 130, rr: 26, sbp: 102, spo2: 99, tempC: 36.9, pain: 5, highRisk: false, needsLifesaving: false, resources: 3 },
     expectedLevel: 3,
-    teachingPoint: 'X-ray plus a reduction under procedural sedation is 2 resources; the splint is not a resource. For ages 3 to 8, HR 130 and RR 26 are outside the danger zone (HR > 140, RR > 30), so ESI 3.',
+    teachingPoint: 'X-ray (1) plus a reduction under procedural sedation (a complex procedure, 2) is 3 resources; the splint is not a resource. For ages 3 to 8, HR 130 and RR 26 are outside the danger zone (HR > 140, RR > 30), so ESI 3.',
     zh: {
       name: '小弗兰基，5 岁',
       story: '从城堡垛口摔下，手掌撑地。腕部向错误方向弯曲，手指红润温暖。已夹板固定，疼痛 5/10。',
-      teachingPoint: 'X 线加程序化镇静下复位是 2 项资源；夹板不算资源。3 至 8 岁时心率 130 次/分、呼吸频率 26 次/分不在危险区（心率 > 140、呼吸频率 > 30），因此为 ESI 3 级。',
+      teachingPoint: 'X 线（1 项）加程序化镇静下复位（复杂操作，2 项）共 3 项资源；夹板不算资源。3 至 8 岁时心率 130 次/分、呼吸频率 26 次/分不在危险区（心率 > 140、呼吸频率 > 30），因此为 ESI 3 级。',
     },
   },
 
