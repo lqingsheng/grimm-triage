@@ -20,10 +20,13 @@
   <main>
     <section id="game" class="panel">
       <div class="hud"><span id="caseNo"></span><span id="score">Score 0</span></div>
-      <article class="card" id="caseCard"></article>
-      <div class="levels" id="levelButtons"></div>
-      <div id="feedback" class="feedback" aria-live="polite"></div>
-      <button id="nextCase" class="ghost" hidden>Next patient ☠️</button>
+      <div id="play">
+        <article class="card" id="caseCard" tabindex="-1"></article>
+        <div class="levels" id="levelButtons"></div>
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+        <button id="nextCase" class="ghost" hidden>Next patient ☠️</button>
+      </div>
+      <div id="shiftReport" class="report" role="region" aria-labelledby="reportTitle" hidden></div>
     </section>
 
     <section id="calc" class="panel" hidden>

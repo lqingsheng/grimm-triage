@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { triage, scoreGuess, isDangerZone, dangerThresholds } from '../src/triage.js';
+import { triage, scoreGuess, isDangerZone, dangerThresholds, hypotensionThreshold } from '../src/triage.js';
 import { CASES } from '../src/cases.js';
 
 const base = { ageYears: 40, avpu: 'A', newConfusion: false, hr: 80, rr: 16, sbp: 120, spo2: 98, tempC: 36.8, pain: 0, highRisk: false, needsLifesaving: false, resources: 0 };
@@ -81,4 +81,44 @@ test('pediatric danger-zone reason names the threshold band', () => {
   const r = triage(kid(1, { hr: 170 }));
   assert.equal(r.level, 2);
   assert.match(r.reasons.join(' '), /3 months to 3 years/);
+});
+
+// ---- PALS hypotension cut-off for vitals highlighting (display only) ----
+const days = (d) => d / 365.25;
+
+test('PALS hypotension: neonate 0-28 days is SBP < 60', () => {
+  assert.equal(hypotensionThreshold(0), 60);
+  assert.equal(hypotensionThreshold(days(14)), 60);
+  assert.equal(hypotensionThreshold(days(28)), 60);
+});
+test('PALS hypotension: infant 1-12 months is SBP < 70', () => {
+  assert.equal(hypotensionThreshold(days(29)), 70);
+  assert.equal(hypotensionThreshold(0.5), 70);
+  assert.equal(hypotensionThreshold(0.99), 70);
+});
+test('PALS hypotension: child 1-10 years is SBP < 70 + 2 x age in completed years', () => {
+  assert.equal(hypotensionThreshold(1), 72);
+  assert.equal(hypotensionThreshold(2.5), 74);
+  assert.equal(hypotensionThreshold(5), 80);
+  assert.equal(hypotensionThreshold(10), 90);
+});
+test('PALS hypotension: over 10 years (and adults) is SBP < 90', () => {
+  assert.equal(hypotensionThreshold(10.5), 90);
+  assert.equal(hypotensionThreshold(40), 90);
+  assert.equal(hypotensionThreshold(547), 90);
+});
+test('PALS hypotension cut-off never decreases with age', () => {
+  let prev = 0;
+  for (let d = 0; d <= 15 * 365; d += 7) {
+    const t = hypotensionThreshold(days(d));
+    assert.ok(t >= prev, `day ${d}: ${t} < ${prev}`);
+    prev = t;
+  }
+});
+test('hypotension cut-off is display only: triage levels for pediatric BP are unchanged', () => {
+  // A 5-year-old with SBP 75 is hypotensive by PALS (< 80) but the engine only uses SBP < 70 for level 1.
+  const child = { ...base, ageYears: 5, hr: 100, rr: 20, sbp: 75 };
+  assert.ok(child.sbp < hypotensionThreshold(child.ageYears));
+  assert.equal(triage(child).level, 5);
+  assert.equal(triage({ ...child, sbp: 69 }).level, 1);
 });
