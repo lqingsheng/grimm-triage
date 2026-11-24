@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "name": "Run tests on engine change",
+  "description": "When the triage engine or cases change, run the unit and property tests and fix any failure.",
+  "version": "1",
+  "when": { "type": "fileEdited", "patterns": ["src/triage.js", "src/cases.js", "test/**/*.js"] },
+  "then": { "type": "askAgent", "prompt": "Run `npm test`. If any test fails, explain which clinical rule broke and fix the code (not the test) unless the test itself is wrong. Follow .kiro/steering/clinical-safety.md." }
+}

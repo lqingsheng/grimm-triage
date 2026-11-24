@@ -1,0 +1,25 @@
+# Implementation plan
+
+- [x] 1. Pure triage engine with adult ESI v4 decision points (`src/triage.js`)
+  - _Requirements: 1.1–1.7_
+- [x] 2. Unit tests and property tests P1–P6
+  - _Requirements: 1.7_
+- [x] 3. Minimal Night Shift game and Triage Desk calculator
+  - _Requirements: 2.1, 2.2, 3.1–3.3_
+- [ ] 4. Pediatric danger-zone thresholds + property test P7
+  - _Requirements: 1.8_
+- [ ] 5. Expand case bank to >= 20 monsters (>= 3 per level), add `teachingPoint` to each, shuffle per night
+  - _Requirements: 2.4_
+- [ ] 6. Shift report screen (score, under/over-triage counts, missed cases with teaching points)
+  - _Requirements: 2.3_
+- [ ] 7. Haunting effects: under-triage flicker + blood-drip, correct-answer candle flare; reduced-motion fallback
+  - _Requirements: 2.5, 4.1_
+- [ ] 8. Monster art: inline SVG portraits per monster (no copyrighted assets)
+  - _Requirements: 4.1_
+- [ ] 9. English / 中文 toggle with a strings table
+  - _Requirements: 5.2_
+- [ ] 10. PWA: manifest + service worker for offline use
+  - _Requirements: 5.3_
+- [ ] 11. Accessibility pass: contrast check, focus order, screen-reader labels
+  - _Requirements: 4.2, 4.3_
+- [ ] 12. Deploy to Vercel; add live URL and screenshots to README

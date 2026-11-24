@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "name": "Review new monster cases",
+  "description": "When cases.js changes, check every case is clinically coherent and the level spread stays balanced.",
+  "version": "1",
+  "when": { "type": "fileEdited", "patterns": ["src/cases.js"] },
+  "then": { "type": "askAgent", "prompt": "For each case in src/cases.js, check that the story matches the vital signs, compute its level with the engine, and report the count per level. Flag any level with fewer than 3 cases and any story that would mislead a learner." }
+}

@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "name": "Costume and accessibility check",
+  "description": "When UI files change, check the haunted theme stays consistent and accessible.",
+  "version": "1",
+  "when": { "type": "fileEdited", "patterns": ["index.html", "styles.css", "src/app.js"] },
+  "then": { "type": "askAgent", "prompt": "Review the changed UI for: WCAG AA contrast, keyboard access, aria-live feedback, reduced-motion support, the disclaimer still visible, and theme tokens used instead of raw colours. List issues and fix them." }
+}
