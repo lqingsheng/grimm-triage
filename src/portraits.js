@@ -3,8 +3,9 @@
 // images or links, so the art works offline and carries no third-party copyright.
 // The candle-lit circular frame around each portrait is drawn in CSS (.portrait in styles.css).
 //
-// Shape: { label, art }
-//   label - accessible description, used as the SVG's aria-label
+// Shape: { label, labelZh, art }
+//   label   - accessible description, used as the SVG's aria-label
+//   labelZh - the same description in Simplified Chinese, used when the 中文 toggle is on
 //   art   - SVG child elements only; portraitSvg() wraps them in the <svg> element
 
 const INK = '#1d1a22';
@@ -14,12 +15,14 @@ export const PORTRAITS = {
   // ---------------- ESI 1 ----------------
   'ghost-unresponsive': {
     label: 'The Grey Lady: a pale grey ghost with closed eyes and a small open mouth',
+    labelZh: '灰衣夫人：苍白的灰色幽灵，双眼紧闭，嘴巴微张',
     art: `<path d="M16 58V28a16 16 0 0 1 32 0v30l-5-4-5 4-6-4-6 4-5-4z" fill="#d9d4e3"/>
       <path d="M23 30q3 2 6 0M35 30q3 2 6 0" stroke="${DUSK}" stroke-width="2" fill="none" stroke-linecap="round"/>
       <circle cx="32" cy="40" r="2.5" fill="${DUSK}"/>`,
   },
   'frankenstein-bradycardia': {
     label: 'Bolt-neck Frank: a green square-headed monster with neck bolts and a spark of lightning',
+    labelZh: '螺栓颈弗兰克：方脑袋的绿色怪物，脖子上有螺栓，旁边闪着一道电光',
     art: `<rect x="18" y="14" width="28" height="34" rx="4" fill="#7fae6a"/>
       <rect x="18" y="12" width="28" height="9" fill="${INK}"/>
       <rect x="11" y="38" width="7" height="5" fill="#9aa0a8"/><rect x="46" y="38" width="7" height="5" fill="#9aa0a8"/>
@@ -30,6 +33,7 @@ export const PORTRAITS = {
   },
   'zombie-anaphylaxis': {
     label: 'Zed the Zombie: a grey-green zombie with swollen red lips and hives on his face',
+    labelZh: '僵尸泽德：灰绿色的僵尸，嘴唇红肿，脸上布满荨麻疹',
     art: `<circle cx="32" cy="32" r="18" fill="#8fa77a"/>
       <circle cx="25" cy="28" r="3" fill="#f4f0e0"/><circle cx="25" cy="28" r="1.3" fill="${INK}"/>
       <path d="M36 28h6" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>
@@ -40,6 +44,7 @@ export const PORTRAITS = {
   },
   'sandman-overdose': {
     label: 'The Sandman: a sleeping figure in a blue nightcap with grains of sand drifting by',
+    labelZh: '睡魔：戴蓝色睡帽的沉睡身影，身边飘着沙粒',
     art: `<circle cx="32" cy="38" r="16" fill="#c9b48a"/>
       <path d="M16 34q4-22 30-18l6 10-6-2q-14-4-30 10z" fill="#4a7bd6"/>
       <circle cx="53" cy="26" r="3" fill="#e9e4f0"/>
@@ -50,6 +55,7 @@ export const PORTRAITS = {
   },
   'vampire-bleed': {
     label: 'Count Vlad: a pale vampire with a high red collar, fangs and a drop of blood at his mouth',
+    labelZh: '弗拉德伯爵：苍白的吸血鬼，高高的红色衣领，露出獠牙，嘴边有一滴血',
     art: `<path d="M10 60l8-20h28l8 20z" fill="#b3122e"/>
       <path d="M14 42l6-6v10zM50 42l-6-6v10z" fill="#5a0b18"/>
       <ellipse cx="32" cy="32" rx="13" ry="16" fill="#e8e2ee"/>
@@ -63,6 +69,7 @@ export const PORTRAITS = {
   // ---------------- ESI 2 ----------------
   'mummy-dehydration': {
     label: 'Neferkare: a bandaged mummy with glowing yellow eyes and a loose bandage end',
+    labelZh: '奈费尔卡拉：缠满绷带的木乃伊，眼睛发出黄光，一截绷带松脱',
     art: `<rect x="18" y="12" width="28" height="40" rx="12" fill="#e3d7b8"/>
       <path d="M18 22l28-4M18 38l28-5M20 47l24 1" stroke="#b8a77f" stroke-width="2.5"/>
       <rect x="22" y="25" width="20" height="7" rx="3.5" fill="#2a2030"/>
@@ -71,6 +78,7 @@ export const PORTRAITS = {
   },
   'witch-chestpain': {
     label: 'Agatha Hollow: a green-faced witch in a pointed hat above a cracked red heart',
+    labelZh: '阿加莎·霍洛：戴尖帽的绿脸女巫，下方是一颗裂开的红心',
     art: `<path d="M22 25l9-21 11 21z" fill="#2a1838" stroke="#5a3a70" stroke-width="1"/>
       <ellipse cx="32" cy="26" rx="20" ry="4" fill="#2a1838" stroke="#5a3a70" stroke-width="1"/>
       <rect x="24" y="20" width="16" height="3" fill="#ff8a1f"/>
@@ -83,6 +91,7 @@ export const PORTRAITS = {
   },
   'pumpkin-fever': {
     label: 'Jack O. Lantern: a glowing carved pumpkin with a bead of sweat',
+    labelZh: '杰克·南瓜灯：发光的雕刻南瓜，挂着一滴汗珠',
     art: `<ellipse cx="32" cy="38" rx="22" ry="18" fill="#ff8a1f"/>
       <path d="M32 20v36M20 22q-6 16 0 32M44 22q6 16 0 32" stroke="#c9600f" stroke-width="2" fill="none"/>
       <path d="M31 21q0-8 6-10" stroke="#3fb27f" stroke-width="4" fill="none" stroke-linecap="round"/>
@@ -92,6 +101,7 @@ export const PORTRAITS = {
   },
   'medusa-stroke': {
     label: 'Medusa Gorgon: a pale green face with snakes for hair and a mouth drooping on one side',
+    labelZh: '美杜莎·戈耳工：淡绿色的脸，头发是一条条蛇，一侧嘴角下垂',
     art: `<path d="M20 28q-8-6-6-16M25 22q-4-10 1-17M32 20q0-10 6-15M39 22q5-10 11-13M44 28q8-6 10-15" stroke="#3fb27f" stroke-width="4" fill="none" stroke-linecap="round"/>
       <circle cx="14" cy="12" r="2.6" fill="#3fb27f"/><circle cx="26" cy="5" r="2.6" fill="#3fb27f"/><circle cx="38" cy="5" r="2.6" fill="#3fb27f"/>
       <circle cx="50" cy="9" r="2.6" fill="#3fb27f"/><circle cx="54" cy="13" r="2.6" fill="#3fb27f"/>
@@ -101,6 +111,7 @@ export const PORTRAITS = {
   },
   'banshee-bronchiolitis': {
     label: 'Baby Banshee: a tiny ghost in a blue bonnet, mouth open, with wheezy breath lines',
+    labelZh: '报丧女妖宝宝：戴蓝色软帽的小幽灵，张着嘴，旁边画着喘息的呼吸线',
     art: `<path d="M20 56V34a12 12 0 0 1 24 0v22l-4-3-4 3-4-3-4 3-4-3z" fill="#e6e0f0"/>
       <path d="M18 36a14 14 0 0 1 28 0" stroke="#7cc7ff" stroke-width="4" fill="none"/>
       <circle cx="28" cy="36" r="1.8" fill="${DUSK}"/><circle cx="36" cy="36" r="1.8" fill="${DUSK}"/>
@@ -109,6 +120,7 @@ export const PORTRAITS = {
   },
   'gremlin-gastro': {
     label: 'Grizzle the Gremlin: a small green gremlin with huge pointed ears, wide eyes and a tear',
+    labelZh: '小魔怪格里佐：绿色的小魔怪，长着巨大的尖耳朵，眼睛圆睁，流着一滴泪',
     art: `<path d="M20 32L4 20l10 16zM44 32l16-12-10 16z" fill="#7a9a6a"/>
       <circle cx="32" cy="37" r="14" fill="#8fae7a"/>
       <circle cx="26" cy="34" r="4" fill="#f4f0e0"/><circle cx="38" cy="34" r="4" fill="#f4f0e0"/>
@@ -118,6 +130,7 @@ export const PORTRAITS = {
   },
   'imp-appendicitis': {
     label: 'Little Imp: a red imp with yellow horns and a pointed tail, frowning in pain',
+    labelZh: '小恶魔：长着黄色犄角和尖尾巴的红色小恶魔，痛得皱着眉',
     art: `<path d="M21 24l-5-14 10 8zM43 24l5-14-10 8z" fill="#f2c230"/>
       <path d="M45 48q9 3 9-6l3 2" stroke="#d9413a" stroke-width="2" fill="none" stroke-linecap="round"/>
       <circle cx="32" cy="35" r="15" fill="#d9413a"/>
@@ -129,6 +142,7 @@ export const PORTRAITS = {
   // ---------------- ESI 3 ----------------
   'goblin-abdopain': {
     label: 'Grubnik the Goblin: a green goblin with long ears, a hooked nose and two small fangs',
+    labelZh: '哥布林格鲁布尼克：绿色哥布林，长耳朵，鹰钩鼻，露出两颗小尖牙',
     art: `<path d="M18 32L2 26l14 12zM46 32l16-6-14 12z" fill="#5f9a4a"/>
       <ellipse cx="32" cy="34" rx="15" ry="16" fill="#6fae55"/>
       <circle cx="26" cy="30" r="2.5" fill="#f2c230"/><circle cx="38" cy="30" r="2.5" fill="#f2c230"/>
@@ -139,6 +153,7 @@ export const PORTRAITS = {
   },
   'zombie-handbite': {
     label: 'Zelda the Zombie: a zombie with brown hair raising a swollen red hand with bite marks',
+    labelZh: '僵尸塞尔达：棕色头发的僵尸，举起一只带咬痕的红肿的手',
     art: `<path d="M14 52q0-36 18-36t18 36z" fill="#4a3a2a"/>
       <ellipse cx="32" cy="34" rx="12" ry="14" fill="#9db08a"/>
       <circle cx="27" cy="32" r="2" fill="${INK}"/><circle cx="37" cy="32" r="2.6" fill="#f4f0e0"/>
@@ -150,6 +165,7 @@ export const PORTRAITS = {
   },
   'pixie-toddler-fever': {
     label: 'Pip the Pixie: a small pixie with see-through wings, orange hair and flushed cheeks',
+    labelZh: '小精灵皮普：长着透明翅膀、橙色头发、脸颊通红的小精灵',
     art: `<ellipse cx="16" cy="30" rx="9" ry="16" fill="#bfe8ff" opacity=".7" transform="rotate(-20 16 30)"/>
       <ellipse cx="48" cy="30" rx="9" ry="16" fill="#bfe8ff" opacity=".7" transform="rotate(20 48 30)"/>
       <circle cx="32" cy="37" r="12" fill="#f3d2c1"/>
@@ -161,6 +177,7 @@ export const PORTRAITS = {
   },
   'frankie-jr-fracture': {
     label: 'Frankie Jr.: a small green monster with neck bolts and a white cast on his arm',
+    labelZh: '小弗兰基：脖子上有螺栓的绿色小怪物，手臂打着白色石膏',
     art: `<rect x="20" y="12" width="24" height="26" rx="4" fill="#8fbf7a"/>
       <rect x="20" y="10" width="24" height="7" fill="${INK}"/>
       <rect x="15" y="28" width="5" height="4" fill="#9aa0a8"/><rect x="44" y="28" width="5" height="4" fill="#9aa0a8"/>
@@ -174,6 +191,7 @@ export const PORTRAITS = {
   // ---------------- ESI 4 ----------------
   'werewolf-sprain': {
     label: 'Luna Lycan: a grey werewolf with pointed ears and yellow eyes',
+    labelZh: '狼人露娜：灰色狼人，尖耳朵，黄眼睛',
     art: `<path d="M16 28l2-18 10 10zM48 28l-2-18-10 10z" fill="#6b6478"/>
       <path d="M14 30q0-14 18-14t18 14l-4 14-14 10-14-10z" fill="#857d93"/>
       <circle cx="25" cy="31" r="2.2" fill="#f2c230"/><circle cx="39" cy="31" r="2.2" fill="#f2c230"/>
@@ -182,6 +200,7 @@ export const PORTRAITS = {
   },
   'banshee-uti': {
     label: 'Siobhan the Banshee: a pale wailing spirit with long silver hair',
+    labelZh: '报丧女妖希冯：长着银色长发、正在哀嚎的苍白幽灵',
     art: `<path d="M12 58q0-46 20-46t20 46q-6-10-8-24H20q-2 14-8 24z" fill="#9aa6c0"/>
       <ellipse cx="32" cy="34" rx="10" ry="13" fill="#eef0f8"/>
       <circle cx="28" cy="31" r="1.8" fill="${DUSK}"/><circle cx="36" cy="31" r="1.8" fill="${DUSK}"/>
@@ -189,6 +208,7 @@ export const PORTRAITS = {
   },
   'scarecrow-laceration': {
     label: 'Scarecrow Silas: a burlap scarecrow in a straw hat with button eyes and a small red cut',
+    labelZh: '稻草人塞拉斯：戴草帽的麻布稻草人，纽扣眼睛，身上有一道小红伤口',
     art: `<path d="M20 60l4-8M44 60l-4-8M28 60l2-6M36 60l-2-6" stroke="#f2c230" stroke-width="2"/>
       <circle cx="32" cy="38" r="14" fill="#d9b77a"/>
       <path d="M21 25q0-15 11-15t11 15z" fill="#a67c3d"/>
@@ -201,6 +221,7 @@ export const PORTRAITS = {
   // ---------------- ESI 5 ----------------
   'skeleton-refill': {
     label: 'Mr. Bones: a white skull with dark eye sockets next to a blue and white capsule',
+    labelZh: '骨头先生：一个白色骷髅头，眼窝漆黑，旁边是一粒蓝白相间的胶囊',
     art: `<path d="M18 30a14 14 0 0 1 28 0v8l-4 2v6H22v-6l-4-2z" fill="#eee8dc"/>
       <circle cx="26" cy="31" r="4" fill="${INK}"/><circle cx="38" cy="31" r="4" fill="${INK}"/>
       <path d="M32 35l-2 4h4z" fill="${INK}"/>
@@ -212,6 +233,7 @@ export const PORTRAITS = {
   },
   'phantom-cold': {
     label: 'The Phantom: a man in a white half-mask with a red nose and a floating music note',
+    labelZh: '魅影：戴白色半边面具的男人，鼻子通红，身旁飘着一个音符',
     art: `<ellipse cx="32" cy="34" rx="13" ry="16" fill="#e6c9b3"/>
       <path d="M19 28q0-14 13-14t13 14q-4-8-13-8t-13 8z" fill="${INK}"/>
       <path d="M32 20q13 0 13 14t-13 16z" fill="#f4f0f8"/>
@@ -223,6 +245,7 @@ export const PORTRAITS = {
   },
   'gargoyle-sting': {
     label: 'Grimwald the Gargoyle: a stone-grey gargoyle with wings and horns, a wasp buzzing nearby',
+    labelZh: '石像鬼格林瓦尔德：长着翅膀和犄角的石灰色石像鬼，旁边有一只嗡嗡飞的马蜂',
     art: `<path d="M16 40L2 22l8 4 2-8 8 14zM48 40l14-18-8 4-2-8-8 14z" fill="#5d5a66"/>
       <path d="M23 22l-3-10 9 7zM41 22l3-10-9 7z" fill="#7a7684"/>
       <rect x="18" y="20" width="28" height="30" rx="10" fill="#8a8694"/>
@@ -237,8 +260,9 @@ export const PORTRAITS = {
 const escapeAttr = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
 // Full <svg> markup for a case id, or '' when the case has no portrait.
-export function portraitSvg(id) {
+export function portraitSvg(id, lang = 'en') {
   const p = PORTRAITS[id];
   if (!p) return '';
-  return `<svg class="portrait-art" viewBox="0 0 64 64" role="img" aria-label="${escapeAttr(p.label)}">${p.art}</svg>`;
+  const label = lang === 'zh-CN' && p.labelZh ? p.labelZh : p.label;
+  return `<svg class="portrait-art" viewBox="0 0 64 64" role="img" aria-label="${escapeAttr(label)}">${p.art}</svg>`;
 }

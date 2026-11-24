@@ -3,17 +3,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Grimm Triage: Night Shift at St. Grimm's ER</title>
+  <title data-i18n="doc.title">Grimm Triage: Night Shift at St. Grimm's ER</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="fog" aria-hidden="true"></div>
   <header>
-    <h1>🕯️ St. Grimm's ER <span>Night Shift</span></h1>
-    <p class="tag">Learn real emergency triage by sorting monsters. The costume is fake. The logic is real.</p>
-    <nav>
-      <button data-mode="game" class="active">Night Shift (game)</button>
-      <button data-mode="calc">Triage Desk (calculator)</button>
+    <div class="lang-toggle" role="group" aria-label="Language" data-i18n-aria="lang.label">
+      <button type="button" data-lang="en" lang="en" aria-pressed="true">English</button>
+      <button type="button" data-lang="zh-CN" lang="zh-CN" aria-pressed="false">中文</button>
+    </div>
+    <h1>🕯️ <span class="h1-title" data-i18n="header.title">St. Grimm's ER</span> <span class="h1-sub" data-i18n="header.subtitle">Night Shift</span></h1>
+    <p class="tag" data-i18n="header.tag">Learn real emergency triage by sorting monsters. The costume is fake. The logic is real.</p>
+    <nav aria-label="Mode" data-i18n-aria="nav.label">
+      <button data-mode="game" class="active" data-i18n="nav.game">Night Shift (game)</button>
+      <button data-mode="calc" data-i18n="nav.calc">Triage Desk (calculator)</button>
     </nav>
   </header>
 
@@ -23,38 +27,38 @@
       <div class="hud"><span id="caseNo"></span><span id="score">Score 0</span></div>
       <div id="play">
         <article class="card" id="caseCard" tabindex="-1"></article>
-        <div class="levels" id="levelButtons"></div>
+        <div class="levels" id="levelButtons" role="group" aria-label="Choose a triage level" data-i18n-aria="level.group"></div>
         <div id="feedback" class="feedback" aria-live="polite"></div>
-        <button id="nextCase" class="ghost" hidden>Next patient ☠️</button>
+        <button id="nextCase" class="ghost" hidden data-i18n="game.next">Next patient ☠️</button>
       </div>
       <div id="shiftReport" class="report" role="region" aria-labelledby="reportTitle" hidden></div>
     </section>
 
     <section id="calc" class="panel" hidden>
       <form id="calcForm" class="grid">
-        <label>Age (years)<input name="ageYears" type="number" value="45" required></label>
-        <label>AVPU
-          <select name="avpu"><option>A</option><option>V</option><option>P</option><option>U</option></select>
+        <label><span data-i18n="calc.age">Age (years)</span><input name="ageYears" type="number" value="45" required></label>
+        <label><span data-i18n="calc.avpu">AVPU</span>
+          <select name="avpu"><option value="A" data-i18n="calc.avpu.A">A</option><option value="V" data-i18n="calc.avpu.V">V</option><option value="P" data-i18n="calc.avpu.P">P</option><option value="U" data-i18n="calc.avpu.U">U</option></select>
         </label>
-        <label>HR (/min)<input name="hr" type="number" value="90" required></label>
-        <label>RR (/min)<input name="rr" type="number" value="16" required></label>
-        <label>SBP (mmHg)<input name="sbp" type="number" value="125" required></label>
-        <label>SpO₂ (%)<input name="spo2" type="number" value="98" min="0" max="100" required></label>
-        <label>Temp (°C)<input name="tempC" type="number" step="0.1" value="36.8" required></label>
-        <label>Pain (0–10)<input name="pain" type="number" value="2" min="0" max="10" required></label>
-        <label>Expected resources<input name="resources" type="number" value="1" min="0" required></label>
-        <label class="chk"><input name="newConfusion" type="checkbox"> New confusion / lethargy</label>
-        <label class="chk"><input name="highRisk" type="checkbox"> High-risk complaint</label>
-        <label class="chk"><input name="needsLifesaving" type="checkbox"> Needs life-saving intervention now</label>
-        <button type="submit">Summon triage level 🔮</button>
+        <label><span data-i18n="calc.hr">HR (/min)</span><input name="hr" type="number" value="90" required></label>
+        <label><span data-i18n="calc.rr">RR (/min)</span><input name="rr" type="number" value="16" required></label>
+        <label><span data-i18n="calc.sbp">SBP (mmHg)</span><input name="sbp" type="number" value="125" required></label>
+        <label><span data-i18n="calc.spo2">SpO₂ (%)</span><input name="spo2" type="number" value="98" min="0" max="100" required></label>
+        <label><span data-i18n="calc.temp">Temp (°C)</span><input name="tempC" type="number" step="0.1" value="36.8" required></label>
+        <label><span data-i18n="calc.pain">Pain (0–10)</span><input name="pain" type="number" value="2" min="0" max="10" required></label>
+        <label><span data-i18n="calc.resources">Expected resources</span><input name="resources" type="number" value="1" min="0" required></label>
+        <label class="chk"><input name="newConfusion" type="checkbox"> <span data-i18n="calc.newConfusion">New confusion / lethargy</span></label>
+        <label class="chk"><input name="highRisk" type="checkbox"> <span data-i18n="calc.highRisk">High-risk complaint</span></label>
+        <label class="chk"><input name="needsLifesaving" type="checkbox"> <span data-i18n="calc.needsLifesaving">Needs life-saving intervention now</span></label>
+        <button type="submit" data-i18n="calc.submit">Summon triage level 🔮</button>
       </form>
       <div id="calcResult" class="feedback" aria-live="polite"></div>
     </section>
   </main>
 
   <footer>
-    Educational demo only. Not a medical device. Never use for real patient care.
-    Based on the logic of the Emergency Severity Index (ESI) v4.
+    <span data-i18n="footer.disclaimer">Educational demo only. Not a medical device. Never use for real patient care.</span>
+    <span data-i18n="footer.basis">Based on the logic of the Emergency Severity Index (ESI) v4.</span>
   </footer>
   <script type="module" src="src/app.js"></script>
 </body>
