@@ -56,9 +56,9 @@ export const CASES = [
     name: 'Count Vlad, 547',
     emoji: '🧛',
     story: 'Fang slipped during dinner. Bleeding from the mouth will not stop. Pale (paler than usual).',
-    patient: { ageYears: 547, avpu: 'A', newConfusion: false, hr: 128, rr: 24, sbp: 82, spo2: 95, tempC: 35.9, pain: 5, highRisk: true, needsLifesaving: false, resources: 3 },
-    expectedLevel: 2,
-    teachingPoint: 'Uncontrolled bleeding with HR 128 and SBP 82 is high risk: start two large-bore IVs and reassess often. Confusion or cool, mottled skin means shock and an upgrade to ESI 1.',
+    patient: { ageYears: 547, avpu: 'A', newConfusion: false, hr: 128, rr: 24, sbp: 82, spo2: 95, tempC: 35.9, pain: 5, highRisk: true, needsLifesaving: true, resources: 3 },
+    expectedLevel: 1,
+    teachingPoint: 'Uncontrolled bleeding with HR 128 and SBP 82 (shock index about 1.6) is hemorrhagic shock: it needs immediate hemorrhage control and fluid or blood resuscitation, so it is ESI 1, not ESI 2.',
   },
   {
     id: 'mummy-dehydration',
