@@ -16,7 +16,7 @@
   - _Requirements: 2.5, 4.1_
 - [x] 8. Monster art: inline SVG portraits per monster (no copyrighted assets)
   - _Requirements: 4.1_
-- [ ] 9. English / 中文 toggle with a strings table
+- [x] 9. English / 中文 toggle with a strings table
   - _Requirements: 5.2_
 - [ ] 10. PWA: manifest + service worker for offline use
   - _Requirements: 5.3_
