@@ -19,6 +19,10 @@ Night start → shuffle cases → for each: render card → player picks level �
 
 ## Data model (case)
 `{ id, name, emoji, story, patient, expectedLevel, teachingPoint }` — `patient` matches the engine input; `expectedLevel` is the author's intended ESI level, checked against `triage()` by a unit test.
+Portraits live in `src/portraits.js` as `PORTRAITS[id] = { label, art }` (inline SVG shapes only, `aria-label` from `label`); `test/portraits.test.js` checks every case has one.
+
+## Haunting effects
+`app.js` adds `fx-under` (flicker + blood-drip) or `fx-correct` (candle flare) to `#game` after an answer and removes it on the next case. All motion is CSS keyframes; the flicker dims twice in ~1 s (below the WCAG 2.3.1 three-flashes-per-second limit). Under `prefers-reduced-motion` the same classes give a static panel tint and reveal a `.fx-note` text message in the `aria-live` feedback.
 
 ## Theme tokens
 `--bg --ink --blood --ecto --pumpkin --l1..--l5`. Motion only via CSS; disabled under `prefers-reduced-motion`.

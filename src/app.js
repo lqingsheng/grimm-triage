@@ -1,6 +1,7 @@
 import { triage, scoreGuess, dangerThresholds, hypotensionThreshold, LEVEL_NAMES } from './triage.js';
 import { summarizeShift } from './shift.js';
 import { CASES } from './cases.js';
+import { portraitSvg } from './portraits.js';
 
 const $ = (s) => document.querySelector(s);
 const COLORS = { 1: 'var(--l1)', 2: 'var(--l2)', 3: 'var(--l3)', 4: 'var(--l4)', 5: 'var(--l5)' };
@@ -51,12 +52,31 @@ function vitalsHtml(p) {
   </div>`;
 }
 
+// ---- haunting effects ----
+// CSS does all the animation (styles.css, "Haunting effects"); JS only swaps classes on the game panel.
+// Under prefers-reduced-motion the same classes give a static colour change, and the .fx-note text
+// in the feedback becomes visible instead of the motion.
+const FX_CLASSES = ['fx-under', 'fx-correct'];
+const FX_NOTES = {
+  under: '🩸 The ward lights bleed red: this patient is sicker than your call.',
+  correct: '🕯 The candles flare: the right bay for this monster.',
+};
+function setEffect(kind) {
+  const panel = $('#game');
+  panel.classList.remove(...FX_CLASSES);
+  if (!kind) return;
+  void panel.offsetWidth; // restart the CSS animation even if the same class was just removed
+  panel.classList.add(`fx-${kind}`);
+}
+
 function renderCase() {
   const c = nightCases[idx];
   answered = false;
+  setEffect(null);
   $('#caseNo').textContent = `Patient ${idx + 1} of ${nightCases.length}`;
-  $('#caseCard').innerHTML = `<span class="emoji" aria-hidden="true">${c.emoji}</span>
-    <div class="who">${c.name}</div><p>${c.story}</p>${vitalsHtml(c.patient)}`;
+  const art = portraitSvg(c.id) || `<span class="emoji" aria-hidden="true">${c.emoji}</span>`;
+  $('#caseCard').innerHTML = `<div class="card-head"><div class="portrait">${art}</div>
+    <div class="who">${c.name}</div></div><p>${c.story}</p>${vitalsHtml(c.patient)}`;
   $('#feedback').innerHTML = '';
   $('#nextCase').hidden = true;
 }
@@ -76,7 +96,10 @@ $('#levelButtons').addEventListener('click', (e) => {
   answers.push({ case: nightCases[idx], guess, level: truth.level });
   $('#score').textContent = `Score ${score}`;
   const verdict = s.points === 100 ? '✅ Correct!' : s.underTriage ? '🩸 Under-triage: this monster is sicker than you thought.' : '🕸️ Over-triage: safe, but you used a resus bay.';
-  $('#feedback').innerHTML = `${verdict} ${badge(truth.level)}<br>Why: ${truth.reasons.join('; ')}. (+${s.points})`;
+  const fx = s.points === 100 ? 'correct' : s.underTriage ? 'under' : null;
+  const note = fx ? `<p class="fx-note">${FX_NOTES[fx]}</p>` : '';
+  $('#feedback').innerHTML = `${verdict} ${badge(truth.level)}<br>Why: ${truth.reasons.join('; ')}. (+${s.points})${note}`;
+  setEffect(fx);
   $('#nextCase').hidden = false;
   if (idx === nightCases.length - 1) $('#nextCase').textContent = 'See the shift report 📜';
 });
@@ -97,6 +120,7 @@ function renderReport() {
   const max = r.total * 100;
   $('#caseNo').textContent = 'Shift over';
   $('#play').hidden = true;
+  setEffect(null);
   const report = $('#shiftReport');
   report.innerHTML = `<h2 id="reportTitle" tabindex="-1">📜 Shift report</h2>
     <p class="final">Final score <strong>${r.score}</strong> of ${max}</p>

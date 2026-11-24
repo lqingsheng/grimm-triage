@@ -12,9 +12,9 @@
   - _Requirements: 2.4_
 - [x] 6. Shift report screen (score, under/over-triage counts, missed cases with teaching points)
   - _Requirements: 2.3_
-- [ ] 7. Haunting effects: under-triage flicker + blood-drip, correct-answer candle flare; reduced-motion fallback
+- [x] 7. Haunting effects: under-triage flicker + blood-drip, correct-answer candle flare; reduced-motion fallback
   - _Requirements: 2.5, 4.1_
-- [ ] 8. Monster art: inline SVG portraits per monster (no copyrighted assets)
+- [x] 8. Monster art: inline SVG portraits per monster (no copyrighted assets)
   - _Requirements: 4.1_
 - [ ] 9. English / 中文 toggle with a strings table
   - _Requirements: 5.2_

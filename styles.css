@@ -1,6 +1,7 @@
 :root {
   --bg: #0b0a10; --ink: #e9e4f0; --muted: #9a92a8; --blood: #b3122e; --ecto: #7cff9b; --pumpkin: #ff8a1f;
   --l1: #b3122e; --l2: #ff5a1f; --l3: #f2c230; --l4: #3fb27f; --l5: #4a7bd6;
+  --candle: #ffcf6b; --clot: #6d0a1c;
 }
 * { box-sizing: border-box; }
 body { margin: 0; min-height: 100vh; background: radial-gradient(circle at 50% -20%, #2a1838, var(--bg) 60%); color: var(--ink);
@@ -24,6 +25,12 @@ nav button.active { background: var(--blood); border-color: var(--blood); }
 .card { margin: 1rem 0; }
 .card .who { font-size: 1.4rem; }
 .card .emoji { font-size: 3rem; display: block; }
+.card-head { display: flex; align-items: center; gap: 1rem; }
+/* Candle-lit frame for the SVG monster portraits (src/portraits.js) */
+.portrait { flex: none; width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; overflow: hidden;
+  background: radial-gradient(circle at 50% 70%, #ffcf6b2e, #2a1838 72%);
+  border: 2px solid #ff8a1f55; box-shadow: 0 0 18px #ff8a1f33, inset 0 0 14px #000000aa; }
+.portrait-art { width: 84px; height: 84px; display: block; }
 .vitals { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: .5rem; margin-top: .75rem; }
 .vitals div { background: #00000055; border-radius: 8px; padding: .4rem .6rem; font-family: ui-monospace, monospace; }
 .vitals .danger { color: #ff6b81; border: 1px solid #ff6b8166; }
@@ -53,4 +60,59 @@ input, select { font: inherit; background: #00000066; color: var(--ink); border:
 .missed.under { border-left-color: var(--blood); }
 .missed .teach { margin: .4rem 0 0; color: var(--ink); }
 footer { color: var(--muted); font-size: .85rem; text-align: center; }
+
+/* ---- Haunting effects (task 7) ----
+   app.js adds .fx-under or .fx-correct to #game after an answer and removes it on the next case.
+   The flicker dims the panel twice in about one second (under the WCAG 2.3.1 limit of three flashes
+   per second) and never flashes to bright white. */
+#game { position: relative; }
+.drips { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; pointer-events: none; z-index: 2; }
+.drips span { position: absolute; top: 0; width: 7px; height: 0; opacity: 0; border-radius: 0 0 4px 4px;
+  background: linear-gradient(var(--clot), var(--blood)); }
+.drips span::after { content: ''; position: absolute; left: 50%; bottom: -7px; width: 11px; height: 11px; margin-left: -5.5px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: var(--blood); }
+.drips span:nth-child(1) { left: 6%;  --len: 70px;  animation-delay: 0s; }
+.drips span:nth-child(2) { left: 19%; --len: 120px; animation-delay: .25s; }
+.drips span:nth-child(3) { left: 33%; --len: 55px;  animation-delay: .1s; }
+.drips span:nth-child(4) { left: 51%; --len: 150px; animation-delay: .35s; }
+.drips span:nth-child(5) { left: 66%; --len: 85px;  animation-delay: .05s; }
+.drips span:nth-child(6) { left: 80%; --len: 130px; animation-delay: .3s; }
+.drips span:nth-child(7) { left: 93%; --len: 60px;  animation-delay: .15s; }
+.fx-under .drips span { animation-name: drip; animation-duration: 2.6s; animation-timing-function: ease-in; animation-fill-mode: forwards; }
+@keyframes drip { 0% { height: 0; opacity: 1; } 65% { height: var(--len); opacity: 1; } 100% { height: calc(var(--len) + 10px); opacity: 0; } }
+
+.panel.fx-under { border-color: var(--blood); animation: flicker 1s ease-in-out 1; }
+@keyframes flicker {
+  0%, 30%, 70%, 100% { filter: none; }
+  15% { filter: brightness(.45) sepia(.5) saturate(2) hue-rotate(-25deg); }
+  50% { filter: brightness(.7); }
+  60% { filter: brightness(.5) sepia(.4) saturate(2) hue-rotate(-25deg); }
+}
+
+.panel.fx-correct { border-color: var(--pumpkin); animation: flare 1.4s ease-out 1; }
+.fx-correct .portrait { animation: candle 1.4s ease-out 1; }
+@keyframes flare {
+  0% { box-shadow: 0 0 0 0 #ff8a1f00; }
+  30% { box-shadow: 0 0 42px 6px #ff8a1f77, inset 0 0 60px #ffcf6b26; }
+  100% { box-shadow: 0 0 0 0 #ff8a1f00; }
+}
+@keyframes candle {
+  0% { box-shadow: 0 0 18px #ff8a1f33, inset 0 0 14px #000000aa; }
+  30% { box-shadow: 0 0 34px 8px #ffcf6b99, inset 0 0 10px #ffcf6b55; border-color: var(--candle); }
+  100% { box-shadow: 0 0 18px #ff8a1f33, inset 0 0 14px #000000aa; }
+}
+
+/* The text note only shows when motion is reduced; otherwise the animation carries the message
+   and the verdict text already states the outcome. */
+.fx-note { display: none; margin: .5rem 0 0; font-style: italic; }
+
+@media (prefers-reduced-motion: reduce) {
+  .panel.fx-under, .panel.fx-correct, .fx-correct .portrait, .fx-under .drips span { animation: none; }
+  .drips { display: none; }
+  /* Static colour change instead of motion */
+  .panel.fx-under { background: #2a0a12e6; border-color: var(--blood); box-shadow: inset 0 0 0 2px var(--blood); }
+  .panel.fx-correct { background: #24160ae6; border-color: var(--pumpkin); box-shadow: inset 0 0 0 2px var(--pumpkin); }
+  .fx-correct .portrait { border-color: var(--candle); }
+  .fx-note { display: block; }
+}
 @media (max-width: 560px) { .levels { grid-template-columns: repeat(3, 1fr); } h1 { font-size: 1.6rem; } }
