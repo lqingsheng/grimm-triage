@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grimm Triage: Night Shift at St. Grimm's ER</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="fog" aria-hidden="true"></div>
+  <header>
+    <h1>🕯️ St. Grimm's ER <span>Night Shift</span></h1>
+    <p class="tag">Learn real emergency triage by sorting monsters. The costume is fake. The logic is real.</p>
+    <nav>
+      <button data-mode="game" class="active">Night Shift (game)</button>
+      <button data-mode="calc">Triage Desk (calculator)</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="game" class="panel">
+      <div class="hud"><span id="caseNo"></span><span id="score">Score 0</span></div>
+      <article class="card" id="caseCard"></article>
+      <div class="levels" id="levelButtons"></div>
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+      <button id="nextCase" class="ghost" hidden>Next patient ☠️</button>
+    </section>
+
+    <section id="calc" class="panel" hidden>
+      <form id="calcForm" class="grid">
+        <label>Age (years)<input name="ageYears" type="number" value="45" required></label>
+        <label>AVPU
+          <select name="avpu"><option>A</option><option>V</option><option>P</option><option>U</option></select>
+        </label>
+        <label>HR (/min)<input name="hr" type="number" value="90" required></label>
+        <label>RR (/min)<input name="rr" type="number" value="16" required></label>
+        <label>SBP (mmHg)<input name="sbp" type="number" value="125" required></label>
+        <label>SpO₂ (%)<input name="spo2" type="number" value="98" min="0" max="100" required></label>
+        <label>Temp (°C)<input name="tempC" type="number" step="0.1" value="36.8" required></label>
+        <label>Pain (0–10)<input name="pain" type="number" value="2" min="0" max="10" required></label>
+        <label>Expected resources<input name="resources" type="number" value="1" min="0" required></label>
+        <label class="chk"><input name="newConfusion" type="checkbox"> New confusion / lethargy</label>
+        <label class="chk"><input name="highRisk" type="checkbox"> High-risk complaint</label>
+        <label class="chk"><input name="needsLifesaving" type="checkbox"> Needs life-saving intervention now</label>
+        <button type="submit">Summon triage level 🔮</button>
+      </form>
+      <div id="calcResult" class="feedback" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer>
+    Educational demo only. Not a medical device. Never use for real patient care.
+    Based on the logic of the Emergency Severity Index (ESI) v4.
+  </footer>
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

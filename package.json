@@ -1,0 +1,14 @@
+{
+  "name": "grimm-triage",
+  "version": "0.1.0",
+  "description": "Night Shift at St. Grimm's ER: learn real emergency triage by sorting monster patients. Kiroween 2026 entry (Costume Contest).",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "start": "npx --yes serve ."
+  },
+  "devDependencies": {
+    "fast-check": "^3.23.0"
+  }
+}
