@@ -28,6 +28,9 @@ export const STRINGS = {
   'nav.game': { en: 'Night Shift (game)', 'zh-CN': '夜班（游戏）' },
   'nav.calc': { en: 'Triage Desk (calculator)', 'zh-CN': '分诊台（计算器）' },
   'lang.label': { en: 'Language', 'zh-CN': '语言' },
+  'skip.main': { en: 'Skip to main content', 'zh-CN': '跳到主要内容' },
+  'section.game': { en: 'Night Shift game', 'zh-CN': '夜班游戏' },
+  'section.calc': { en: 'Triage Desk calculator', 'zh-CN': '分诊台计算器' },
   'footer.disclaimer': {
     en: 'Educational demo only. Not a medical device. Never use for real patient care.',
     'zh-CN': '仅供教学演示，不是医疗器械。切勿用于真实患者诊疗。',
@@ -44,7 +47,9 @@ export const STRINGS = {
   'level.4': { en: 'Less urgent', 'zh-CN': '次紧急' },
   'level.5': { en: 'Non-urgent', 'zh-CN': '非紧急' },
   'level.badge': { en: 'ESI {level} · {name}', 'zh-CN': 'ESI {level} 级 · {name}' },
-  'level.button': { en: 'Triage level {level}, {name}', 'zh-CN': '分诊 {level} 级，{name}' },
+  // Accessible name of a level button. It must contain the visible text "{level} {name}" in
+  // order (WCAG 2.5.3 Label in Name), so speech-input users can say what they see.
+  'level.button': { en: 'Triage level {level}: {name}', 'zh-CN': '分诊级别 {level}：{name}' },
   'level.group': { en: 'Choose a triage level', 'zh-CN': '选择分诊级别' },
 
   // ---- game ----
@@ -63,6 +68,7 @@ export const STRINGS = {
   },
   'game.why': { en: 'Why: {reasons}.', 'zh-CN': '依据：{reasons}。' },
   'game.reasonSep': { en: '; ', 'zh-CN': '；' },
+  'feedback.label': { en: 'Triage feedback', 'zh-CN': '分诊反馈' },
   'game.points': { en: '(+{points})', 'zh-CN': '（+{points} 分）' },
   'fx.under': {
     en: '🩸 The ward lights bleed red: this patient is sicker than your call.',
@@ -120,6 +126,8 @@ export const STRINGS = {
   'calc.highRisk': { en: 'High-risk complaint', 'zh-CN': '高危主诉' },
   'calc.needsLifesaving': { en: 'Needs life-saving intervention now', 'zh-CN': '需要立即实施抢救性干预' },
   'calc.submit': { en: 'Summon triage level 🔮', 'zh-CN': '召唤分诊级别 🔮' },
+  'calc.form': { en: 'Patient findings', 'zh-CN': '患者检查结果' },
+  'calc.result': { en: 'Triage result', 'zh-CN': '分诊结果' },
   'calc.dangerZone': { en: '⚠️ Danger-zone vitals.', 'zh-CN': '⚠️ 生命体征处于危险区。' },
   'calc.error': { en: 'The spirits reject this input: {message}', 'zh-CN': '幽灵拒绝了这些输入：{message}' },
 };

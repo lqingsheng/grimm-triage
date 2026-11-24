@@ -2,6 +2,10 @@
   --bg: #0b0a10; --ink: #e9e4f0; --muted: #9a92a8; --blood: #b3122e; --ecto: #7cff9b; --pumpkin: #ff8a1f;
   --l1: #b3122e; --l2: #ff5a1f; --l3: #f2c230; --l4: #3fb27f; --l5: #4a7bd6;
   --candle: #ffcf6b; --clot: #6d0a1c;
+  /* Accessibility pass (task 11), WCAG 2.2 AA. Contrast ratios measured on --btn-bg #1a1424.
+     --l1 is 2.6:1 there, so level-1 outlines use --l1-line (5.6:1); --l2..--l5 are >= 4.3:1.
+     Badge text: black on --l2..--l5 (>= 5.1:1), white on --l1 (6.9:1; black was 3.0:1). */
+  --btn-bg: #1a1424; --l1-line: #ff4d6a; --focus: var(--ecto);
 }
 * { box-sizing: border-box; }
 body { margin: 0; min-height: 100vh; background: radial-gradient(circle at 50% -20%, #2a1838, var(--bg) 60%); color: var(--ink);
@@ -16,14 +20,22 @@ h1 { font-size: 2.2rem; margin: .5rem 0 0; color: var(--pumpkin); text-shadow: 0
 h1 .h1-sub { color: var(--ecto); font-size: 1rem; letter-spacing: .2em; text-transform: uppercase; }
 .tag { color: var(--muted); margin-top: .25rem; }
 nav { display: flex; gap: .5rem; flex-wrap: wrap; }
-button { font: inherit; cursor: pointer; border: 1px solid #ffffff33; background: #1a1424; color: var(--ink);
+button { font: inherit; cursor: pointer; border: 1px solid #ffffff33; background: var(--btn-bg); color: var(--ink);
   padding: .6rem 1rem; border-radius: 10px; }
-button:hover, button:focus-visible { border-color: var(--ecto); outline: none; box-shadow: 0 0 10px #7cff9b55; }
-nav button.active { background: var(--blood); border-color: var(--blood); }
+button:hover { border-color: var(--ecto); box-shadow: 0 0 10px #7cff9b55; }
+/* One visible focus ring for every focusable element: 3px ectoplasm green, >= 12:1 on the dark theme
+   (WCAG 2.4.7 / 2.4.11). Mouse clicks on buttons do not show it; keyboard focus always does. */
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+:focus:not(:focus-visible) { outline: none; }
+.skip-link { position: absolute; left: 1rem; top: -3rem; z-index: 10; padding: .5rem 1rem; border-radius: 8px;
+  background: var(--btn-bg); color: var(--ecto); }
+.skip-link:focus { top: .5rem; }
+/* Pressed state is not colour alone (WCAG 1.4.1 / 1.4.11): blood fill plus an ink underline bar. */
+nav button.active, .lang-toggle button[aria-pressed="true"] { background: var(--blood); border-color: var(--blood);
+  box-shadow: inset 0 -3px 0 var(--ink); }
 /* English / 中文 toggle: the pressed language uses the same blood-red state as the active mode */
 .lang-toggle { display: flex; justify-content: flex-end; gap: .35rem; }
 .lang-toggle button { padding: .3rem .75rem; font-size: .9rem; }
-.lang-toggle button[aria-pressed="true"] { background: var(--blood); border-color: var(--blood); }
 /* Chinese text: Georgia has no CJK glyphs, so name serif CJK fonts before the generic fallback */
 body:lang(zh-CN) { font-family: Georgia, 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', 'SimSun', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', serif; }
 .vitals div:lang(zh-CN) { font-family: ui-monospace, monospace, 'Noto Sans CJK SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
@@ -43,20 +55,21 @@ h1 .h1-sub:lang(zh-CN) { letter-spacing: .3em; }
 .vitals div { background: #00000055; border-radius: 8px; padding: .4rem .6rem; font-family: ui-monospace, monospace; }
 .vitals .danger { color: #ff6b81; border: 1px solid #ff6b8166; }
 .levels { display: grid; grid-template-columns: repeat(5, 1fr); gap: .5rem; }
-.levels button { padding: .8rem .3rem; }
-.levels button[data-level="1"] { border-color: var(--l1); } .levels button[data-level="2"] { border-color: var(--l2); }
+.levels button { padding: .8rem .3rem; border-width: 2px; }
+.levels button[aria-disabled="true"] { cursor: not-allowed; }
+.levels button[data-level="1"] { border-color: var(--l1-line); } .levels button[data-level="2"] { border-color: var(--l2); }
 .levels button[data-level="3"] { border-color: var(--l3); } .levels button[data-level="4"] { border-color: var(--l4); }
 .levels button[data-level="5"] { border-color: var(--l5); }
 .feedback { margin-top: 1rem; min-height: 2rem; }
 .badge { display: inline-block; padding: .2rem .7rem; border-radius: 999px; font-weight: bold; color: #000; }
+.badge.lv1 { background: var(--l1); color: #fff; } .badge.lv2 { background: var(--l2); } .badge.lv3 { background: var(--l3); }
+.badge.lv4 { background: var(--l4); } .badge.lv5 { background: var(--l5); }
 .ghost { margin-top: .5rem; background: transparent; border-color: var(--ecto); color: var(--ecto); }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .75rem; }
 label { display: flex; flex-direction: column; gap: .25rem; color: var(--muted); }
 label.chk { flex-direction: row; align-items: center; gap: .5rem; }
 input, select { font: inherit; background: #00000066; color: var(--ink); border: 1px solid #ffffff33; border-radius: 8px; padding: .45rem; }
-.card:focus { outline: none; }
 .report h2 { color: var(--pumpkin); margin: .25rem 0; }
-.report h2:focus { outline: none; }
 .report h3 { color: var(--ecto); margin-bottom: .5rem; }
 .report .final { font-size: 1.25rem; }
 .tally { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .5rem; margin: 0; }
