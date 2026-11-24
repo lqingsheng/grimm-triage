@@ -8,7 +8,7 @@
   - _Requirements: 2.1, 2.2, 3.1–3.3_
 - [x] 4. Pediatric danger-zone thresholds + property test P7
   - _Requirements: 1.8_
-- [ ] 5. Expand case bank to >= 20 monsters (>= 3 per level), add `teachingPoint` to each, shuffle per night
+- [x] 5. Expand case bank to >= 20 monsters (>= 3 per level), add `teachingPoint` to each, shuffle per night
   - _Requirements: 2.4_
 - [ ] 6. Shift report screen (score, under/over-triage counts, missed cases with teaching points)
   - _Requirements: 2.3_

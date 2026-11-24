@@ -1,4 +1,4 @@
-import { triage, scoreGuess, isDangerZone, LEVEL_NAMES } from './triage.js';
+import { triage, scoreGuess, dangerThresholds, LEVEL_NAMES } from './triage.js';
 import { CASES } from './cases.js';
 
 const $ = (s) => document.querySelector(s);
@@ -19,15 +19,27 @@ let idx = 0;
 let score = 0;
 let answered = false;
 
+// Fisher-Yates shuffle on a copy, so each night presents the cases in a new order.
+function shuffled(list) {
+  const a = [...list];
+  for (let i = a.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+let nightCases = shuffled(CASES);
+
 function vitalsHtml(p) {
-  const dz = isDangerZone(p);
+  // Age-appropriate danger-zone cut-offs (pediatric bands for age <= 8), plus the level-1 lows.
+  const t = dangerThresholds(p.ageYears);
   const cell = (label, val, danger) => `<div class="${danger ? 'danger' : ''}">${label} ${val}</div>`;
   return `<div class="vitals">
     ${cell('AVPU', p.avpu, p.avpu !== 'A')}
-    ${cell('HR', p.hr, dz && p.hr > 100)}
-    ${cell('RR', p.rr, dz && p.rr > 20)}
+    ${cell('HR', p.hr, p.hr > t.hr || p.hr < 40)}
+    ${cell('RR', p.rr, p.rr > t.rr || p.rr < 8)}
     ${cell('BP', `${p.sbp} sys`, p.sbp < 90)}
-    ${cell('SpO₂', `${p.spo2}%`, p.spo2 < 92)}
+    ${cell('SpO₂', `${p.spo2}%`, p.spo2 < t.spo2)}
     ${cell('T', `${p.tempC}°C`, p.tempC >= 38.5 || p.tempC < 35)}
     ${cell('Pain', `${p.pain}/10`, p.pain >= 7)}
     ${cell('Resources', p.resources, false)}
@@ -35,9 +47,9 @@ function vitalsHtml(p) {
 }
 
 function renderCase() {
-  const c = CASES[idx];
+  const c = nightCases[idx];
   answered = false;
-  $('#caseNo').textContent = `Patient ${idx + 1} of ${CASES.length}`;
+  $('#caseNo').textContent = `Patient ${idx + 1} of ${nightCases.length}`;
   $('#caseCard').innerHTML = `<span class="emoji" aria-hidden="true">${c.emoji}</span>
     <div class="who">${c.name}</div><p>${c.story}</p>${vitalsHtml(c.patient)}`;
   $('#feedback').innerHTML = '';
@@ -53,18 +65,18 @@ $('#levelButtons').addEventListener('click', (e) => {
   if (!btn || answered) return;
   answered = true;
   const guess = Number(btn.dataset.level);
-  const truth = triage(CASES[idx].patient);
+  const truth = triage(nightCases[idx].patient);
   const s = scoreGuess(guess, truth.level);
   score += s.points;
   $('#score').textContent = `Score ${score}`;
   const verdict = s.points === 100 ? '✅ Correct!' : s.underTriage ? '🩸 Under-triage: this monster is sicker than you thought.' : '🕸️ Over-triage: safe, but you used a resus bay.';
   $('#feedback').innerHTML = `${verdict} ${badge(truth.level)}<br>Why: ${truth.reasons.join('; ')}. (+${s.points})`;
   $('#nextCase').hidden = false;
-  if (idx === CASES.length - 1) $('#nextCase').textContent = 'Start a new night 🌙';
+  if (idx === nightCases.length - 1) $('#nextCase').textContent = 'Start a new night 🌙';
 });
 
 $('#nextCase').addEventListener('click', () => {
-  if (idx === CASES.length - 1) { idx = 0; score = 0; $('#score').textContent = 'Score 0'; $('#nextCase').textContent = 'Next patient ☠️'; }
+  if (idx === nightCases.length - 1) { nightCases = shuffled(CASES); idx = 0; score = 0; $('#score').textContent = 'Score 0'; $('#nextCase').textContent = 'Next patient ☠️'; }
   else idx += 1;
   renderCase();
 });
