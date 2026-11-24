@@ -10,7 +10,7 @@
   - _Requirements: 1.8_
 - [x] 5. Expand case bank to >= 20 monsters (>= 3 per level), add `teachingPoint` to each, shuffle per night
   - _Requirements: 2.4_
-- [ ] 6. Shift report screen (score, under/over-triage counts, missed cases with teaching points)
+- [x] 6. Shift report screen (score, under/over-triage counts, missed cases with teaching points)
   - _Requirements: 2.3_
 - [ ] 7. Haunting effects: under-triage flicker + blood-drip, correct-answer candle flare; reduced-motion fallback
   - _Requirements: 2.5, 4.1_

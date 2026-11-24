@@ -61,6 +61,22 @@ export function dangerThresholds(ageYears) {
   return { label: 'adult, age > 8 years', ...ADULT_DANGER };
 }
 
+// Age-based hypotension cut-off for systolic BP, used ONLY to highlight vitals in the UI.
+// It does not feed triage(): the level-1 SBP rule (< 70) is unchanged.
+// Source: AHA Pediatric Advanced Life Support (PALS) Provider Manual, definition of hypotension:
+//   term neonates 0-28 days: SBP < 60;  infants 1-12 months: SBP < 70;
+//   children 1-10 years: SBP < 70 + (2 x age in years);  over 10 years: SBP < 90.
+// "Age in years" is completed years (e.g. 2.5 y -> 2 -> SBP < 74), as the formula is usually applied.
+// Day 28 counts as neonatal and age 1 and age 10 use the formula, matching the published bands;
+// the formula gives 90 at age 10, so the bands join without a jump.
+const DAYS_PER_YEAR = 365.25;
+export function hypotensionThreshold(ageYears) {
+  if (ageYears * DAYS_PER_YEAR <= 28) return 60;
+  if (ageYears < 1) return 70;
+  if (ageYears <= 10) return 70 + 2 * Math.floor(ageYears);
+  return 90;
+}
+
 export function isDangerZone(p) {
   const t = dangerThresholds(p.ageYears);
   return p.hr > t.hr || p.rr > t.rr || p.spo2 < t.spo2;
