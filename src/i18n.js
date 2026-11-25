@@ -218,7 +218,7 @@ export const STRINGS = {
   'help.pain.ageTitle': { en: 'Choose the scale by age', 'zh-CN': '按年龄选择量表' },
   'help.pain.age.numeric': { en: 'Adults and children aged about 8 and older: the 0 to 10 number scale.', 'zh-CN': '成人及约 8 岁以上儿童：0 至 10 数字评分。' },
   'help.pain.age.faces': { en: 'Children aged about 3 to 7: a faces scale, from a face with no hurt to a face that hurts worst. The child points to the face that matches.', 'zh-CN': '约 3 至 7 岁儿童：面部表情量表，从“不痛”的脸到“最痛”的脸，让孩子指出与自己感受相符的那张脸。' },
-  'help.pain.age.flacc': { en: 'Infants, toddlers and anyone who cannot tell you: score behaviour instead. Face, legs, activity, cry and consolability are each scored 0 to 2, for a total of 0 to 10 (the FLACC scale).', 'zh-CN': '婴幼儿及无法表达的患者：改为评估行为。面部表情、双腿、活动、哭闹和可安抚程度各计 0 至 2 分，总分 0 至 10 分（FLACC 量表）。' },
+  'help.pain.age.flacc': { en: 'Infants, toddlers and anyone who cannot tell you: score behaviour instead. Face, legs, activity, cry and consolability are each scored 0 to 2, for a total of 0 to 10 (the FLACC scale, validated for about 2 months to 7 years).', 'zh-CN': '婴幼儿及无法表达的患者：改为评估行为。面部表情、双腿、活动、哭闹和可安抚程度各计 0 至 2 分，总分 0 至 10 分（FLACC 量表，适用于约 2 月龄至 7 岁）。' },
   'help.pain.look': { en: 'Record the patient’s own rating, and look at the patient too: if the vital signs or behaviour do not match the number, note it.', 'zh-CN': '记录患者自己给出的分数，同时观察患者：若生命体征或行为与分数不符，应记录下来。' },
   'help.pain.esi': { en: 'ESI v4: severe pain or distress (7 or more) means consider ESI 2 at step B. This game always assigns ESI 2 at 7 or more.', 'zh-CN': 'ESI 第 4 版：剧烈疼痛或明显痛苦（7 分及以上）时，在第 B 步考虑 ESI 2 级。本游戏在 7 分及以上时一律判为 ESI 2 级。' },
 
@@ -250,9 +250,9 @@ export const STRINGS = {
   'help.lifesaving.ask': { en: 'Does the patient need one of these right now?', 'zh-CN': '患者现在是否需要以下任一项？' },
   'help.lifesaving.airway': { en: 'Airway and breathing: bag-valve-mask ventilation, intubation, a surgical airway, emergency CPAP or BiPAP', 'zh-CN': '气道与呼吸：球囊面罩通气、气管插管、外科气道、紧急无创正压通气（CPAP 或 BiPAP）' },
   'help.lifesaving.electrical': { en: 'Electrical: defibrillation, emergency cardioversion, external pacing', 'zh-CN': '电治疗：除颤、紧急电复律、体外起搏' },
-  'help.lifesaving.procedures': { en: 'Procedures: needle decompression of the chest, pericardiocentesis', 'zh-CN': '操作：胸腔穿刺减压、心包穿刺' },
+  'help.lifesaving.procedures': { en: 'Procedures: needle decompression of the chest, pericardiocentesis', 'zh-CN': '操作：胸腔穿刺针减压、心包穿刺' },
   'help.lifesaving.circulation': { en: 'Circulation: major IV fluid resuscitation, blood transfusion, control of major bleeding', 'zh-CN': '循环：大量静脉液体复苏、输血、控制大出血' },
-  'help.lifesaving.meds': { en: 'Medicines: naloxone, IV glucose (D50), atropine, adenosine, vasopressors', 'zh-CN': '药物：纳洛酮、静脉葡萄糖（50% 葡萄糖）、阿托品、腺苷、血管活性药物' },
+  'help.lifesaving.meds': { en: 'Medicines: naloxone, IV glucose (D50 in adults, D10 in children), atropine, adenosine, vasopressors', 'zh-CN': '药物：纳洛酮、静脉葡萄糖（成人 50%、儿童 10%）、阿托品、腺苷、血管活性药物' },
   'help.lifesaving.notTitle': { en: 'Not life-saving on their own', 'zh-CN': '单独使用时不算抢救性干预' },
   'help.lifesaving.not': {
     en: 'Oxygen by mask or nasal cannula, a cardiac monitor, an ECG, labs, IV access, a nebuliser, IV fluids at a maintenance rate.',

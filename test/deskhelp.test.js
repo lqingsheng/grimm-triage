@@ -94,6 +94,18 @@ test('the checklist keeps ticked boxes and shows the running total', () => {
   assert.equal(STRINGS['help.resources.rule'].en, 'Count different types of resources, not tests: a blood count and electrolytes are one resource (labs).');
 });
 
+test('wording decided in clinical review (PR #11)', () => {
+  assert.match(STRINGS['help.pain.age.flacc'].en, /validated for about 2 months to 7 years/);
+  assert.match(STRINGS['help.pain.age.flacc']['zh-CN'], /适用于约 2 月龄至 7 岁/);
+  assert.match(STRINGS['help.lifesaving.meds'].en, /IV glucose \(D50 in adults, D10 in children\)/);
+  assert.match(STRINGS['help.lifesaving.meds']['zh-CN'], /静脉葡萄糖（成人 50%、儿童 10%）/);
+  assert.match(STRINGS['help.lifesaving.procedures']['zh-CN'], /胸腔穿刺针减压/);
+  // Kept as built in review.
+  assert.equal(STRINGS['help.highRisk.ex.suicidal'].en, 'Thoughts of suicide or of harming others');
+  assert.equal(STRINGS['help.highRisk.ex.trauma']['zh-CN'], '高能量创伤机制');
+  assert.match(STRINGS['help.lifesaving.meds']['zh-CN'], /血管活性药物/);
+});
+
 test('help content says what the task asks for', () => {
   const en = (f) => helpPanelHtml(f, trFor('en'), { open: true });
   assert.match(en('pain'), /0 is no pain, 10 is the worst pain you can imagine/);
