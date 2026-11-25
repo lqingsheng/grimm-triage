@@ -73,7 +73,7 @@
 
     <section id="calc" class="panel" aria-label="Triage Desk calculator" data-i18n-aria="section.calc" hidden>
       <form id="calcForm" class="grid" aria-label="Patient findings" data-i18n-aria="calc.form">
-        <label><span data-i18n="calc.age">Age (years)</span><input name="ageYears" type="number" value="45" required></label>
+        <label><span data-i18n="calc.age">Age (years)</span><input name="ageYears" type="number" value="45" min="0" step="any" required></label>
         <label><span data-i18n="calc.avpu">AVPU</span>
           <select name="avpu"><option value="A" data-i18n="calc.avpu.A">A</option><option value="V" data-i18n="calc.avpu.V">V</option><option value="P" data-i18n="calc.avpu.P">P</option><option value="U" data-i18n="calc.avpu.U">U</option></select>
         </label>

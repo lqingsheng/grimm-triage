@@ -4,7 +4,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { triage } from '../src/triage.js';
-import { parseVital, missingWarningHtml, provisionalTagHtml, MISSING_REASONS, OPTIONAL_VITALS, WARNING_ID, helpPanelHtml } from '../src/deskhelp.js';
+import { parseVital, missingWarningHtml, provisionalTagHtml, MISSING_REASONS, OPTIONAL_VITALS, WARNING_ID, helpPanelHtml, YOUNG_INFANT_MAX_AGE } from '../src/deskhelp.js';
+import { PEDIATRIC_DANGER } from '../src/triage.js';
 import { lessonHtml } from '../src/lesson.js';
 import { STRINGS, LANGS, t } from '../src/i18n.js';
 
@@ -59,13 +60,37 @@ test('the warning lists every missing vital, with its reason when given, and say
   }
 });
 
+test('under 3 months with no temperature: a stronger warning line, and the level does not change', () => {
+  assert.equal(YOUNG_INFANT_MAX_AGE, PEDIATRIC_DANGER[0].maxAgeYears, 'same cut-off as the engine (< 3 months)');
+  assert.equal(STRINGS['calc.infantTemp'].en, 'Under 3 months: measure temperature now. Fever in a young infant needs urgent assessment and is often ESI 2.');
+  assert.equal(STRINGS['calc.infantTemp']['zh-CN'], '3 月龄以下：请立即测量体温。小婴儿发热需要紧急评估，常为 ESI 2 级。');
+  for (const lang of LANGS) {
+    const tr = trFor(lang);
+    const line = t('calc.infantTemp', lang);
+    for (const resources of [0, 1, 2]) {
+      const infant = { ...base, ageYears: 0.1, hr: 150, rr: 40, resources };
+      const missingTemp = triage({ ...infant, tempC: null });
+      assert.equal(missingTemp.level, triage(infant).level, 'the level does not change');
+      assert.ok(missingWarningHtml(missingTemp, {}, tr, 0.1).includes(line), `${lang}: line shown at ${resources} resources`);
+    }
+    // Not shown at 3 months or older, when temperature was measured, or when the age is unknown.
+    assert.ok(!missingWarningHtml(triage({ ...base, ageYears: 0.25, tempC: null }), {}, tr, 0.25).includes(line), 'exactly 3 months');
+    assert.ok(!missingWarningHtml(triage({ ...base, ageYears: 1, tempC: null }), {}, tr, 1).includes(line), '1 year');
+    assert.ok(!missingWarningHtml(triage({ ...base, ageYears: 0.1, sbp: null }), {}, tr, 0.1).includes(line), 'temperature measured');
+    assert.ok(!missingWarningHtml(triage({ ...base, ageYears: 0.1, tempC: null }), {}, tr).includes(line), 'age not passed');
+  }
+  assert.match(app, /missingWarningHtml\(r, calc\.reasons, tr, calc\.ageYears\)/);
+  // Infants are entered in years (3 weeks = 0.06): the age field must accept fractions.
+  assert.match(html.match(/<input name="ageYears"[^>]*>/)[0], /step="any"/);
+  assert.match(app, /calc = \{ result: triage\(p\), reasons, ageYears: p\.ageYears \}/);
+});
+
 test('the provisional tag shows only for a provisional result', () => {
   const tr = trFor('en');
   assert.equal(provisionalTagHtml(triage({ ...base, rr: null }), tr), ' <span class="provisional-tag">Provisional</span>');
   assert.equal(provisionalTagHtml(triage({ ...base, sbp: null }), tr), '');
   assert.equal(provisionalTagHtml(triage(base), tr), '');
   assert.match(app, /\$\{badge\(r\.level\)\}\$\{provisionalTagHtml\(r, tr\)\}/);
-  assert.match(app, /missingWarningHtml\(r, calc\.reasons, tr\)/);
 });
 
 test('missing inputs point at the warning with aria-describedby', () => {

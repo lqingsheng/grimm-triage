@@ -105,6 +105,7 @@ label.chk { flex-direction: row; align-items: center; gap: .5rem; }
 .missing-warning { margin: .6rem 0 0; padding: .5rem .7rem; border: 1px solid var(--pumpkin); border-left-width: 4px; border-radius: 8px;
   background: var(--btn-bg); color: var(--ink); }
 .missing-warning strong { color: var(--candle); }
+.missing-warning .infant-temp { display: block; margin-top: .4rem; font-weight: bold; color: var(--ink); }
 .provisional-tag { display: inline-block; margin-left: .4rem; padding: 0 .55rem; border: 1px dashed var(--candle); border-radius: 999px;
   color: var(--candle); font-weight: bold; font-size: .9rem; }
 .help-missing, .lesson-missing { color: var(--candle); }

@@ -294,6 +294,10 @@ export const STRINGS = {
   'calc.missing': { en: '⚠ Not measured: {list}.', 'zh-CN': '⚠ 未测量：{list}。' },
   'calc.missingAction': { en: 'Measure as soon as possible and re-triage.', 'zh-CN': '请尽快测量并重新分诊。' },
   'calc.provisional': { en: 'Provisional', 'zh-CN': '暂定' },
+  'calc.infantTemp': {
+    en: 'Under 3 months: measure temperature now. Fever in a young infant needs urgent assessment and is often ESI 2.',
+    'zh-CN': '3 月龄以下：请立即测量体温。小婴儿发热需要紧急评估，常为 ESI 2 级。',
+  },
   'lesson.missingVitals': {
     en: 'If vital signs cannot be obtained, do not delay steps A and B; at step D, treat the patient as possibly in the danger zone until measured.',
     'zh-CN': '如果无法获得生命体征，不要因此延误第 A 步和第 B 步；在第 D 步，测量之前应将患者视为可能处于危险区。',

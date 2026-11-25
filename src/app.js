@@ -369,7 +369,7 @@ function renderCalcResult() {
     return;
   }
   const r = calc.result;
-  $('#calcResult').innerHTML = `${badge(r.level)}${provisionalTagHtml(r, tr)}<br>${tr('game.why', { reasons: reasonsText(r.reasons) })}${r.dangerZone ? ` ${tr('calc.dangerZone')}` : ''}${missingWarningHtml(r, calc.reasons, tr)}`;
+  $('#calcResult').innerHTML = `${badge(r.level)}${provisionalTagHtml(r, tr)}<br>${tr('game.why', { reasons: reasonsText(r.reasons) })}${r.dangerZone ? ` ${tr('calc.dangerZone')}` : ''}${missingWarningHtml(r, calc.reasons, tr, calc.ageYears)}`;
   describeMissing(r.missing);
 }
 
@@ -386,7 +386,7 @@ $('#calcForm').addEventListener('submit', (e) => {
   };
   const reasons = Object.fromEntries(OPTIONAL_VITALS.map((k) => [k, f.get(`${k}Reason`) || '']));
   try {
-    calc = { result: triage(p), reasons };
+    calc = { result: triage(p), reasons, ageYears: p.ageYears };
   } catch (err) {
     calc = { error: err.message };
   }

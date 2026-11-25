@@ -5,7 +5,7 @@
 // The resource checklist reuses RESOURCE_COUNTS / RESOURCE_NOT and their strings from the
 // shift-report lesson (src/lesson.js), so the desk and the lesson can never disagree.
 import { RESOURCE_COUNTS, RESOURCE_NOT } from './lesson.js';
-import { OPTIONAL_VITALS } from './triage.js';
+import { OPTIONAL_VITALS, PEDIATRIC_DANGER } from './triage.js';
 
 // Field name in the form -> label string key and help content.
 export const HELP_FIELDS = {
@@ -94,15 +94,22 @@ export function parseVital(raw) {
   return Number(raw);
 }
 
+// The engine's youngest band (< 3 months), so the infant line uses the same age cut-off as triage().
+export const YOUNG_INFANT_MAX_AGE = PEDIATRIC_DANGER[0].maxAgeYears;
+
 // Warning for a triage() result with missing vitals: what is missing (with the reason, if one was
 // given) and what to do. '' when nothing is missing. `reasons` maps a vital key to a MISSING_REASONS value.
-export function missingWarningHtml(result, reasons, tr) {
+// Under 3 months with no temperature it adds a stronger line (clinical review, PR #12); the level
+// is not changed.
+export function missingWarningHtml(result, reasons, tr, ageYears = null) {
   if (!result.missing?.length) return '';
   const items = result.missing.map((k) => {
     const vital = tr(`calc.vitalName.${k}`);
     return MISSING_REASONS.includes(reasons?.[k]) ? tr('calc.missingItem', { vital, reason: tr(`calc.reasonShort.${reasons[k]}`) }) : vital;
   });
-  return `<p class="missing-warning" id="${WARNING_ID}" role="note">${tr('calc.missing', { list: items.join(tr('calc.missingSep')) })} <strong>${tr('calc.missingAction')}</strong></p>`;
+  const infant = result.missing.includes('tempC') && Number.isFinite(ageYears) && ageYears < YOUNG_INFANT_MAX_AGE
+    ? `<span class="infant-temp">${tr('calc.infantTemp')}</span>` : '';
+  return `<p class="missing-warning" id="${WARNING_ID}" role="note">${tr('calc.missing', { list: items.join(tr('calc.missingSep')) })} <strong>${tr('calc.missingAction')}</strong>${infant}</p>`;
 }
 
 // "Provisional" tag shown next to the level badge when step D could not be completed.
