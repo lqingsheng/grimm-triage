@@ -21,6 +21,8 @@ A spooky, educational web app that teaches five-level ED triage. Players triage 
 3. THE SYSTEM SHALL show a shift report at the end: score, number of under- and over-triages, and the cases missed.
 4. THE SYSTEM SHALL offer at least 20 cases covering every level at least 3 times, shuffled per night.
 5. WHEN a case is under-triaged THE SYSTEM SHALL play a haunting effect (screen flicker, blood-drip) that respects reduced-motion settings.
+6. WHILE a night is in progress THE SYSTEM SHALL keep one visible stain per under-triage, and clear them when a new night starts.
+7. THE SYSTEM SHALL keep effect sound off until the player turns it on.
 
 ## Requirement 3: Triage Desk calculator
 1. THE SYSTEM SHALL accept age, AVPU, HR, RR, SBP, SpO2, temperature, pain, expected resources and three flags.

@@ -23,3 +23,5 @@
 - [x] 11. Accessibility pass: contrast check, focus order, screen-reader labels
   - _Requirements: 4.2, 4.3_
 - [x] 12. Deploy to Vercel; add live URL and screenshots to README
+- [x] 13. Scarier under-triage effect: 12 glossy drips (4–14 px) that pool at the bottom edge, smeared handprint, 1 Hz heartbeat vignette for 3 s, flatlining ECG, desaturated portrait with red eyes, one persistent stain per under-triage (cleared at "Start a new night"), optional Web Audio heartbeat + flatline (off by default). Keep <= 3 flashes/s, readable feedback and the reduced-motion fallback (static stains, tint, text note)
+  - _Requirements: 2.5–2.7, 4.1, 4.2_

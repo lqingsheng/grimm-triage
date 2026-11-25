@@ -2,6 +2,8 @@
   --bg: #0b0a10; --ink: #e9e4f0; --muted: #9a92a8; --blood: #b3122e; --ecto: #7cff9b; --pumpkin: #ff8a1f;
   --l1: #b3122e; --l2: #ff5a1f; --l3: #f2c230; --l4: #3fb27f; --l5: #4a7bd6;
   --candle: #ffcf6b; --clot: #6d0a1c;
+  /* Under-triage effect (task 13): screen vignette, dried stains, glowing eyes. */
+  --vignette: #5c0a18; --stain: #5a0a18; --eye-glow: #ff3030;
   /* Accessibility pass (task 11), WCAG 2.2 AA. Contrast ratios measured on --btn-bg #1a1424.
      --l1 is 2.6:1 there, so level-1 outlines use --l1-line (5.6:1); --l2..--l5 are >= 4.3:1.
      Badge text: black on --l2..--l5 (>= 5.1:1), white on --l1 (6.9:1; black was 3.0:1). */
@@ -31,11 +33,16 @@ button:hover { border-color: var(--ecto); box-shadow: 0 0 10px #7cff9b55; }
   background: var(--btn-bg); color: var(--ecto); }
 .skip-link:focus { top: .5rem; }
 /* Pressed state is not colour alone (WCAG 1.4.1 / 1.4.11): blood fill plus an ink underline bar. */
-nav button.active, .lang-toggle button[aria-pressed="true"] { background: var(--blood); border-color: var(--blood);
+nav button.active, .lang-toggle button[aria-pressed="true"], .sound-toggle[aria-pressed="true"] { background: var(--blood); border-color: var(--blood);
   box-shadow: inset 0 -3px 0 var(--ink); }
 /* English / 中文 toggle: the pressed language uses the same blood-red state as the active mode */
-.lang-toggle { display: flex; justify-content: flex-end; gap: .35rem; }
-.lang-toggle button { padding: .3rem .75rem; font-size: .9rem; }
+.tools { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: .5rem; }
+.lang-toggle { display: flex; gap: .35rem; }
+.lang-toggle button, .sound-toggle { padding: .3rem .75rem; font-size: .9rem; }
+/* Sound toggle (task 13): off by default; the icon is decoration (empty alt text after the slash),
+   the state is announced through aria-pressed. */
+.sound-toggle::before { content: '🔇 ' / ''; }
+.sound-toggle[aria-pressed="true"]::before { content: '🔊 ' / ''; }
 /* Chinese text: Georgia has no CJK glyphs, so name serif CJK fonts before the generic fallback */
 body:lang(zh-CN) { font-family: Georgia, 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', 'SimSun', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', serif; }
 .vitals div:lang(zh-CN) { font-family: ui-monospace, monospace, 'Noto Sans CJK SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
@@ -82,33 +89,113 @@ input, select { font: inherit; background: #00000066; color: var(--ink); border:
 .missed .teach { margin: .4rem 0 0; color: var(--ink); }
 footer { color: var(--muted); font-size: .85rem; text-align: center; }
 
-/* ---- Haunting effects (task 7) ----
-   app.js adds .fx-under or .fx-correct to #game after an answer and removes it on the next case.
-   The flicker dims the panel twice in about one second (under the WCAG 2.3.1 limit of three flashes
-   per second) and never flashes to bright white. */
-#game { position: relative; }
-.drips { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; pointer-events: none; z-index: 2; }
-.drips span { position: absolute; top: 0; width: 7px; height: 0; opacity: 0; border-radius: 0 0 4px 4px;
-  background: linear-gradient(var(--clot), var(--blood)); }
-.drips span::after { content: ''; position: absolute; left: 50%; bottom: -7px; width: 11px; height: 11px; margin-left: -5.5px;
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: var(--blood); }
-.drips span:nth-child(1) { left: 6%;  --len: 70px;  animation-delay: 0s; }
-.drips span:nth-child(2) { left: 19%; --len: 120px; animation-delay: .25s; }
-.drips span:nth-child(3) { left: 33%; --len: 55px;  animation-delay: .1s; }
-.drips span:nth-child(4) { left: 51%; --len: 150px; animation-delay: .35s; }
-.drips span:nth-child(5) { left: 66%; --len: 85px;  animation-delay: .05s; }
-.drips span:nth-child(6) { left: 80%; --len: 130px; animation-delay: .3s; }
-.drips span:nth-child(7) { left: 93%; --len: 60px;  animation-delay: .15s; }
-.fx-under .drips span { animation-name: drip; animation-duration: 2.6s; animation-timing-function: ease-in; animation-fill-mode: forwards; }
-@keyframes drip { 0% { height: 0; opacity: 1; } 65% { height: var(--len); opacity: 1; } 100% { height: calc(var(--len) + 10px); opacity: 0; } }
+/* ---- Haunting effects (tasks 7 and 13) ----
+   app.js adds .fx-under or .fx-correct to #game after an answer and removes it on the next case;
+   .haunted on <body> drives the full-screen vignette. Everything below is decoration (aria-hidden).
 
-.panel.fx-under { border-color: var(--blood); animation: flicker 1s ease-in-out 1; }
-@keyframes flicker {
-  0%, 30%, 70%, 100% { filter: none; }
-  15% { filter: brightness(.45) sepia(.5) saturate(2) hue-rotate(-25deg); }
-  50% { filter: brightness(.7); }
-  60% { filter: brightness(.5) sepia(.4) saturate(2) hue-rotate(-25deg); }
+   Layers, bottom to top. #game is deliberately NOT a stacking context (no filter, opacity or
+   transform on .panel), so the z-indexes below all compete in one context:
+     1  .stains     dried stains that persist through the night (one per under-triage)
+     2  .hud .card .report
+     3  .fx-layer   dim overlay, drips, pool, handprint; .ecg across the top of the card
+     5  .vignette   fixed, full screen
+     6  .levels .feedback #nextCase   always above every effect, so feedback text stays readable
+
+   Flash safety (WCAG 2.3.1): only two animations change the brightness of a large area: the panel
+   flicker (2 dims in 1 s) and the vignette heartbeat (1 pulse per second, 3 times, starting at
+   0.2 s). In any 1 s window that is at most 3 flashes; test/haunt.test.js checks it from this file.
+   The vignette red is dark and not a "saturated red" (R / (R+G+B) < 0.8). */
+#game { position: relative; }
+#play { position: relative; }
+.stains, .fx-layer { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; pointer-events: none; }
+.stains { z-index: 1; }
+.hud, .card, .report { position: relative; z-index: 2; }
+.fx-layer { z-index: 3; container-type: size; visibility: hidden; }
+.fx-under .fx-layer { visibility: visible; }
+.levels, .feedback, #nextCase { position: relative; z-index: 6; }
+.fx-under .feedback { background: #120e1af2; border: 1px solid var(--blood); border-radius: 10px; padding: .6rem .8rem; }
+.fx-under #nextCase { background: var(--btn-bg); }
+
+/* Persistent stains: positions and sizes come from stainLayout() in src/haunt.js. */
+.stain { position: absolute; width: var(--size); height: calc(var(--size) * .8); translate: -50% -50%; rotate: var(--rot);
+  background: radial-gradient(closest-side, var(--stain) 68%, #5a0a18b3 86%, #5a0a1800); opacity: .9;
+  transition: width .8s ease-out, height .8s ease-out; }
+
+/* Flicker: a dark red overlay instead of a filter on the panel (a filter would make #game a
+   stacking context and trap the feedback under the vignette). */
+.fx-dim { position: absolute; inset: 0; background: #1a0306; opacity: 0; }
+.fx-under .fx-dim { animation: flicker 1s ease-in-out 1; }
+@keyframes flicker { 0%, 30%, 75%, 100% { opacity: 0; } 15% { opacity: .6; } 55% { opacity: .5; } }
+
+/* Drips: 12 streaks (src/haunt.js DRIPS, 4 to 14 px wide) with a glossy highlight. Each streak
+   grows from the top, then its drop falls to the bottom edge and the pool there rises. */
+.drips span { position: absolute; top: 0; left: var(--x); width: var(--w); height: 0;
+  border-radius: 0 0 calc(var(--w) / 2) calc(var(--w) / 2);
+  background: linear-gradient(90deg, var(--clot), var(--blood) 40%, #d21a3a 55%, var(--clot)); }
+.drips span::before { content: ''; position: absolute; top: 0; bottom: 3px; left: 22%; width: max(1px, 18%); border-radius: 2px;
+  background: linear-gradient(#ffffff00, #ffffff66 40%, #ffffff26); }
+.drips span::after { content: ''; position: absolute; left: 50%; bottom: calc(var(--w) * -.6); width: calc(var(--w) * 1.5);
+  height: calc(var(--w) * 1.7); translate: -50% 0; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 35% 30%, #ffffff8c 0 12%, #ffffff00 24%),
+    radial-gradient(circle at 50% 60%, #d21a3a, var(--blood) 55%, var(--clot)); }
+.fx-under .drips span { animation: drip 1.6s ease-in var(--d) forwards; }
+.fx-under .drips span::after { animation: drop-fall .7s ease-in calc(var(--d) + 1.6s) forwards; }
+@keyframes drip { from { height: 0; } to { height: var(--len); } }
+@keyframes drop-fall {
+  0% { transform: translateY(0); opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(calc(100cqh - var(--len))); opacity: 0; }
 }
+
+/* Pool along the bottom edge: a scalloped band with a glossy line, rising as the drops land. */
+.pool { position: absolute; left: 0; right: 0; bottom: 0; height: 22px; transform: scaleY(0); transform-origin: 50% 100%;
+  background: linear-gradient(#d21a3a, var(--blood) 35%, var(--clot));
+  mask: radial-gradient(14px 8px at 50% 8px, #000 98%, #0000) 0 0 / 46px 16px repeat-x,
+    linear-gradient(#000 0 0) 0 8px / 100% 100% no-repeat; }
+.pool::before { content: ''; position: absolute; left: 3%; right: 3%; top: 9px; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, #fff0, #ffffff55 20%, #fff0 45%, #ffffff40 70%, #fff0); }
+.fx-under .pool { animation: pool 1.4s ease-out 2s forwards; }
+@keyframes pool { to { transform: scaleY(1); } }
+
+/* Handprint (inline SVG in index.html) slapped on the right side, then dragged down. */
+.handprint { position: absolute; right: 2.5%; top: 4%; width: 52px; height: 174px; color: var(--blood); opacity: .85; }
+.handprint .hand { opacity: 0; }
+.handprint .smear path { stroke-dasharray: 100; stroke-dashoffset: 100; }
+.fx-under .handprint .hand { animation: hand-drag 2.2s cubic-bezier(.3, 0, .6, 1) .5s forwards; }
+.fx-under .handprint .smear path { animation: smear 2.2s cubic-bezier(.3, 0, .6, 1) .5s forwards; }
+@keyframes hand-drag {
+  0% { opacity: 0; transform: translateY(0); }
+  6% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 1; transform: translateY(132px); }
+}
+@keyframes smear { 0%, 6% { stroke-dashoffset: 100; } 100% { stroke-dashoffset: 0; } }
+
+/* Dark red vignette around the whole screen: one slow heartbeat per second for 3 seconds. */
+.vignette { position: fixed; inset: 0; z-index: 5; pointer-events: none; opacity: 0;
+  background: radial-gradient(ellipse at center, #0000 50%, var(--vignette) 100%); }
+.haunted .vignette { animation: heartbeat 1s ease-out .2s 3; }
+@keyframes heartbeat { 0%, 100% { opacity: 0; } 15% { opacity: .9; } 55% { opacity: .3; } }
+
+/* ECG trace across the top of the card: three beats, the last one weak, then flat. */
+.ecg { position: absolute; left: 0; top: .1rem; width: 100%; height: 36px; z-index: 3; pointer-events: none;
+  overflow: visible; visibility: hidden; filter: drop-shadow(0 0 3px var(--ecto)); }
+.ecg path { fill: none; stroke: var(--ecto); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+/* Revealed left to right with a clip (dash offsets break on a stretched, non-scaling stroke). */
+.fx-under .ecg { visibility: visible; clip-path: inset(0 100% 0 0); animation: ecg-trace 3.6s linear .2s forwards; }
+@keyframes ecg-trace { to { clip-path: inset(0 0 0 0); } }
+
+/* Portrait: drains to grey while the eyes glow red (eyeGlowSvg() in src/portraits.js). */
+.portrait > svg { grid-area: 1 / 1; }
+.eye-glow { width: 84px; height: 84px; display: block; opacity: 0; filter: drop-shadow(0 0 3px var(--eye-glow)); }
+.eye-glow .glow-halo { fill: var(--eye-glow); opacity: .5; }
+.eye-glow .glow-core { fill: #ffd6d6; }
+.fx-under .portrait { border-color: var(--blood); }
+.fx-under .portrait-art { animation: desaturate 3s ease-in-out forwards; }
+.fx-under .eye-glow { animation: eyes-glow 3s ease-in-out forwards; }
+@keyframes desaturate { 0%, 100% { filter: none; } 20%, 75% { filter: grayscale(1) brightness(.7) contrast(1.1); } }
+@keyframes eyes-glow { 0%, 100% { opacity: 0; } 20%, 75% { opacity: 1; } }
+
+.panel.fx-under { border-color: var(--blood); }
 
 .panel.fx-correct { border-color: var(--pumpkin); animation: flare 1.4s ease-out 1; }
 .fx-correct .portrait { animation: candle 1.4s ease-out 1; }
@@ -127,10 +214,11 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
    and the verdict text already states the outcome. */
 .fx-note { display: none; margin: .5rem 0 0; font-style: italic; }
 
+/* Reduced motion: only the static stains, the panel tint and the text note. */
 @media (prefers-reduced-motion: reduce) {
-  .panel.fx-under, .panel.fx-correct, .fx-correct .portrait, .fx-under .drips span { animation: none; }
-  .drips { display: none; }
-  /* Static colour change instead of motion */
+  .panel.fx-correct, .fx-correct .portrait, .fx-under .portrait-art { animation: none; }
+  .fx-layer, .vignette, .ecg, .eye-glow { display: none; }
+  .stain { transition: none; }
   .panel.fx-under { background: #2a0a12e6; border-color: var(--blood); box-shadow: inset 0 0 0 2px var(--blood); }
   .panel.fx-correct { background: #24160ae6; border-color: var(--pumpkin); box-shadow: inset 0 0 0 2px var(--pumpkin); }
   .fx-correct .portrait { border-color: var(--candle); }
