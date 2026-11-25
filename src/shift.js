@@ -19,12 +19,13 @@ export const MAX_POINTS = scoreGuess(1, 1).points; // an exact answer
 // ESI v4 decision points, in the order the algorithm asks them.
 export const STEPS = ['A', 'B', 'C', 'D'];
 
-// Reason text that triage() gives when decision point D (danger-zone vitals) makes a case ESI 2.
-const DANGER_ZONE_REASON = /^2\+ resources with danger-zone vital signs/;
+// Reason text that triage() gives when decision point D makes a case ESI 2: danger-zone vitals,
+// or (Triage Desk only) a missing HR, RR or SpO2 that leaves the danger zone unchecked.
+const DANGER_ZONE_REASON = /^2\+ resources with danger-zone vital signs|^danger-zone vital signs could not be checked/;
 
 // Which decision point decided a triage() result:
-//   ESI 1 -> A (life-saving intervention); ESI 2 -> D if danger-zone vitals with 2+ resources made it
-//   so, otherwise B (high risk, confusion/lethargy, severe pain or distress); ESI 3-5 -> C (resources).
+//   ESI 1 -> A (life-saving intervention); ESI 2 -> D if danger-zone vitals (measured, or missing and
+//   so unchecked) with 2+ resources made it so, otherwise B (high risk, confusion/lethargy, severe pain or distress); ESI 3-5 -> C (resources).
 // triage() returns at the first point that fires, so its reasons only ever come from one point.
 export function decisionPointFor(result) {
   if (!result || !isLevel(result.level) || !Array.isArray(result.reasons)) throw new TypeError('decisionPointFor needs a triage() result');

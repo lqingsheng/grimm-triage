@@ -31,3 +31,5 @@
   - _Requirements: 2.3, 2.10, 4.2, 4.3, 5.2_
 - [x] 16. Triage Desk inline help: an ⓘ button (`aria-expanded`, `aria-controls`) and panel for pain score, expected resources, high-risk complaint, life-saving intervention and new confusion / lethargy; a resource checklist that fills the number field, reusing `RESOURCE_COUNTS` / `RESOURCE_NOT` and their strings (complex procedure = 2); English and Chinese
   - _Requirements: 2.11, 3.1, 4.2, 4.3, 5.2, 5.3_
+- [x] 17. Incomplete vital signs on the Triage Desk: `triage()` accepts `null` for HR, RR, SBP, SpO2 and temperature and returns `missing` and `provisional`; provisional ESI 2 at decision point D when HR, RR or SpO2 is missing; "not measured" reasons, warning (`aria-describedby`) and provisional tag in the calculator; a line in the desk help and the lesson; property test P9; English and Chinese
+  - _Requirements: 1.1, 1.6, 1.7, 2.12, 3.1–3.3, 4.2, 4.3, 5.2_

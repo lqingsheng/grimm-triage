@@ -77,11 +77,27 @@
         <label><span data-i18n="calc.avpu">AVPU</span>
           <select name="avpu"><option value="A" data-i18n="calc.avpu.A">A</option><option value="V" data-i18n="calc.avpu.V">V</option><option value="P" data-i18n="calc.avpu.P">P</option><option value="U" data-i18n="calc.avpu.U">U</option></select>
         </label>
-        <label><span data-i18n="calc.hr">HR (/min)</span><input name="hr" type="number" value="90" required></label>
-        <label><span data-i18n="calc.rr">RR (/min)</span><input name="rr" type="number" value="16" required></label>
-        <label><span data-i18n="calc.sbp">SBP (mmHg)</span><input name="sbp" type="number" value="125" required></label>
-        <label><span data-i18n="calc.spo2">SpO₂ (%)</span><input name="spo2" type="number" value="98" min="0" max="100" required></label>
-        <label><span data-i18n="calc.temp">Temp (°C)</span><input name="tempC" type="number" step="0.1" value="36.8" required></label>
+        <p class="vitals-note" id="vitalsNote" data-i18n="calc.vitalsNote">HR, RR, SBP, SpO₂ and temperature may be left blank if they could not be measured.</p>
+        <div class="vital" data-vital="hr">
+          <label><span id="lbl-hr" data-i18n="calc.hr">HR (/min)</span><input name="hr" type="number" value="90" aria-describedby="vitalsNote"></label>
+          <label class="reason"><span id="why-hr" data-i18n="calc.reasonLabel">If not measured: why?</span><select name="hrReason" aria-labelledby="lbl-hr why-hr"><option value="" data-i18n="calc.reason.none">Reason (optional)</option><option value="refused" data-i18n="calc.reason.refused">Patient refused</option><option value="agitated" data-i18n="calc.reason.agitated">Agitated or uncooperative</option><option value="equipment" data-i18n="calc.reason.equipment">No equipment</option><option value="failed" data-i18n="calc.reason.failed">Measurement failed (for example, cold hands for SpO₂)</option><option value="other" data-i18n="calc.reason.other">Other</option></select></label>
+        </div>
+        <div class="vital" data-vital="rr">
+          <label><span id="lbl-rr" data-i18n="calc.rr">RR (/min)</span><input name="rr" type="number" value="16" aria-describedby="vitalsNote"></label>
+          <label class="reason"><span id="why-rr" data-i18n="calc.reasonLabel">If not measured: why?</span><select name="rrReason" aria-labelledby="lbl-rr why-rr"><option value="" data-i18n="calc.reason.none">Reason (optional)</option><option value="refused" data-i18n="calc.reason.refused">Patient refused</option><option value="agitated" data-i18n="calc.reason.agitated">Agitated or uncooperative</option><option value="equipment" data-i18n="calc.reason.equipment">No equipment</option><option value="failed" data-i18n="calc.reason.failed">Measurement failed (for example, cold hands for SpO₂)</option><option value="other" data-i18n="calc.reason.other">Other</option></select></label>
+        </div>
+        <div class="vital" data-vital="sbp">
+          <label><span id="lbl-sbp" data-i18n="calc.sbp">SBP (mmHg)</span><input name="sbp" type="number" value="125" aria-describedby="vitalsNote"></label>
+          <label class="reason"><span id="why-sbp" data-i18n="calc.reasonLabel">If not measured: why?</span><select name="sbpReason" aria-labelledby="lbl-sbp why-sbp"><option value="" data-i18n="calc.reason.none">Reason (optional)</option><option value="refused" data-i18n="calc.reason.refused">Patient refused</option><option value="agitated" data-i18n="calc.reason.agitated">Agitated or uncooperative</option><option value="equipment" data-i18n="calc.reason.equipment">No equipment</option><option value="failed" data-i18n="calc.reason.failed">Measurement failed (for example, cold hands for SpO₂)</option><option value="other" data-i18n="calc.reason.other">Other</option></select></label>
+        </div>
+        <div class="vital" data-vital="spo2">
+          <label><span id="lbl-spo2" data-i18n="calc.spo2">SpO₂ (%)</span><input name="spo2" type="number" value="98" min="0" max="100" aria-describedby="vitalsNote"></label>
+          <label class="reason"><span id="why-spo2" data-i18n="calc.reasonLabel">If not measured: why?</span><select name="spo2Reason" aria-labelledby="lbl-spo2 why-spo2"><option value="" data-i18n="calc.reason.none">Reason (optional)</option><option value="refused" data-i18n="calc.reason.refused">Patient refused</option><option value="agitated" data-i18n="calc.reason.agitated">Agitated or uncooperative</option><option value="equipment" data-i18n="calc.reason.equipment">No equipment</option><option value="failed" data-i18n="calc.reason.failed">Measurement failed (for example, cold hands for SpO₂)</option><option value="other" data-i18n="calc.reason.other">Other</option></select></label>
+        </div>
+        <div class="vital" data-vital="tempC">
+          <label><span id="lbl-tempC" data-i18n="calc.temp">Temp (°C)</span><input name="tempC" type="number" step="0.1" value="36.8" aria-describedby="vitalsNote"></label>
+          <label class="reason"><span id="why-tempC" data-i18n="calc.reasonLabel">If not measured: why?</span><select name="tempCReason" aria-labelledby="lbl-tempC why-tempC"><option value="" data-i18n="calc.reason.none">Reason (optional)</option><option value="refused" data-i18n="calc.reason.refused">Patient refused</option><option value="agitated" data-i18n="calc.reason.agitated">Agitated or uncooperative</option><option value="equipment" data-i18n="calc.reason.equipment">No equipment</option><option value="failed" data-i18n="calc.reason.failed">Measurement failed (for example, cold hands for SpO₂)</option><option value="other" data-i18n="calc.reason.other">Other</option></select></label>
+        </div>
         <div class="field" data-field="pain">
           <label><span data-i18n="calc.pain">Pain (0–10)</span><input name="pain" type="number" value="2" min="0" max="10" required></label>
         </div>

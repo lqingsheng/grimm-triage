@@ -9,7 +9,9 @@ Static single-page app. `triage.js` (pure engine) ← `app.js` (DOM) ← `index.
 - C: count resources → 0 = 5, 1 = 4, >= 2 → check D
 - D: danger-zone vitals (adult: HR > 100, RR > 20, SpO2 < 92) → 2, else 3
 - Pediatric danger zones (to implement): <3 mo HR >180 RR >50; 3 mo–3 y HR >160 RR >40; 3–8 y HR >140 RR >30; SpO2 < 92 for all.
-Output: `{ level, reasons[], dangerZone }`. Errors: `TypeError` with all field messages joined.
+Output: `{ level, reasons[], dangerZone, missing[], provisional }`. Errors: `TypeError` with all field messages joined.
+
+**Missing vital signs (task 17, clinical-safety rule 7):** on the Triage Desk, HR, RR, SBP, SpO2 and temperature may be `null` (not measured). Only explicit `null` counts: `undefined` or `NaN` is still an error. Points A and B use only measured values, so a missing value never triggers level 1 on its own. At D (2+ resources), a measured danger-zone value gives ESI 2 as before. Otherwise a missing HR, RR or SpO2 gives a **provisional** ESI 2, with the reason "danger-zone vital signs could not be checked: when in doubt, choose the more urgent level". ESI 4 and 5, and missing SBP or temperature, never change the level. `missing` lists the null vitals in the order hr, rr, sbp, spo2, tempC. The calculator treats a blank field as missing, and offers an optional reason per vital (refused, agitated or uncooperative, no equipment, measurement failed, other). It shows a warning (`#calcWarning`, `role="note"`, referenced by each missing input's `aria-describedby`) that lists what is missing and says "Measure as soon as possible and re-triage.", and a "Provisional" tag next to the badge. The game's cases always have all five vitals.
 
 ## Scoring
 `scoreGuess(guess, truth)`: exact 100, ±1 = 50, else 0; under-triage subtracts 25 (floor 0). Rationale: under-triage is the clinically dangerous error.
@@ -54,9 +56,10 @@ Rules:
 
 ## Testing strategy
 - Unit tests for each decision point and every case's expected level.
-- Property tests: range/explanation (P1), determinism (P2), level-1 triggers (P3), monotonic safety for high-risk (P4), SpO2 (P5), resources (P6), pediatric thresholds (P7), case variants (P8: any vitals drawn from a case's ranges give exactly its expectedLevel; if not, narrow the range, never the engine).
+- Property tests: range/explanation (P1), determinism (P2), level-1 triggers (P3), monotonic safety for high-risk (P4), SpO2 (P5), resources (P6), pediatric thresholds (P7), missing vitals (P9: a missing vital is at least as urgent as any measured value that is not itself a level-1 trigger), case variants (P8: any vitals drawn from a case's ranges give exactly its expectedLevel; if not, narrow the range, never the engine).
 - Case bank (`test/cases.test.js`): size and balance, coverage of the requested presentations, range validity, openings, no quoted vital values, and a boundary grid that checks every range end and engine cut-off combination for every case (the deterministic twin of P8).
 - ESI lesson (`test/lesson.test.js`): `decisionPointFor` matches the rule that fired for every case and drawn variant; the table numbers equal the engine's thresholds, with none hard-coded; every lesson key exists in both languages; markup and accessibility (headings, lists, scoped table headers, no animation); placement and auto-open in the report.
 - Triage Desk help (`test/deskhelp.test.js`): every `help.*` key in both languages; the checklist count for all 512 tick combinations (complex = 2, each type once); the checklist uses the lesson's keys and strings; buttons carry `aria-expanded` and `aria-controls` pointing at their panel; no links, images or animation.
+- Missing vital signs (`test/missing.test.js`, `test/desk-missing.test.js`, P9 and P9b): every case has all five vitals; only `null` means not measured; each of rules 2–5; an exhaustive grid of P9 over every engine cut-off and age band; the form markup, parsing, warning, provisional tag, strings and shared help/lesson line.
 - Nightly draw (`test/night.test.js`): 3 per level, no repeats from the previous night, top-up when a level runs short, determinism with a seeded random, shuffled order, every case reachable, and no use of `Math.random`.
 - Haunting effect (`test/haunt.test.js`): drip and stain layout, flash count and vignette colour parsed from `styles.css`, layer order, reduced-motion rules, eye positions, and the sound schedule run against a fake `AudioContext`.

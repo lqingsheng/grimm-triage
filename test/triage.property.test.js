@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fc from 'fast-check';
-import { triage } from '../src/triage.js';
+import { triage, OPTIONAL_VITALS } from '../src/triage.js';
 import { CASES } from '../src/cases.js';
 import { INTEGER_VITALS } from '../src/night.js';
 
@@ -126,3 +126,34 @@ test('P8: any vitals drawn from a case\'s ranges give exactly its expectedLevel'
     );
   }
 });
+
+// ---- P9: missing vital signs (task 17, clinical-safety rule 7) ----
+// Removing a vital (null = not measured) never makes the level less urgent than the same patient
+// with a measured value for it, for every measured value that is not itself a level-1 trigger.
+// Those values are excluded on purpose: rule 2 says a missing value never triggers level 1 on its
+// own, so "SpO2 80%" (ESI 1) can be more urgent than "SpO2 not measured".
+const LEVEL1 = { hr: (v) => v < 40, rr: (v) => v < 8, sbp: (v) => v < 70, spo2: (v) => v < 85, tempC: () => false };
+const anyAgeArb = fc.oneof(patientArb, pediatricArb);
+const vitalArb = fc.constantFrom(...OPTIONAL_VITALS);
+// Each other vital is missing about a quarter of the time, so combinations of gaps are covered too.
+const withGapsArb = fc.record({ p: anyAgeArb, gaps: fc.record(Object.fromEntries(OPTIONAL_VITALS.map((k) => [k, fc.integer({ min: 0, max: 3 })]))) })
+  .map(({ p, gaps }) => ({ ...p, ...Object.fromEntries(OPTIONAL_VITALS.filter((k) => gaps[k] === 0).map((k) => [k, null])) }));
+
+test('P9: a missing vital is at least as urgent as any measured value that is not a level-1 trigger', () => {
+  fc.assert(fc.property(withGapsArb, vitalArb, fc.integer({ min: 0, max: 260 }), fc.double({ min: 30, max: 43, noNaN: true }), (p, k, n, temp) => {
+    const value = k === 'tempC' ? temp : k === 'spo2' ? Math.min(100, n) : n;
+    if (LEVEL1[k](value)) return true;
+    return triage({ ...p, [k]: null }).level <= triage({ ...p, [k]: value }).level;
+  }), { numRuns: 2000 });
+});
+
+test('P9b: with vitals missing, P1 still holds, missing is listed exactly, and only step D results are provisional', () => {
+  fc.assert(fc.property(withGapsArb, (p) => {
+    const r = triage(p);
+    const gaps = OPTIONAL_VITALS.filter((k) => p[k] === null);
+    return Number.isInteger(r.level) && r.level >= 1 && r.level <= 5 && r.reasons.length > 0 &&
+      JSON.stringify(r.missing) === JSON.stringify(gaps) &&
+      (!r.provisional || (r.level === 2 && ['hr', 'rr', 'spo2'].some((k) => p[k] === null)));
+  }), { numRuns: 1000 });
+});
+
