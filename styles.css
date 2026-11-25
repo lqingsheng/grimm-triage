@@ -87,6 +87,9 @@ input, select { font: inherit; background: #00000066; color: var(--ink); border:
 .missed { background: #00000055; border-radius: 8px; padding: .6rem .8rem; border-left: 4px solid var(--l3); }
 .missed.under { border-left-color: var(--blood); }
 .missed .teach { margin: .4rem 0 0; color: var(--ink); }
+/* Vitals the player saw for a missed case (task 14): they vary each appearance. */
+.missed .seen { margin: .4rem 0 0; color: var(--muted); font-size: .9rem; }
+.missed .vitals { margin-top: .3rem; }
 footer { color: var(--muted); font-size: .85rem; text-align: center; }
 
 /* ---- Haunting effects (tasks 7 and 13) ----

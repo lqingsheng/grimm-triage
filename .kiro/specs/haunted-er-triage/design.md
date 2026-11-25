@@ -15,10 +15,16 @@ Output: `{ level, reasons[], dangerZone }`. Errors: `TypeError` with all field m
 `scoreGuess(guess, truth)`: exact 100, ±1 = 50, else 0; under-triage subtracts 25 (floor 0). Rationale: under-triage is the clinically dangerous error.
 
 ## Game flow
-Night start → shuffle cases → for each: render card → player picks level → reveal (badge, reasons, points, effect) → next → shift report.
+Night start → plan the night → for each: render card → player picks level → reveal (badge, reasons, points, effect) → next → shift report.
+
+**Nightly plan (task 14, `src/night.js`, pure):** `planNight(CASES, { random, avoid })` draws 3 cases per ESI level (15 per night) and shuffles them. It skips last night's ids, which `app.js` stores in localStorage under `grimm-triage-last-night`. Avoided cases come back only if a level has too few fresh ones; with 12 per level that never happens. Each drawn case is then instantiated: every ranged vital is drawn inside its `variants.vitals` range (whole numbers; temperature to 0.1 °C), and one of the story's openings is picked (its own first sentence or one of 2–3 alternatives, in both languages). One injectable `random` drives all of this; the app passes `Math.random`, and tests pass the seeded `mulberry32(seed)`.
+
+**Score maximum:** `summarizeShift` returns `max` = 100 × cases played (1500 for a full night). The report shows each missed case's drawn vitals next to its teaching point.
 
 ## Data model (case)
-`{ id, name, emoji, story, patient, expectedLevel, teachingPoint }` — `patient` matches the engine input; `expectedLevel` is the author's intended ESI level, checked against `triage()` by a unit test.
+`{ id, name, emoji, story, patient, expectedLevel, teachingPoint, zh, variants }` — `patient` matches the engine input (the case's typical values); `expectedLevel` is the author's intended ESI level, checked against `triage()` by a unit test. `variants.vitals` gives a `[low, high]` range for hr, rr, sbp, spo2 and tempC (and optionally pain); every value inside must give `expectedLevel` (P8). `variants.openings` lists optional `{ en, zh }` alternatives for the story's first sentence. Stories and teaching points quote thresholds, never the patient's own values.
+
+Case bank: 61 cases (12 per ESI level, 13 at ESI 2 after the clinical review moved the staggered paracetamol overdose up), 18 pediatric (at least 2 in each age band: < 3 months, 3 months–3 years, 3–8 years).
 Portraits live in `src/portraits.js` as `PORTRAITS[id] = { label, art }` (inline SVG shapes only, `aria-label` from `label`); `test/portraits.test.js` checks every case has one.
 
 ## Haunting effects
@@ -44,5 +50,7 @@ Rules:
 
 ## Testing strategy
 - Unit tests for each decision point and every case's expected level.
-- Property tests: range/explanation (P1), determinism (P2), level-1 triggers (P3), monotonic safety for high-risk (P4), SpO2 (P5), resources (P6). Add P7 for pediatric thresholds.
+- Property tests: range/explanation (P1), determinism (P2), level-1 triggers (P3), monotonic safety for high-risk (P4), SpO2 (P5), resources (P6), pediatric thresholds (P7), case variants (P8: any vitals drawn from a case's ranges give exactly its expectedLevel; if not, narrow the range, never the engine).
+- Case bank (`test/cases.test.js`): size and balance, coverage of the requested presentations, range validity, openings, no quoted vital values, and a boundary grid that checks every range end and engine cut-off combination for every case (the deterministic twin of P8).
+- Nightly draw (`test/night.test.js`): 3 per level, no repeats from the previous night, top-up when a level runs short, determinism with a seeded random, shuffled order, every case reachable, and no use of `Math.random`.
 - Haunting effect (`test/haunt.test.js`): drip and stain layout, flash count and vignette colour parsed from `styles.css`, layer order, reduced-motion rules, eye positions, and the sound schedule run against a fake `AudioContext`.

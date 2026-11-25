@@ -3,6 +3,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fc from 'fast-check';
 import { triage } from '../src/triage.js';
+import { CASES } from '../src/cases.js';
+import { INTEGER_VITALS } from '../src/night.js';
 
 const patientArb = fc.record({
   ageYears: fc.integer({ min: 9, max: 110 }),
@@ -105,4 +107,22 @@ test('P7d: safety properties P1, P3-P6 also hold for children', () => {
       triage({ ...p, spo2: Math.max(50, p.spo2 - drop) }).level <= r.level &&
       triage({ ...p, resources: p.resources + 1 }).level <= r.level;
   }));
+});
+
+// ---- P8: case variants (task 14) ----
+// Every case is a template: its vitals are drawn inside case.variants.vitals each time it appears.
+// Any value inside those ranges must give exactly the case's expectedLevel. If this fails, narrow
+// the case's range in src/cases.js; never change the engine to fit a case.
+const rangeArb = (key, [lo, hi]) => (INTEGER_VITALS.includes(key)
+  ? fc.integer({ min: lo, max: hi })
+  : fc.integer({ min: Math.round(lo * 10), max: Math.round(hi * 10) }).map((t) => t / 10));
+
+test('P8: any vitals drawn from a case\'s ranges give exactly its expectedLevel', () => {
+  for (const c of CASES) {
+    const vitalsArb = fc.record(Object.fromEntries(Object.entries(c.variants.vitals).map(([k, r]) => [k, rangeArb(k, r)])));
+    fc.assert(
+      fc.property(vitalsArb, (v) => triage({ ...c.patient, ...v }).level === c.expectedLevel),
+      { numRuns: 200, examples: [[{ ...Object.fromEntries(Object.entries(c.variants.vitals).map(([k, [lo]]) => [k, lo])) }], [{ ...Object.fromEntries(Object.entries(c.variants.vitals).map(([k, [, hi]]) => [k, hi])) }]] },
+    );
+  }
 });

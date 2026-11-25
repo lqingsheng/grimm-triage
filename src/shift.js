@@ -1,9 +1,10 @@
 // End-of-night shift report: a pure summary of the player's answers (no DOM, no randomness).
 //
 // summarizeShift(answers) -> {
-//   score, total, correct, underTriage, overTriage,
-//   missed: [{ id, name, emoji, guess, correctLevel, kind: 'under' | 'over', teachingPoint }]
+//   score, max, total, correct, underTriage, overTriage,
+//   missed: [{ id, name, emoji, guess, correctLevel, kind: 'under' | 'over', teachingPoint, patient }]
 // }
+// max is the best possible score (100 per case played). `patient` is the vitals the player saw.
 //
 // answers = [{ case, guess, level }] in the order played, where `case` is an entry from CASES,
 // `guess` is the player's level and `level` is the engine's level for that case.
@@ -11,10 +12,11 @@
 import { scoreGuess } from './triage.js';
 
 const isLevel = (x) => Number.isInteger(x) && x >= 1 && x <= 5;
+export const MAX_POINTS = scoreGuess(1, 1).points; // an exact answer
 
 export function summarizeShift(answers) {
   if (!Array.isArray(answers)) throw new TypeError('answers must be an array');
-  const summary = { score: 0, total: answers.length, correct: 0, underTriage: 0, overTriage: 0, missed: [] };
+  const summary = { score: 0, max: answers.length * MAX_POINTS, total: answers.length, correct: 0, underTriage: 0, overTriage: 0, missed: [] };
 
   answers.forEach((a, i) => {
     if (!a || !a.case) throw new TypeError(`answers[${i}].case is required`);
@@ -29,8 +31,8 @@ export function summarizeShift(answers) {
     }
     if (s.underTriage) summary.underTriage += 1;
     else summary.overTriage += 1;
-    const { id, name, emoji, teachingPoint } = a.case;
-    summary.missed.push({ id, name, emoji, guess: a.guess, correctLevel: a.level, kind: s.underTriage ? 'under' : 'over', teachingPoint });
+    const { id, name, emoji, teachingPoint, patient } = a.case;
+    summary.missed.push({ id, name, emoji, guess: a.guess, correctLevel: a.level, kind: s.underTriage ? 'under' : 'over', teachingPoint, patient });
   });
 
   return summary;

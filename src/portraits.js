@@ -278,6 +278,476 @@ export const PORTRAITS = {
       <path d="M52 49.3v5.4M55 49.2v5.6" stroke="${INK}" stroke-width="1.5"/>
       <ellipse cx="53" cy="48" rx="3" ry="1.8" fill="#e9e4f0" opacity=".8"/>`,
   },
+
+  // ---------------- Task 14: new cases ----------------
+  'werewolf-cub-anaphylaxis': {
+    label: 'Rowan the Werewolf Cub: a small brown wolf pup with a swollen muzzle and red hives',
+    labelZh: '狼人幼崽罗恩：一只棕色小狼崽，口鼻肿胀，身上有红色荨麻疹',
+    eyes: [[26, 31], [38, 31]],
+    art: `<path d="M18 26l2-14 9 9zM46 26l-2-14-9 9z" fill="#8a6a4a"/>
+      <circle cx="32" cy="35" r="15" fill="#a07a55"/>
+      <ellipse cx="32" cy="43" rx="9" ry="7" fill="#e0a98a"/>
+      <circle cx="26" cy="31" r="2" fill="${INK}"/><circle cx="38" cy="31" r="2" fill="${INK}"/>
+      <circle cx="32" cy="40" r="2.2" fill="${INK}"/>
+      <circle cx="21" cy="40" r="1.6" fill="#ff6b81"/><circle cx="44" cy="38" r="1.6" fill="#ff6b81"/><circle cx="41" cy="46" r="1.3" fill="#ff6b81"/>`,
+  },
+  'mothman-organophosphate': {
+    label: 'The Mothman: a dark grey moth-winged figure with tiny pupils, drooling, in a cloud of spray',
+    labelZh: '天蛾人：长着蛾翅的深灰色身影，瞳孔极小，正在流涎，周围是一团喷雾',
+    eyes: [[26, 28], [38, 28]],
+    art: `<path d="M30 30L6 14q-4 18 8 28zM34 30l24-16q4 18-8 28z" fill="#4a4456"/>
+      <ellipse cx="32" cy="36" rx="10" ry="16" fill="#5d5868"/>
+      <circle cx="26" cy="28" r="4.5" fill="#ff8a8a"/><circle cx="38" cy="28" r="4.5" fill="#ff8a8a"/>
+      <circle cx="26" cy="28" r=".9" fill="${INK}"/><circle cx="38" cy="28" r=".9" fill="${INK}"/>
+      <path d="M29 40q3 2 6 0" stroke="${INK}" stroke-width="1.5" fill="none"/>
+      <path d="M31 42v5" stroke="#bfe8ff" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="50" cy="50" r="2" fill="#d9f5c8" opacity=".7"/><circle cx="55" cy="45" r="1.5" fill="#d9f5c8" opacity=".7"/><circle cx="56" cy="54" r="1.2" fill="#d9f5c8" opacity=".7"/>`,
+  },
+  'poltergeist-status': {
+    label: 'Tiny Tremor: a small blue-white ghost baby with jagged shake lines and floating toys',
+    labelZh: '小震颤：一个蓝白色的小幽灵宝宝，周围有锯齿状的抖动线条和漂浮的玩具',
+    eyes: [[28, 34], [36, 34]],
+    art: `<path d="M20 54V36a12 12 0 0 1 24 0v18l-4-3-4 3-4-3-4 3-4-3z" fill="#cfe0f0"/>
+      <path d="M26 34h4M34 34h4" stroke="${DUSK}" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="32" cy="42" rx="2.5" ry="2" fill="${DUSK}"/>
+      <path d="M12 30l3 3-3 3 3 3M52 30l-3 3 3 3-3 3" stroke="#f2c230" stroke-width="1.5" fill="none"/>
+      <rect x="8" y="10" width="7" height="7" rx="1.5" fill="#ff8a1f" transform="rotate(15 11.5 13.5)"/>
+      <circle cx="52" cy="13" r="4" fill="#4a7bd6"/>`,
+  },
+  'dragon-keeper-burn': {
+    label: 'Ember the Dragon Keeper: a soot-smudged keeper with singed hair, holding a tiny green dragon',
+    labelZh: '驯龙人恩伯：满脸烟灰、头发烧焦的驯龙人，怀里抱着一条小绿龙',
+    eyes: [[27, 28], [37, 28]],
+    art: `<path d="M18 26q0-14 14-14t14 14l-3-4-3 4-3-6-3 6-3-6-3 6-3-4z" fill="#3a2a20"/>
+      <circle cx="32" cy="30" r="12" fill="#e0b48f"/>
+      <circle cx="27" cy="28" r="1.8" fill="${INK}"/><circle cx="37" cy="28" r="1.8" fill="${INK}"/>
+      <ellipse cx="32" cy="36" rx="4" ry="2.4" fill="#4a3a34" opacity=".75"/>
+      <circle cx="24" cy="33" r="2.4" fill="#5a4a44" opacity=".5"/><circle cx="41" cy="31" r="2" fill="#5a4a44" opacity=".5"/>
+      <path d="M20 62q0-14 12-16 12 2 12 16z" fill="#7a4a2a"/>
+      <path d="M34 54q8-8 16-3l-3 1 4 3h-5q-4 5-12 2z" fill="#3fb27f"/>
+      <path d="M14 8q2 4-1 7M50 6q3 5 0 8" stroke="#9a92a8" stroke-width="1.5" fill="none" stroke-linecap="round"/>`,
+  },
+  'nymph-ectopic': {
+    label: 'Willow the Wood Nymph: a pale green nymph with leafy hair, eyes half closed, pale and clammy',
+    labelZh: '林中仙子薇洛：长着树叶头发的淡绿色仙子，半闭着眼，面色苍白、皮肤湿冷',
+    eyes: [[27, 33], [37, 33]],
+    art: `<path d="M14 30q-2-16 18-18 20 2 18 18l-6-6-4 6-4-8-4 8-4-8-4 8-4-6z" fill="#3fb27f"/>
+      <ellipse cx="32" cy="36" rx="12" ry="15" fill="#d6e8d0"/>
+      <path d="M24 33q3 1.5 6 0M34 33q3 1.5 6 0" stroke="${DUSK}" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M28 44q4-2 8 0" stroke="${DUSK}" stroke-width="1.5" fill="none"/>
+      <path d="M44 38q2 3 0 5q-2-2 0-5z" fill="#7cc7ff"/>
+      <path d="M10 40q-4 6 0 10M54 40q4 6 0 10" stroke="#5f9a4a" stroke-width="2" fill="none"/>`,
+  },
+  'lich-septic-shock': {
+    label: 'Lord Marrow the Lich: a grey skull-faced sorcerer in a gold crown, shivering, beside a glowing jar',
+    labelZh: '巫妖马罗勋爵：戴金冠、骷髅脸的灰色巫师，正在发抖，身旁有一只发光的罐子',
+    eyes: [[27, 31], [37, 31]],
+    art: `<path d="M20 20l4-8 4 6 4-8 4 8 4-6 4 8z" fill="#f2c230"/>
+      <path d="M20 30a12 12 0 0 1 24 0v8l-3 2v5H23v-5l-3-2z" fill="#c9c4bc"/>
+      <circle cx="27" cy="31" r="3.4" fill="${INK}"/><circle cx="37" cy="31" r="3.4" fill="${INK}"/>
+      <path d="M32 35l-2 3h4z" fill="${INK}"/>
+      <path d="M14 26l-3 2 3 2M50 26l3 2-3 2" stroke="#9a92a8" stroke-width="1.5" fill="none"/>
+      <path d="M12 62l6-14h28l6 14z" fill="#3a2a50"/>
+      <rect x="48" y="46" width="9" height="12" rx="2" fill="#7cff9b" opacity=".55"/><rect x="49" y="43" width="7" height="3" fill="#9a92a8"/>`,
+  },
+  'wraith-asthma': {
+    label: 'Whisper the Wraith: a hooded grey wraith with heavy-lidded eyes, holding a blue inhaler',
+    labelZh: '幽魂低语：戴兜帽的灰色幽魂，眼皮沉重，手拿蓝色吸入器',
+    eyes: [[27, 33], [37, 33]],
+    art: `<path d="M12 60q0-48 20-48t20 48l-6-5-4 5-5-5-5 5-5-5-4 5z" fill="#5d5868"/>
+      <ellipse cx="32" cy="34" rx="10" ry="12" fill="#bdb6c8"/>
+      <path d="M24 33h6M34 33h6" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M24 31q3-2 6 0M34 31q3-2 6 0" stroke="${INK}" stroke-width="1" fill="none"/>
+      <ellipse cx="32" cy="41" rx="2" ry="1.5" fill="${INK}"/>
+      <rect x="44" y="42" width="6" height="12" rx="2" fill="#4a7bd6"/><rect x="42" y="40" width="10" height="4" rx="1.5" fill="#e9e4f0"/>`,
+  },
+  'baby-bat-febrile-infant': {
+    label: 'Baby Bat: a tiny pink bat baby with flushed cheeks, wrapped in a blue blanket',
+    labelZh: '蝙蝠宝宝：脸颊通红的粉色小蝙蝠，裹在蓝色毯子里',
+    eyes: [[28, 30], [36, 30]],
+    art: `<path d="M22 28L6 20l4 10-4 6 14-2zM42 28l16-8-4 10 4 6-14-2z" fill="#5a4a60"/>
+      <path d="M25 22l-2-7 6 5zM39 22l2-7-6 5z" fill="#d9a8b8"/>
+      <circle cx="32" cy="30" r="11" fill="#d9a8b8"/>
+      <circle cx="28" cy="30" r="1.8" fill="${INK}"/><circle cx="36" cy="30" r="1.8" fill="${INK}"/>
+      <circle cx="25" cy="34" r="2.2" fill="#ff6b81" opacity=".75"/><circle cx="39" cy="34" r="2.2" fill="#ff6b81" opacity=".75"/>
+      <path d="M30 36q2 1.5 4 0" stroke="${INK}" stroke-width="1.2" fill="none"/>
+      <path d="M16 62q0-18 16-20 16 2 16 20z" fill="#7cc7ff"/>`,
+  },
+  'siren-preeclampsia': {
+    label: 'Selene the Siren: a siren with flowing sea-green hair and a pregnant belly, stars flashing by her eyes',
+    labelZh: '海妖塞勒涅：海绿色长发飘逸、腹部隆起的海妖，眼旁闪着星光',
+    eyes: [[27, 26], [37, 26]],
+    art: `<path d="M16 40q-4-28 16-28t16 28q-4-6-6-14H22q-2 8-6 14z" fill="#2f8f8a"/>
+      <ellipse cx="32" cy="27" rx="9" ry="11" fill="#cfe8e0"/>
+      <circle cx="27" cy="26" r="1.8" fill="${INK}"/><circle cx="37" cy="26" r="1.8" fill="${INK}"/>
+      <path d="M29 32q3 1 6 0" stroke="${INK}" stroke-width="1.3" fill="none"/>
+      <path d="M20 62q-2-14 6-22h12q12 6 8 22z" fill="#4a7bd6"/>
+      <ellipse cx="38" cy="52" rx="8" ry="7" fill="#5a8be6"/>
+      <path d="M14 18l1.5 3 3 1.5-3 1.5-1.5 3-1.5-3-3-1.5 3-1.5zM50 14l1 2 2 1-2 1-1 2-1-2-2-1 2-1z" fill="#f2c230"/>`,
+  },
+  'shade-suicidal': {
+    label: 'Hollow the Shade: a dark shadow figure with faint grey eyes, arms wrapped round himself',
+    labelZh: '幽影霍洛：一个黑色的影子人形，眼睛是淡淡的灰色，双臂抱着自己',
+    eyes: [[27, 27], [37, 27]],
+    art: `<path d="M16 62q-2-22 6-30a12 12 0 1 1 20 0q8 8 6 30z" fill="#2a2434"/>
+      <circle cx="27" cy="27" r="2" fill="#9a92a8"/><circle cx="37" cy="27" r="2" fill="#9a92a8"/>
+      <path d="M28 34q4-2 8 0" stroke="#9a92a8" stroke-width="1.3" fill="none"/>
+      <path d="M18 46q14 8 28 0" stroke="#3a3246" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M10 20l3 2M54 20l-3 2M8 30h4M56 30h-4" stroke="#5a4a6a" stroke-width="1.5" stroke-linecap="round"/>`,
+  },
+  'grimalkin-fall-anticoag': {
+    label: 'Granny Grimalkin: an elderly witch with grey hair, round glasses and a bump on her brow, with her black cat',
+    labelZh: '格里玛金奶奶：灰发、戴圆眼镜的老女巫，眉骨上有个肿包，身边是她的黑猫',
+    eyes: [[27, 32], [37, 32]],
+    art: `<path d="M18 30q0-16 14-16t14 16q-4-6-14-6t-14 6z" fill="#c8c0d4"/>
+      <ellipse cx="32" cy="35" rx="12" ry="13" fill="#e8d6c8"/>
+      <circle cx="27" cy="32" r="3.2" fill="none" stroke="${INK}" stroke-width="1.2"/><circle cx="37" cy="32" r="3.2" fill="none" stroke="${INK}" stroke-width="1.2"/>
+      <circle cx="27" cy="32" r="1.3" fill="${INK}"/><circle cx="37" cy="32" r="1.3" fill="${INK}"/>
+      <path d="M30.2 32h3.6" stroke="${INK}" stroke-width="1.2"/>
+      <ellipse cx="38" cy="25" rx="3" ry="2" fill="#b58aa0"/>
+      <path d="M28 42q4 2 8 0" stroke="${INK}" stroke-width="1.4" fill="none"/>
+      <path d="M48 62v-10a6 6 0 0 1 12 0v10zM48 47l1-5 3 4zM60 47l-1-5-3 4z" fill="${INK}"/>
+      <circle cx="52" cy="51" r="1" fill="#f2c230"/><circle cx="56" cy="51" r="1" fill="#f2c230"/>`,
+  },
+  'sugar-skull-dka': {
+    label: 'Sofia Sugar Skull: a white sugar-skull face with blue flower eyes and a sweet wrapper',
+    labelZh: '糖骷髅索菲亚：白色糖骷髅脸，眼眶画着蓝色花朵，旁边有一张糖纸',
+    eyes: [[26, 30], [38, 30]],
+    art: `<path d="M18 30a14 14 0 0 1 28 0v8l-4 3v6H22v-6l-4-3z" fill="#f4f0f8"/>
+      <circle cx="26" cy="30" r="5" fill="#7cc7ff"/><circle cx="38" cy="30" r="5" fill="#7cc7ff"/>
+      <circle cx="26" cy="30" r="2" fill="${INK}"/><circle cx="38" cy="30" r="2" fill="${INK}"/>
+      <path d="M32 34l-2 4h4z" fill="#ff6b81"/>
+      <path d="M24 43h16M27 41v4M31 41v4M35 41v4" stroke="${INK}" stroke-width="1.2"/>
+      <circle cx="32" cy="20" r="2.5" fill="#ff8a1f"/><circle cx="27" cy="21" r="1.5" fill="#3fb27f"/><circle cx="37" cy="21" r="1.5" fill="#3fb27f"/>
+      <path d="M50 52l4-3 4 3-4 3z" fill="#ff6b81"/><path d="M46 52h4M58 52h4" stroke="#f2c230" stroke-width="1.5"/>`,
+  },
+  'raven-paracetamol': {
+    label: 'Poe the Raven: a black raven with yellow eyes, a cracked grey beak and a small white pill',
+    labelZh: '渡鸦坡：一只黄眼睛的黑色渡鸦，灰色的喙上有裂纹，旁边有一粒白色小药片',
+    eyes: [[27, 26], [37, 26]],
+    art: `<ellipse cx="32" cy="40" rx="15" ry="17" fill="#2a2434"/>
+      <circle cx="32" cy="27" r="11" fill="#3a3246"/>
+      <circle cx="27" cy="26" r="2.2" fill="#f2c230"/><circle cx="37" cy="26" r="2.2" fill="#f2c230"/>
+      <circle cx="27" cy="26" r="1" fill="${INK}"/><circle cx="37" cy="26" r="1" fill="${INK}"/>
+      <path d="M28 31l4 9 4-9z" fill="#9a92a8"/>
+      <path d="M32.5 32l-1.5 3" stroke="${INK}" stroke-width="1"/>
+      <ellipse cx="52" cy="56" rx="5" ry="3" fill="#e9e4f0"/><path d="M52 53v6" stroke="#9a92a8" stroke-width="1"/>`,
+  },
+  'golem-renal-colic': {
+    label: 'Granite the Golem: a grey stone golem with glowing amber eyes, clutching his side, a small pebble beside him',
+    labelZh: '石魔格拉尼特：一个眼睛发出琥珀色光的灰色石魔，捂着腰侧，身旁有一颗小石子',
+    eyes: [[26, 26], [38, 26]],
+    art: `<rect x="17" y="12" width="30" height="26" rx="5" fill="#8a8694"/>
+      <path d="M22 16l6 4M40 14l-3 6M44 30l-5 2" stroke="#6b6778" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="26" cy="26" r="2.6" fill="#ffb347"/><circle cx="38" cy="26" r="2.6" fill="#ffb347"/>
+      <path d="M27 34q5-3 10 0" stroke="${INK}" stroke-width="1.8" fill="none"/>
+      <rect x="14" y="40" width="36" height="22" rx="6" fill="#7a7684"/>
+      <path d="M50 46q-8 2-10 8" stroke="#9a96a4" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M44 50l3-3M45 53l3-1" stroke="#ff6b81" stroke-width="1.2" stroke-linecap="round"/>
+      <ellipse cx="9" cy="52" rx="3" ry="2.2" fill="#b8b4c0"/>`,
+  },
+  'ghoul-gi-bleed': {
+    label: 'Gus the Ghoul: a grey-green ghoul with sunken eyes, next to a roll of toilet paper',
+    labelZh: '食尸鬼格斯：灰绿色食尸鬼，眼窝深陷，旁边有一卷卫生纸',
+    eyes: [[27, 31], [37, 31]],
+    art: `<ellipse cx="32" cy="33" rx="13" ry="16" fill="#8a9a7a"/>
+      <ellipse cx="27" cy="31" rx="3.5" ry="3" fill="#5a6a4a"/><ellipse cx="37" cy="31" rx="3.5" ry="3" fill="#5a6a4a"/>
+      <circle cx="27" cy="31" r="1.4" fill="#f4f0e0"/><circle cx="37" cy="31" r="1.4" fill="#f4f0e0"/>
+      <path d="M26 42q6 3 12 0" stroke="${INK}" stroke-width="1.6" fill="none"/>
+      <path d="M22 20q4-4 6 0M36 19q4-4 6 1" stroke="#5a6a4a" stroke-width="2" fill="none"/>
+      <rect x="46" y="46" width="12" height="12" rx="3" fill="#f4f0f8"/><circle cx="52" cy="52" r="2" fill="#c8c0d4"/>`,
+  },
+  'horseman-head-injury': {
+    label: 'Sir Bram the Horseman: a knight with a dented helmet and a white bandage round his head, beside a horseshoe',
+    labelZh: '骑士布拉姆：头盔凹陷、头缠白色绷带的骑士，旁边有一只马蹄铁',
+    eyes: [[27, 36], [37, 36]],
+    art: `<path d="M18 34q0-20 14-20t14 20z" fill="#9aa0a8"/>
+      <path d="M30 14l2 4 2-4" stroke="#6a7078" stroke-width="1.5" fill="none"/>
+      <rect x="18" y="30" width="28" height="18" rx="6" fill="#e0b48f"/>
+      <path d="M17 29h30" stroke="#f4f0f8" stroke-width="5"/>
+      <circle cx="40" cy="28" r="1.6" fill="#b3122e"/>
+      <circle cx="27" cy="36" r="1.8" fill="${INK}"/><circle cx="37" cy="36" r="1.8" fill="${INK}"/>
+      <path d="M28 43q4-2 8 0" stroke="${INK}" stroke-width="1.5" fill="none"/>
+      <path d="M48 60v-6a5 5 0 0 1 10 0v6" stroke="#9aa0a8" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+  },
+  'kelpie-pyelonephritis': {
+    label: 'Kip the Kelpie: a young blue-green water horse with a dripping mane and flushed cheeks',
+    labelZh: '水马基普：一匹蓝绿色的小水马，鬃毛滴着水，脸颊通红',
+    eyes: [[26, 30], [38, 30]],
+    art: `<path d="M20 22l2-10 6 7zM44 22l-2-10-6 7z" fill="#3f8fa0"/>
+      <path d="M18 26q0-10 14-10t14 10v16q0 10-14 12-14-2-14-12z" fill="#5fb0c0"/>
+      <ellipse cx="32" cy="46" rx="9" ry="6" fill="#8fd0dc"/>
+      <circle cx="26" cy="30" r="2.2" fill="${INK}"/><circle cx="38" cy="30" r="2.2" fill="${INK}"/>
+      <circle cx="29" cy="46" r="1.2" fill="${INK}"/><circle cx="35" cy="46" r="1.2" fill="${INK}"/>
+      <circle cx="22" cy="37" r="2.2" fill="#ff6b81" opacity=".7"/><circle cx="42" cy="37" r="2.2" fill="#ff6b81" opacity=".7"/>
+      <path d="M30 14q-4 6-2 10M36 14q2 6 0 10" stroke="#2f6f80" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M14 30q-2 4 0 6q2-2 0-6z" fill="#7cc7ff"/>`,
+  },
+  'hobgoblin-dehydration': {
+    label: 'Nib the Hobgoblin: a small brown hobgoblin toddler in a spotted red mushroom-cap hat, with a tear',
+    labelZh: '小妖精尼布：戴红色斑点蘑菇帽的棕色小妖精幼儿，流着一滴泪',
+    eyes: [[27, 36], [37, 36]],
+    art: `<path d="M18 34L8 30l8 8zM46 34l10-4-8 8z" fill="#9a7a5a"/>
+      <circle cx="32" cy="38" r="12" fill="#b08a65"/>
+      <path d="M14 30q18-24 36 0z" fill="#d9413a"/>
+      <circle cx="22" cy="24" r="2" fill="#f4f0e0"/><circle cx="33" cy="17" r="2.2" fill="#f4f0e0"/><circle cx="42" cy="24" r="1.8" fill="#f4f0e0"/>
+      <circle cx="27" cy="36" r="1.8" fill="${INK}"/><circle cx="37" cy="36" r="1.8" fill="${INK}"/>
+      <path d="M28 45q4-2 8 0" stroke="${INK}" stroke-width="1.5" fill="none"/>
+      <path d="M25 39q2 3 0 5q-2-2 0-5z" fill="#7cc7ff"/>`,
+  },
+  'spider-hip-fracture': {
+    label: 'Grandma Cobweb: an elderly spider lady with grey curls and a purple shawl, lying beside a cobweb',
+    labelZh: '蛛网奶奶：一位灰色卷发、披紫色披肩的蜘蛛老奶奶，躺在一张蛛网旁',
+    eyes: [[28, 28], [36, 28]],
+    art: `<path d="M18 40L6 34M18 44L4 46M46 40l12-6M46 44l14 2M20 48l-8 10M44 48l8 10" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="32" cy="44" rx="15" ry="11" fill="#6a4a80"/>
+      <circle cx="32" cy="28" r="10" fill="#b8a8c0"/>
+      <circle cx="25" cy="20" r="3" fill="#e9e4f0"/><circle cx="31" cy="18" r="3" fill="#e9e4f0"/><circle cx="37" cy="18" r="3" fill="#e9e4f0"/><circle cx="41" cy="22" r="2.6" fill="#e9e4f0"/>
+      <circle cx="28" cy="28" r="1.6" fill="${INK}"/><circle cx="36" cy="28" r="1.6" fill="${INK}"/>
+      <path d="M29 33q3 2 6 0" stroke="${INK}" stroke-width="1.3" fill="none"/>
+      <path d="M50 6l8 8M58 6l-8 8M54 4v12M48 10h12" stroke="#9a92a8" stroke-width=".8"/>`,
+  },
+  'troll-cellulitis': {
+    label: 'Bruk the Bridge Troll: a big grey-green troll with tusks and a red, swollen shin',
+    labelZh: '桥下巨魔布鲁克：长着獠牙的高大灰绿色巨魔，小腿红肿',
+    eyes: [[26, 26], [38, 26]],
+    art: `<ellipse cx="32" cy="28" rx="16" ry="14" fill="#7a8a6a"/>
+      <ellipse cx="32" cy="32" rx="5" ry="4" fill="#6a7a5a"/>
+      <circle cx="26" cy="26" r="2.2" fill="${INK}"/><circle cx="38" cy="26" r="2.2" fill="${INK}"/>
+      <path d="M24 38q8 4 16 0" stroke="${INK}" stroke-width="1.8" fill="none"/>
+      <path d="M26 38l1-5 2 4zM38 38l-1-5-2 4z" fill="#f4f0e0"/>
+      <rect x="22" y="46" width="8" height="16" rx="3" fill="#7a8a6a"/><rect x="34" y="46" width="8" height="16" rx="3" fill="#d9536b"/>
+      <path d="M8 58h16M40 58h16" stroke="#6b6478" stroke-width="3"/>`,
+  },
+  'cyclops-pneumonia': {
+    label: 'Ollie the Cyclops: a pale orange cyclops with one big eye, coughing into his fist',
+    labelZh: '独眼巨人奥利：一个淡橙色的独眼巨人，只有一只大眼睛，正对着拳头咳嗽',
+    eyes: [[32, 28], [32, 28]],
+    art: `<ellipse cx="32" cy="32" rx="15" ry="17" fill="#e0a070"/>
+      <circle cx="32" cy="28" r="7" fill="#f4f0e0"/>
+      <circle cx="32" cy="28" r="3.5" fill="#4a7bd6"/><circle cx="32" cy="28" r="1.6" fill="${INK}"/>
+      <path d="M26 20q6-4 12 0" stroke="#8a5a3a" stroke-width="2" fill="none"/>
+      <ellipse cx="32" cy="42" rx="4" ry="3" fill="#8a5a3a"/>
+      <circle cx="40" cy="46" r="5" fill="#d08a60"/>
+      <path d="M48 40q4-2 6 0M48 44q5 0 8 2" stroke="#9a92a8" stroke-width="1.5" fill="none" stroke-linecap="round"/>`,
+  },
+  'hag-asthma-mild': {
+    label: 'Hex the Hag: a witch with wild grey hair and a long nose, holding a broom and an inhaler',
+    labelZh: '老巫婆赫克丝：灰发蓬乱、长鼻子的女巫，手拿扫帚和吸入器',
+    eyes: [[27, 30], [37, 30]],
+    art: `<path d="M14 36q-4-24 18-24t18 24l-5-8-3 6-4-10-3 8-3-8-4 10-3-6z" fill="#9a92a8"/>
+      <ellipse cx="32" cy="34" rx="11" ry="13" fill="#b5c88a"/>
+      <circle cx="27" cy="30" r="1.8" fill="${INK}"/><circle cx="37" cy="30" r="1.8" fill="${INK}"/>
+      <path d="M32 31l-2 9 4-1z" fill="#8fa86a"/>
+      <path d="M28 43q4 2 8 0" stroke="${INK}" stroke-width="1.4" fill="none"/>
+      <path d="M6 62L20 40" stroke="#a67c3d" stroke-width="2.5"/><path d="M4 62l4-6 4 4z" fill="#d9b77a"/>
+      <rect x="46" y="46" width="6" height="11" rx="2" fill="#4a7bd6"/><rect x="44" y="44" width="10" height="4" rx="1.5" fill="#e9e4f0"/>`,
+  },
+  'elf-strep-throat': {
+    label: 'Holly the Elf: a young elf with pointed ears and a red hat, holding her sore throat',
+    labelZh: '小精灵霍莉：一个尖耳朵、戴红帽子的小精灵，捂着疼痛的喉咙',
+    eyes: [[28, 34], [36, 34]],
+    art: `<path d="M18 30l-8-6 10 12zM46 30l8-6-10 12z" fill="#f3d2c1"/>
+      <path d="M20 28q4-22 26-20-6 4-6 12z" fill="#d9413a"/><circle cx="46" cy="8" r="3" fill="#f4f0f8"/>
+      <circle cx="32" cy="36" r="12" fill="#f3d2c1"/>
+      <circle cx="28" cy="34" r="1.6" fill="${INK}"/><circle cx="36" cy="34" r="1.6" fill="${INK}"/>
+      <path d="M29 41q3-1.5 6 0" stroke="${INK}" stroke-width="1.4" fill="none"/>
+      <circle cx="25" cy="39" r="2" fill="#ff6b81" opacity=".6"/><circle cx="39" cy="39" r="2" fill="#ff6b81" opacity=".6"/>
+      <path d="M24 52q8-6 16 0" stroke="#3fb27f" stroke-width="5" fill="none" stroke-linecap="round"/>`,
+  },
+  'troll-tot-pulled-elbow': {
+    label: 'Tansy the Troll Tot: a small round blue troll child holding her left arm bent against her tummy',
+    labelZh: '小巨魔坦西：圆滚滚的蓝色巨魔小孩，把左臂弯曲贴在肚子上',
+    eyes: [[27, 26], [37, 26]],
+    art: `<path d="M22 14q10-10 20 0" stroke="#ff8a1f" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="32" cy="26" r="11" fill="#7a9ad0"/>
+      <circle cx="27" cy="26" r="1.8" fill="${INK}"/><circle cx="37" cy="26" r="1.8" fill="${INK}"/>
+      <ellipse cx="32" cy="31" rx="3" ry="2" fill="#5a7ab0"/>
+      <path d="M29 34q3 1.5 6 0" stroke="${INK}" stroke-width="1.3" fill="none"/>
+      <ellipse cx="32" cy="50" rx="13" ry="12" fill="#7a9ad0"/>
+      <path d="M44 46q-4 8-12 6" stroke="#5a7ab0" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M20 44l-8 10" stroke="#5a7ab0" stroke-width="5" stroke-linecap="round"/>`,
+  },
+  'gnome-coin': {
+    label: 'Pebble the Gnome: a little garden gnome with a white beard and a pointed blue hat, beside a gold coin',
+    labelZh: '地精佩布尔：留着白胡子、戴蓝色尖帽的花园小地精，旁边有一枚金币',
+    eyes: [[28, 32], [36, 32]],
+    art: `<path d="M20 28L32 4l12 24z" fill="#4a7bd6"/>
+      <circle cx="32" cy="34" r="10" fill="#f3d2c1"/>
+      <path d="M22 36q10 22 20 0q-4 4-10 4t-10-4z" fill="#f4f0f8"/>
+      <circle cx="28" cy="32" r="1.6" fill="${INK}"/><circle cx="36" cy="32" r="1.6" fill="${INK}"/>
+      <circle cx="32" cy="36" r="2.4" fill="#e0a98a"/>
+      <circle cx="52" cy="52" r="6" fill="#f2c230"/><circle cx="52" cy="52" r="4" fill="none" stroke="#c9960f" stroke-width="1"/>`,
+  },
+  'sprite-forehead-cut': {
+    label: 'Twig the Tree Sprite: a bark-brown sprite with leafy twig hair and a small cut on her forehead',
+    labelZh: '树精灵特维格：树皮棕色的精灵，长着带叶的枝条头发，额头有一道小伤口',
+    eyes: [[27, 34], [37, 34]],
+    art: `<path d="M22 22l-6-10M28 18l-2-12M36 18l2-12M42 22l6-10" stroke="#6a4a2a" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="16" cy="11" rx="3" ry="2" fill="#3fb27f"/><ellipse cx="38" cy="6" rx="3" ry="2" fill="#3fb27f"/><ellipse cx="48" cy="11" rx="3" ry="2" fill="#3fb27f"/>
+      <ellipse cx="32" cy="36" rx="12" ry="15" fill="#a67c52"/>
+      <path d="M30 26l5 1" stroke="#b3122e" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="27" cy="34" r="1.8" fill="${INK}"/><circle cx="37" cy="34" r="1.8" fill="${INK}"/>
+      <path d="M28 43q4 2 8 0" stroke="${INK}" stroke-width="1.4" fill="none"/>
+      <path d="M24 48q2 4 0 8M40 48q-2 4 0 8" stroke="#8a5f3a" stroke-width="1.2" fill="none"/>`,
+  },
+  'swamp-abscess': {
+    label: 'Murk the Swamp Thing: a dripping green swamp creature with weed hair and a red lump under one arm',
+    labelZh: '沼泽怪默克：浑身滴水的绿色沼泽生物，头发是水草，一侧腋下有个红色肿块',
+    eyes: [[27, 28], [37, 28]],
+    art: `<path d="M16 62q-4-30 6-40 10-10 20 0 10 10 6 40z" fill="#4f7a4a"/>
+      <path d="M20 22q-2-8 4-12M30 16q0-8 4-10M40 18q4-6 8-6" stroke="#3a5a34" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <circle cx="27" cy="28" r="2.4" fill="#f2c230"/><circle cx="37" cy="28" r="2.4" fill="#f2c230"/>
+      <circle cx="27" cy="28" r="1" fill="${INK}"/><circle cx="37" cy="28" r="1" fill="${INK}"/>
+      <path d="M27 37q5 2 10 0" stroke="${INK}" stroke-width="1.5" fill="none"/>
+      <circle cx="45" cy="44" r="4" fill="#d9536b"/>
+      <path d="M20 54v6M44 56v5" stroke="#7cc7ff" stroke-width="1.5" stroke-linecap="round"/>`,
+  },
+  'pirate-vomiting': {
+    label: 'Captain Barnacle: a pale green ghost pirate in a tricorn hat with an eye patch, looking seasick',
+    labelZh: '巴纳克船长：戴三角帽和眼罩的淡绿色幽灵海盗，一脸晕船的样子',
+    eyes: [[27, 32], [37, 32]],
+    art: `<path d="M12 24q20-16 40 0-6 4-20 4t-20-4z" fill="${INK}"/>
+      <path d="M28 18l4 3 4-3" stroke="#f4f0f8" stroke-width="1.5" fill="none"/>
+      <path d="M18 28v24l4-3 4 3 4-3 4 3 4-3 4 3V28z" fill="#bfe0c8" opacity=".9"/>
+      <circle cx="27" cy="32" r="2.6" fill="${INK}"/><path d="M18 28l16 8" stroke="${INK}" stroke-width="1"/>
+      <circle cx="37" cy="32" r="1.8" fill="${INK}"/>
+      <path d="M27 41q2-2 4 0t4 0 4 0" stroke="${INK}" stroke-width="1.4" fill="none"/>
+      <path d="M4 58q6-4 12 0t12 0 12 0 12 0 12 0" stroke="#4a7bd6" stroke-width="2" fill="none"/>`,
+  },
+  'satyr-nail-puncture': {
+    label: 'Barnaby the Satyr: a curly-haired satyr with small horns, lifting one hoof with a nail beside it',
+    labelZh: '萨堤尔巴纳比：卷发、长着小犄角的萨堤尔，抬起一只蹄子，旁边有一根钉子',
+    eyes: [[27, 26], [37, 26]],
+    art: `<path d="M22 16q-6-8 0-10M42 16q6-8 0-10" stroke="#c8c0a0" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="24" cy="18" r="4" fill="#6a4a2a"/><circle cx="32" cy="15" r="4" fill="#6a4a2a"/><circle cx="40" cy="18" r="4" fill="#6a4a2a"/>
+      <circle cx="32" cy="27" r="10" fill="#e0b48f"/>
+      <circle cx="27" cy="26" r="1.7" fill="${INK}"/><circle cx="37" cy="26" r="1.7" fill="${INK}"/>
+      <path d="M28 32q4 2 8 0" stroke="${INK}" stroke-width="1.4" fill="none"/>
+      <path d="M26 40v14l-4 6M38 40v10l6 4" stroke="#8a6a4a" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M50 46l6 10M48 47l4-2" stroke="#9aa0a8" stroke-width="2" stroke-linecap="round"/>`,
+  },
+  'brownie-ear-bead': {
+    label: 'Bramble the Brownie: a small brown household spirit with big ears, a shiny bead in one ear',
+    labelZh: '家精灵布兰布尔：一个大耳朵的棕色小家精灵，一只耳朵里有颗闪亮的珠子',
+    eyes: [[27, 32], [37, 32]],
+    art: `<path d="M20 30L6 22l6 14zM44 30l14-8-6 14z" fill="#9a7050"/>
+      <circle cx="13" cy="28" r="2" fill="#7cc7ff"/>
+      <circle cx="32" cy="34" r="13" fill="#b08060"/>
+      <path d="M20 26q12-12 24 0" stroke="#6a4a2a" stroke-width="3" fill="none"/>
+      <circle cx="27" cy="32" r="1.9" fill="${INK}"/><circle cx="37" cy="32" r="1.9" fill="${INK}"/>
+      <path d="M28 41q4 2 8 0" stroke="${INK}" stroke-width="1.4" fill="none"/>
+      <path d="M46 52h10M51 47v10" stroke="#a67c3d" stroke-width="2"/>`,
+  },
+  'echo-sore-throat': {
+    label: 'Echo the Ghost: a pale lilac ghost with a striped scarf and little music notes',
+    labelZh: '幽灵艾可：围着条纹围巾的淡紫色幽灵，身边飘着小音符',
+    eyes: [[27, 28], [37, 28]],
+    art: `<path d="M16 58V28a16 16 0 0 1 32 0v30l-5-4-5 4-6-4-6 4-5-4z" fill="#d8cce8"/>
+      <circle cx="27" cy="28" r="2" fill="${DUSK}"/><circle cx="37" cy="28" r="2" fill="${DUSK}"/>
+      <ellipse cx="32" cy="35" rx="2.5" ry="2" fill="${DUSK}"/>
+      <path d="M16 40q16 6 32 0v5q-16 6-32 0z" fill="#ff8a1f"/><path d="M24 42v5M32 43v5M40 42v5" stroke="#f4f0f8" stroke-width="2"/>
+      <path d="M52 10v8M52 10l4 1" stroke="#e9e4f0" stroke-width="1.5" stroke-linecap="round"/><circle cx="51" cy="18" r="1.8" fill="#e9e4f0"/>
+      <path d="M8 16v6M8 16l3 1" stroke="#e9e4f0" stroke-width="1.2" stroke-linecap="round"/><circle cx="7.2" cy="22" r="1.4" fill="#e9e4f0"/>`,
+  },
+  'bog-witch-ivy-rash': {
+    label: 'Ivy the Bog Witch: a witch in a mossy hat with red, blotchy forearms and a sprig of ivy',
+    labelZh: '沼泽女巫艾薇：戴着长满苔藓帽子的女巫，前臂红斑点点，旁边有一枝常春藤',
+    eyes: [[27, 32], [37, 32]],
+    art: `<path d="M20 24l10-18 12 18z" fill="#4f6a3a"/>
+      <ellipse cx="32" cy="25" rx="18" ry="4" fill="#4f6a3a"/>
+      <circle cx="32" cy="35" r="11" fill="#e8d6c8"/>
+      <circle cx="27" cy="32" r="1.7" fill="${INK}"/><circle cx="37" cy="32" r="1.7" fill="${INK}"/>
+      <path d="M28 40q4 2 8 0" stroke="${INK}" stroke-width="1.3" fill="none"/>
+      <path d="M14 54l12-6M50 54l-12-6" stroke="#e8b8a8" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="18" cy="52" r="1.2" fill="#d9413a"/><circle cx="22" cy="50" r="1.2" fill="#d9413a"/><circle cx="44" cy="50" r="1.2" fill="#d9413a"/><circle cx="47" cy="52" r="1.2" fill="#d9413a"/>
+      <path d="M52 8q-4 6 0 10M52 12l4-2M52 16l-4-1" stroke="#3fb27f" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+  },
+  'ghoulberg-eye-drops': {
+    label: 'Dr. Ghoulberg: a grey ghoul in thick glasses and a bow tie, holding a small bottle of eye drops',
+    labelZh: '古尔伯格医生：戴厚眼镜、打领结的灰色食尸鬼，手拿一小瓶滴眼液',
+    eyes: [[26, 30], [38, 30]],
+    art: `<ellipse cx="32" cy="32" rx="13" ry="16" fill="#a8ac9c"/>
+      <circle cx="26" cy="30" r="4.5" fill="#f4f0f8" stroke="${INK}" stroke-width="1.5"/><circle cx="38" cy="30" r="4.5" fill="#f4f0f8" stroke="${INK}" stroke-width="1.5"/>
+      <path d="M30.5 30h3" stroke="${INK}" stroke-width="1.5"/>
+      <circle cx="26" cy="30" r="1.6" fill="${INK}"/><circle cx="38" cy="30" r="1.6" fill="${INK}"/>
+      <path d="M27 41q5 2 10 0" stroke="${INK}" stroke-width="1.4" fill="none"/>
+      <path d="M26 50l6 3 6-3-6-3z" fill="#b3122e"/>
+      <rect x="48" y="44" width="6" height="10" rx="2" fill="#7cc7ff"/><path d="M51 40v4" stroke="#e9e4f0" stroke-width="2"/>`,
+  },
+  'patchwork-suture-removal': {
+    label: 'Patchwork Polly: a rag doll with button eyes, yarn hair and a row of stitches across one knee',
+    labelZh: '拼布波莉：纽扣眼睛、毛线头发的布娃娃，一侧膝盖上有一排缝线',
+    eyes: [[27, 24], [37, 24]],
+    art: `<path d="M20 22q-6 0-6 10M44 22q6 0 6 10M22 16q10-8 20 0" stroke="#ff8a1f" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="32" cy="24" r="11" fill="#f3d2c1"/>
+      <circle cx="27" cy="24" r="2.2" fill="#4a7bd6"/><circle cx="37" cy="24" r="2.2" fill="#4a7bd6"/>
+      <path d="M26 23l2 2M28 23l-2 2M36 23l2 2M38 23l-2 2" stroke="${INK}" stroke-width=".8"/>
+      <path d="M28 30q4 2 8 0" stroke="#b3122e" stroke-width="1.4" fill="none"/>
+      <rect x="22" y="36" width="20" height="14" rx="3" fill="#7a9ad0"/>
+      <rect x="24" y="50" width="6" height="12" rx="2" fill="#f3d2c1"/><rect x="34" y="50" width="6" height="12" rx="2" fill="#f3d2c1"/>
+      <path d="M33 55h8M35 53v4M37 53v4M39 53v4" stroke="${INK}" stroke-width=".8"/>`,
+  },
+  'woodwose-tick-bite': {
+    label: 'Hunter the Woodwose: a hairy wild man of the woods with a leafy crown and a tiny tick on a leaf',
+    labelZh: '林中野人亨特：头戴树叶冠、浑身毛发的林中野人，旁边一片叶子上有只小蜱虫',
+    eyes: [[27, 30], [37, 30]],
+    art: `<path d="M18 22l4-8 4 6 6-8 6 8 4-6 4 8z" fill="#3fb27f"/>
+      <ellipse cx="32" cy="34" rx="14" ry="15" fill="#8a6a4a"/>
+      <ellipse cx="32" cy="32" rx="9" ry="9" fill="#d9b48f"/>
+      <circle cx="27" cy="30" r="1.8" fill="${INK}"/><circle cx="37" cy="30" r="1.8" fill="${INK}"/>
+      <path d="M28 36q4 2 8 0" stroke="${INK}" stroke-width="1.4" fill="none"/>
+      <path d="M22 44q10 8 20 0" stroke="#6a4a2a" stroke-width="3" fill="none"/>
+      <ellipse cx="52" cy="54" rx="7" ry="4" fill="#3fb27f" transform="rotate(-20 52 54)"/>
+      <circle cx="52" cy="53" r="1.5" fill="${INK}"/><path d="M50 52l-1.5-1M54 52l1.5-1M50 54l-1.5 1M54 54l1.5 1" stroke="${INK}" stroke-width=".6"/>`,
+  },
+  'invisible-sunburn': {
+    label: 'The Invisible Man: dark glasses and a hat floating above a pink, sunburnt neck, with a bright sun',
+    labelZh: '隐形人：墨镜和帽子悬浮在晒得发红的脖子上方，旁边有一轮烈日',
+    eyes: [[26, 30], [38, 30]],
+    art: `<path d="M16 24h32M22 24q0-10 10-10t10 10" stroke="#6b6478" stroke-width="3" fill="#6b6478"/>
+      <rect x="20" y="27" width="11" height="6" rx="2" fill="${INK}"/><rect x="33" y="27" width="11" height="6" rx="2" fill="${INK}"/>
+      <path d="M31 30h2" stroke="${INK}" stroke-width="1.5"/>
+      <path d="M26 44h12v8H26z" fill="#ff8a8a"/>
+      <path d="M18 62q0-10 14-10t14 10z" fill="#ff8a8a" opacity=".85"/>
+      <circle cx="54" cy="10" r="5" fill="#f2c230"/><path d="M54 1v3M54 16v3M45 10h3M60 10h3" stroke="#f2c230" stroke-width="1.5"/>`,
+  },
+  'tooth-fairy-cold': {
+    label: 'Tilly the Tooth Fairy: a small fairy with a pink nose and a tissue, holding a tiny tooth',
+    labelZh: '牙仙蒂莉：鼻子红红的小仙子，拿着纸巾和一颗小牙齿',
+    eyes: [[28, 32], [36, 32]],
+    art: `<ellipse cx="16" cy="32" rx="8" ry="14" fill="#e9d8ff" opacity=".75" transform="rotate(-15 16 32)"/>
+      <ellipse cx="48" cy="32" rx="8" ry="14" fill="#e9d8ff" opacity=".75" transform="rotate(15 48 32)"/>
+      <path d="M22 28q10-16 20 0q-4-4-10-4t-10 4z" fill="#f2c230"/>
+      <circle cx="32" cy="34" r="10" fill="#f3d2c1"/>
+      <circle cx="28" cy="32" r="1.6" fill="${INK}"/><circle cx="36" cy="32" r="1.6" fill="${INK}"/>
+      <circle cx="32" cy="36" r="2" fill="#ff6b81"/>
+      <path d="M30 40q2 1 4 0" stroke="${INK}" stroke-width="1.2" fill="none"/>
+      <path d="M48 52q0-4 3-4t3 4l-1 5-2-2-2 2z" fill="#f4f0f8"/>`,
+  },
+  'mini-mummy-nappy-rash': {
+    label: 'Mini Mummy: a tiny bandaged baby mummy with round dark eyes and a dummy',
+    labelZh: '迷你木乃伊：一个缠着绷带的木乃伊小宝宝，圆圆的黑眼睛，含着奶嘴',
+    eyes: [[27, 30], [37, 30]],
+    art: `<circle cx="32" cy="32" r="16" fill="#e3d7b8"/>
+      <path d="M17 26l30-4M16 36l32-3M19 44l26 1" stroke="#b8a77f" stroke-width="2.5"/>
+      <rect x="22" y="27" width="20" height="7" rx="3.5" fill="#2a2030"/>
+      <circle cx="27" cy="30.5" r="2" fill="#f4f0e0"/><circle cx="37" cy="30.5" r="2" fill="#f4f0e0"/>
+      <circle cx="32" cy="41" r="3" fill="#7cc7ff"/><circle cx="32" cy="41" r="1.2" fill="#4a7bd6"/>
+      <path d="M44 46q6 4 4 10" stroke="#e3d7b8" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+  },
+  'wisp-conjunctivitis': {
+    label: 'Glim the Will-o’-the-Wisp: a small glowing blue flame with pink, sticky eyes',
+    labelZh: '鬼火格林：一团发着蓝光的小火焰，眼睛发红、有分泌物',
+    eyes: [[27, 34], [37, 34]],
+    art: `<path d="M32 6q14 16 12 32a12 12 0 0 1-24 0q-2-10 6-18 0 8 4 10 0-12 2-24z" fill="#7cc7ff" opacity=".9"/>
+      <path d="M32 22q6 8 5 16a5 5 0 0 1-10 0q0-8 5-16z" fill="#bfe8ff"/>
+      <circle cx="27" cy="34" r="3" fill="#ff9aa8"/><circle cx="37" cy="34" r="3" fill="#ff9aa8"/>
+      <circle cx="27" cy="34" r="1.3" fill="${INK}"/><circle cx="37" cy="34" r="1.3" fill="${INK}"/>
+      <path d="M24 31l2 1M30 31l-2 1M34 31l2 1M40 31l-2 1" stroke="#f2c230" stroke-width="1"/>
+      <path d="M29 42q3 1.5 6 0" stroke="${INK}" stroke-width="1.2" fill="none"/>
+      <circle cx="12" cy="50" r="1.5" fill="#7cc7ff"/><circle cx="52" cy="54" r="1.2" fill="#7cc7ff"/><circle cx="48" cy="12" r="1" fill="#7cc7ff"/>`,
+  },
 };
 
 const escapeAttr = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');

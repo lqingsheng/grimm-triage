@@ -25,3 +25,5 @@
 - [x] 12. Deploy to Vercel; add live URL and screenshots to README
 - [x] 13. Scarier under-triage effect: 12 glossy drips (4–14 px) that pool at the bottom edge, smeared handprint, 1 Hz heartbeat vignette for 3 s, flatlining ECG, desaturated portrait with red eyes, one persistent stain per under-triage (cleared at "Start a new night"), optional Web Audio heartbeat + flatline (off by default). Keep <= 3 flashes/s, readable feedback and the reduced-motion fallback (static stains, tint, text note)
   - _Requirements: 2.5–2.7, 4.1, 4.2_
+- [x] 14. Case bank of 61 templates (at least 12 per ESI level, 18 pediatric) with vital-sign ranges and alternative openings; nightly draw of 15 (3 per level, shuffled, no repeats from the previous night) with an injectable random source; P8 and a boundary grid for the ranges; drawn vitals in the shift report
+  - _Requirements: 2.1–2.4, 2.8, 2.9_

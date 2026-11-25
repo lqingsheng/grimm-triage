@@ -3,11 +3,13 @@ import assert from 'node:assert/strict';
 import { summarizeShift } from '../src/shift.js';
 import { triage, scoreGuess } from '../src/triage.js';
 import { CASES } from '../src/cases.js';
+import { planNight, mulberry32, NIGHT_SIZE } from '../src/night.js';
 
-const c = (id, level) => ({ id, name: `Monster ${id}`, emoji: '👻', teachingPoint: `Lesson ${id}`, expectedLevel: level });
+const vitals = (id) => ({ hr: id.charCodeAt(0), rr: 16 });
+const c = (id, level) => ({ id, name: `Monster ${id}`, emoji: '👻', teachingPoint: `Lesson ${id}`, expectedLevel: level, patient: vitals(id) });
 
 test('empty night: zero everything, nothing missed', () => {
-  assert.deepEqual(summarizeShift([]), { score: 0, total: 0, correct: 0, underTriage: 0, overTriage: 0, missed: [] });
+  assert.deepEqual(summarizeShift([]), { score: 0, max: 0, total: 0, correct: 0, underTriage: 0, overTriage: 0, missed: [] });
 });
 
 test('counts correct, under- and over-triage and sums score with scoreGuess', () => {
@@ -33,8 +35,8 @@ test('missed cases keep play order, correct level, guess, kind and teaching poin
     { case: c('c', 4), guess: 2, level: 4 },
   ]);
   assert.deepEqual(r.missed, [
-    { id: 'b', name: 'Monster b', emoji: '👻', guess: 3, correctLevel: 1, kind: 'under', teachingPoint: 'Lesson b' },
-    { id: 'c', name: 'Monster c', emoji: '👻', guess: 2, correctLevel: 4, kind: 'over', teachingPoint: 'Lesson c' },
+    { id: 'b', name: 'Monster b', emoji: '👻', guess: 3, correctLevel: 1, kind: 'under', teachingPoint: 'Lesson b', patient: vitals('b') },
+    { id: 'c', name: 'Monster c', emoji: '👻', guess: 2, correctLevel: 4, kind: 'over', teachingPoint: 'Lesson c', patient: vitals('c') },
   ]);
 });
 
@@ -52,6 +54,15 @@ test('report score equals the running HUD score for any guesses', () => {
   const r = summarizeShift(answers);
   assert.equal(r.score, running);
   for (const m of r.missed) assert.ok(m.teachingPoint.length > 0, `${m.id}: missing teaching point`);
+});
+
+test('a 15-case night has a maximum of 1500, and missed cases carry the vitals the player saw', () => {
+  const night = planNight(CASES, { random: mulberry32(8) });
+  const answers = night.map((k) => ({ case: k, guess: 5, level: triage(k.patient).level }));
+  const r = summarizeShift(answers);
+  assert.equal(r.total, NIGHT_SIZE);
+  assert.equal(r.max, 1500);
+  for (const m of r.missed) assert.deepEqual(m.patient, night.find((k) => k.id === m.id).patient);
 });
 
 test('does not mutate its input', () => {
