@@ -128,6 +128,16 @@ test('every lesson string exists in English and Chinese, and every key the lesso
   }
 });
 
+test('wording decided in clinical review (PR #10)', () => {
+  assert.equal(STRINGS['lesson.stepD.a'].en, 'Yes: consider ESI 2. No: ESI 3. This game always assigns ESI 2.');
+  assert.ok(STRINGS['lesson.stepD.a']['zh-CN'].endsWith('本游戏一律判为 ESI 2 级。'));
+  assert.equal(STRINGS['lesson.stepB.q'].en, 'Is this a patient who should not wait? That means a high-risk situation, new confusion, lethargy or disorientation, or severe pain or distress.');
+  assert.match(STRINGS['lesson.counts.complex']['zh-CN'], /程序性镇静/);
+  assert.doesNotMatch(STRINGS['lesson.counts.complex']['zh-CN'], /程序化镇静/);
+  assert.equal(STRINGS['lesson.not.lock']['zh-CN'], '静脉留置针封管（不输液）');
+  assert.ok(RESOURCE_COUNTS.includes('ecg'), 'ECG stays its own resource');
+});
+
 test('the note and source line say what the task asks for', () => {
   assert.equal(STRINGS['lesson.summary'].en, 'Learn ESI v4 in 2 minutes');
   assert.equal(STRINGS['lesson.note'].en, 'The numeric level-1 cut-offs in this game (SpO2 < 85%, RR < 8, HR < 40, SBP < 70) are teaching simplifications. ESI v4 decides level 1 by the need for an immediate life-saving intervention.');
