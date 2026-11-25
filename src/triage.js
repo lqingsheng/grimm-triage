@@ -1,13 +1,14 @@
 // Grimm Triage engine: a pure, deterministic ESI-style (v4) five-level triage function.
 // EDUCATIONAL USE ONLY. Not a medical device. Never use for real patient care.
 //
-// triage(patient) -> { level: 1..5, reasons: string[], dangerZone: boolean }
+// triage(patient) -> { level: 1..5, reasons: string[], dangerZone: boolean, missing: string[], provisional: boolean }
 //
 // patient = {
 //   ageYears: number,
 //   avpu: 'A' | 'V' | 'P' | 'U',
 //   newConfusion: boolean,
-//   hr: number, rr: number, sbp: number, spo2: number, tempC: number,
+//   hr, rr, sbp, spo2, tempC: number, or null when not measured (Triage Desk only; game cases
+//                               always have all five). undefined or NaN is still an input error.
 //   pain: 0..10,
 //   highRisk: boolean,          // high-risk complaint (e.g. chest pain ? ACS, stroke signs, suicidal)
 //   needsLifesaving: boolean,   // needs an immediate life-saving intervention
@@ -27,11 +28,20 @@ export const ADULT_DANGER = { hr: 100, rr: 20, spo2: 92 };
 
 const finite = (x) => typeof x === 'number' && Number.isFinite(x);
 
+// Vital signs that may be missing (null = not measured), in display order.
+export const OPTIONAL_VITALS = ['hr', 'rr', 'sbp', 'spo2', 'tempC'];
+// The ones decision point D looks at: if any is missing, the danger zone cannot be ruled out.
+export const DANGER_ZONE_VITALS = ['hr', 'rr', 'spo2'];
+export const MISSING_DANGER_REASON = 'danger-zone vital signs could not be checked: when in doubt, choose the more urgent level';
+
+const measured = (x) => x !== null;
+
 export function validate(p) {
   const errors = [];
   if (!p || typeof p !== 'object') return ['patient must be an object'];
   if (!['A', 'V', 'P', 'U'].includes(p.avpu)) errors.push('avpu must be A, V, P or U');
   for (const k of ['ageYears', 'hr', 'rr', 'sbp', 'spo2', 'tempC', 'pain', 'resources']) {
+    if (OPTIONAL_VITALS.includes(k) && p[k] === null) continue; // explicitly not measured
     if (!finite(p[k])) errors.push(`${k} must be a finite number`);
   }
   if (finite(p.pain) && (p.pain < 0 || p.pain > 10)) errors.push('pain must be 0 to 10');
@@ -77,9 +87,11 @@ export function hypotensionThreshold(ageYears) {
   return 90;
 }
 
+// True when a measured HR, RR or SpO2 is in the danger zone. Missing values are not counted here;
+// triage() handles them at decision point D.
 export function isDangerZone(p) {
   const t = dangerThresholds(p.ageYears);
-  return p.hr > t.hr || p.rr > t.rr || p.spo2 < t.spo2;
+  return (measured(p.hr) && p.hr > t.hr) || (measured(p.rr) && p.rr > t.rr) || (measured(p.spo2) && p.spo2 < t.spo2);
 }
 
 export function triage(p) {
@@ -88,18 +100,21 @@ export function triage(p) {
 
   const reasons = [];
   const dangerZone = isDangerZone(p);
+  const missing = OPTIONAL_VITALS.filter((k) => p[k] === null);
+  const result = (level, provisional = false) => ({ level, reasons, dangerZone, missing, provisional });
 
-  // Decision point A: immediate life-saving intervention?
+  // Decision point A: immediate life-saving intervention? Only measured values can fire here:
+  // a missing vital never triggers level 1 on its own (null < 85 would be true in JavaScript).
   const level1Triggers = [
     [p.needsLifesaving, 'needs an immediate life-saving intervention'],
     [p.avpu === 'U', 'unresponsive (AVPU = U)'],
-    [p.spo2 < 85, `SpO2 ${p.spo2}% < 85%`],
-    [p.rr < 8, `RR ${p.rr}/min < 8`],
-    [p.hr < 40, `HR ${p.hr}/min < 40`],
-    [p.sbp < 70, `SBP ${p.sbp} mmHg < 70`],
+    [measured(p.spo2) && p.spo2 < 85, `SpO2 ${p.spo2}% < 85%`],
+    [measured(p.rr) && p.rr < 8, `RR ${p.rr}/min < 8`],
+    [measured(p.hr) && p.hr < 40, `HR ${p.hr}/min < 40`],
+    [measured(p.sbp) && p.sbp < 70, `SBP ${p.sbp} mmHg < 70`],
   ];
   for (const [hit, why] of level1Triggers) if (hit) reasons.push(why);
-  if (reasons.length) return { level: 1, reasons, dangerZone };
+  if (reasons.length) return result(1);
 
   // Decision point B: high risk, new confusion/lethargy, or severe pain/distress?
   const level2Triggers = [
@@ -109,24 +124,31 @@ export function triage(p) {
     [p.pain >= 7, `severe pain ${p.pain}/10`],
   ];
   for (const [hit, why] of level2Triggers) if (hit) reasons.push(why);
-  if (reasons.length) return { level: 2, reasons, dangerZone };
+  if (reasons.length) return result(2);
 
   // Decision point C: how many resources?
   if (p.resources >= 2) {
     // Decision point D: danger-zone vitals -> consider level 2.
     if (dangerZone) {
       reasons.push(`2+ resources with danger-zone vital signs (${dangerThresholds(p.ageYears).label} thresholds)`);
-      return { level: 2, reasons, dangerZone };
+      return result(2);
+    }
+    // A missing HR, RR or SpO2 means the danger zone cannot be ruled out: when in doubt, choose
+    // the more urgent level (clinical-safety rule 3), and mark the result provisional until measured.
+    if (DANGER_ZONE_VITALS.some((k) => p[k] === null)) {
+      reasons.push(MISSING_DANGER_REASON);
+      return result(2, true);
     }
     reasons.push(`${p.resources} resources expected`);
-    return { level: 3, reasons, dangerZone };
+    return result(3);
   }
+  // ESI 4 and 5 do not depend on vital signs; the UI still warns about anything missing.
   if (p.resources === 1) {
     reasons.push('1 resource expected');
-    return { level: 4, reasons, dangerZone };
+    return result(4);
   }
   reasons.push('no resources expected');
-  return { level: 5, reasons, dangerZone };
+  return result(5);
 }
 
 // Score a player's guess against the engine: exact = 100, off by one = 50, else 0.

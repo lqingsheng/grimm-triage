@@ -5,7 +5,7 @@ inclusion: always
 
 - `index.html` – shell, two sections (`#game`, `#calc`)
 - `styles.css` – theme tokens in `:root`; level colours `--l1`..`--l5`
-- `src/triage.js` – engine: `validate`, `isDangerZone`, `triage`, `scoreGuess`, `LEVEL_NAMES`, plus display-only `hypotensionThreshold` (PALS)
+- `src/triage.js` – engine: `validate`, `isDangerZone`, `triage`, `scoreGuess`, `LEVEL_NAMES`, plus display-only `hypotensionThreshold` (PALS); HR, RR, SBP, SpO2 and temperature may be `null` (not measured), see clinical-safety rule 7
 - `src/shift.js` – pure `summarizeShift` for the end-of-night shift report, plus `decisionPointFor` (triage result → ESI step A–D) and `stepSummary`
 - `src/deskhelp.js` – pure inline-help markup for the Triage Desk judgement fields, and `countResources` for the resource checklist (reuses the lesson's resource lists)
 - `src/lesson.js` – pure "ESI v4 in 2 minutes" lesson markup for the shift report, built from the engine's danger-zone thresholds

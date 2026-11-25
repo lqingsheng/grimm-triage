@@ -1,7 +1,7 @@
 import { triage, scoreGuess, dangerThresholds, hypotensionThreshold } from './triage.js';
 import { summarizeShift, decisionPointFor } from './shift.js';
 import { lessonHtml } from './lesson.js';
-import { helpButtonHtml, helpPanelHtml, countResources } from './deskhelp.js';
+import { helpButtonHtml, helpPanelHtml, countResources, parseVital, missingWarningHtml, provisionalTagHtml, OPTIONAL_VITALS, WARNING_ID } from './deskhelp.js';
 import { CASES } from './cases.js';
 import { portraitSvg, eyeGlowSvg } from './portraits.js';
 import { dripsHtml, stainsHtml } from './haunt.js';
@@ -351,33 +351,56 @@ $('#calcForm').addEventListener('keydown', (e) => {
 });
 
 // ---- calculator ----
-let calc = null; // { result } or { error } from the last submit, so a language switch can redraw it
+let calc = null; // { result, reasons } or { error } from the last submit, so a language switch can redraw it
+
+// A missing vital's input points at the warning (aria-describedby), so focusing it reads the warning.
+function describeMissing(missing = []) {
+  for (const k of OPTIONAL_VITALS) {
+    const input = $(`#calcForm input[name="${k}"]`);
+    input.setAttribute('aria-describedby', missing.includes(k) ? `vitalsNote ${WARNING_ID}` : 'vitalsNote');
+  }
+}
 
 function renderCalcResult() {
-  if (!calc) { $('#calcResult').innerHTML = ''; return; }
+  if (!calc) { $('#calcResult').innerHTML = ''; describeMissing(); return; }
   if (calc.error) {
     $('#calcResult').textContent = tr('calc.error', { message: translateError(calc.error, lang) });
+    describeMissing();
     return;
   }
   const r = calc.result;
-  $('#calcResult').innerHTML = `${badge(r.level)}<br>${tr('game.why', { reasons: reasonsText(r.reasons) })}${r.dangerZone ? ` ${tr('calc.dangerZone')}` : ''}`;
+  $('#calcResult').innerHTML = `${badge(r.level)}${provisionalTagHtml(r, tr)}<br>${tr('game.why', { reasons: reasonsText(r.reasons) })}${r.dangerZone ? ` ${tr('calc.dangerZone')}` : ''}${missingWarningHtml(r, calc.reasons, tr, calc.ageYears)}`;
+  describeMissing(r.missing);
 }
 
 $('#calcForm').addEventListener('submit', (e) => {
   e.preventDefault();
   const f = new FormData(e.target);
   const num = (k) => Number(f.get(k));
+  // HR, RR, SBP, SpO2 and temperature may be blank: blank means not measured (null).
+  const vital = (k) => parseVital(f.get(k));
   const p = {
-    ageYears: num('ageYears'), avpu: f.get('avpu'), hr: num('hr'), rr: num('rr'), sbp: num('sbp'),
-    spo2: num('spo2'), tempC: num('tempC'), pain: num('pain'), resources: num('resources'),
+    ageYears: num('ageYears'), avpu: f.get('avpu'), hr: vital('hr'), rr: vital('rr'), sbp: vital('sbp'),
+    spo2: vital('spo2'), tempC: vital('tempC'), pain: num('pain'), resources: num('resources'),
     newConfusion: f.has('newConfusion'), highRisk: f.has('highRisk'), needsLifesaving: f.has('needsLifesaving'),
   };
+  const reasons = Object.fromEntries(OPTIONAL_VITALS.map((k) => [k, f.get(`${k}Reason`) || '']));
   try {
-    calc = { result: triage(p) };
+    calc = { result: triage(p), reasons, ageYears: p.ageYears };
   } catch (err) {
     calc = { error: err.message };
   }
   renderCalcResult();
+});
+
+// Choosing a "not measured" reason clears that vital; typing a value clears the reason.
+$('#calcForm').addEventListener('change', (e) => {
+  const select = e.target.closest('select[name$="Reason"]');
+  if (select && select.value) $(`#calcForm input[name="${select.name.replace(/Reason$/, '')}"]`).value = '';
+});
+$('#calcForm').addEventListener('input', (e) => {
+  const input = e.target.closest('.vital input');
+  if (input && input.value !== '') $(`#calcForm select[name="${input.name}Reason"]`).value = '';
 });
 
 // ---- start ----

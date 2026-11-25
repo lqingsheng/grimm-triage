@@ -96,6 +96,19 @@ label.chk { flex-direction: row; align-items: center; gap: .5rem; }
 .resource-check label.chk { color: var(--ink); align-items: flex-start; min-height: 32px; }
 .resource-check input { margin-top: .25rem; flex: none; width: 1.1rem; height: 1.1rem; }
 .resource-total { font-weight: bold; }
+/* Incomplete vital signs (task 17): optional vitals with a "why not measured" select, the warning
+   and the provisional tag in the result. Text, not colour alone, carries each state. No animation. */
+.vitals-note { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: .9rem; }
+.vital { display: flex; flex-direction: column; gap: .3rem; }
+.vital label.reason { font-size: .85rem; }
+.vital label.reason select { font-size: .85rem; padding: .3rem; max-width: 100%; }
+.missing-warning { margin: .6rem 0 0; padding: .5rem .7rem; border: 1px solid var(--pumpkin); border-left-width: 4px; border-radius: 8px;
+  background: var(--btn-bg); color: var(--ink); }
+.missing-warning strong { color: var(--candle); }
+.missing-warning .infant-temp { display: block; margin-top: .4rem; font-weight: bold; color: var(--ink); }
+.provisional-tag { display: inline-block; margin-left: .4rem; padding: 0 .55rem; border: 1px dashed var(--candle); border-radius: 999px;
+  color: var(--candle); font-weight: bold; font-size: .9rem; }
+.help-missing, .lesson-missing { color: var(--candle); }
 input, select { font: inherit; background: #00000066; color: var(--ink); border: 1px solid #ffffff33; border-radius: 8px; padding: .45rem; }
 .report h2 { color: var(--pumpkin); margin: .25rem 0; }
 .report h3 { color: var(--ecto); margin-bottom: .5rem; }

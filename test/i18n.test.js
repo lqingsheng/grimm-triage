@@ -25,7 +25,7 @@ test('every string key has both en and zh-CN values with the same placeholders',
 });
 
 // Values that are only symbols or units in both languages.
-const NO_CJK_NEEDED = new Set(['game.reasonSep', 'vital.bpValue', 'lesson.above', 'lesson.belowPct']);
+const NO_CJK_NEEDED = new Set(['game.reasonSep', 'vital.bpValue', 'lesson.above', 'lesson.belowPct', 'calc.missingSep', 'calc.missingItem']);
 
 test('Chinese strings are actually Chinese, except symbols and units', () => {
   for (const [key, entry] of Object.entries(STRINGS)) {
@@ -118,6 +118,9 @@ function* patients() {
   }
   yield { ...base, needsLifesaving: true, avpu: 'U', spo2: 80.5, rr: 4, hr: 30, sbp: 60 };
   for (const avpu of ['V', 'P']) yield { ...base, avpu, highRisk: true, newConfusion: true, pain: 9 };
+  // Triage Desk with vitals not measured (task 17).
+  for (const k of ['hr', 'rr', 'spo2']) yield { ...base, resources: 2, [k]: null };
+  yield { ...base, resources: 2, sbp: null, tempC: null };
 }
 
 test('every triage reason has a Chinese translation', () => {

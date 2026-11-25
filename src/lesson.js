@@ -61,6 +61,7 @@ export function lessonHtml({ tr, badge, missed = [], open = false }) {
   <div class="lesson-body">
     <h3 id="lessonSteps">${tr('lesson.stepsTitle')}</h3>
     ${stepsHtml(tr)}
+    <p class="lesson-missing">${tr('lesson.missingVitals')}</p>
     <h3 id="lessonResources">${tr('lesson.resourcesTitle')}</h3>
     <p>${tr('lesson.resourcesIntro')}</p>
     <div class="resource-lists">
