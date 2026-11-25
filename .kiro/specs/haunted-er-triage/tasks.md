@@ -27,3 +27,5 @@
   - _Requirements: 2.5–2.7, 4.1, 4.2_
 - [x] 14. Case bank of 61 templates (at least 12 per ESI level, 18 pediatric) with vital-sign ranges and alternative openings; nightly draw of 15 (3 per level, shuffled, no repeats from the previous night) with an injectable random source; P8 and a boundary grid for the ranges; drawn vitals in the shift report
   - _Requirements: 2.1–2.4, 2.8, 2.9_
+- [x] 15. "ESI v4 in 2 minutes" lesson in the shift report: collapsible `<details>` (open after any under-triage) with the A–D steps, resource lists, a danger-zone table built from `ADULT_DANGER` / `PEDIATRIC_DANGER`, "where your shift went wrong" via a pure `decisionPointFor()` in `src/shift.js` (also tagged on each missed case), the level-1 simplification note and source line; English and Chinese
+  - _Requirements: 2.3, 2.10, 4.2, 4.3, 5.2_

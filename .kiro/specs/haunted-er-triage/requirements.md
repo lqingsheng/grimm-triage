@@ -25,6 +25,7 @@ A spooky, educational web app that teaches five-level ED triage. Players triage 
 7. THE SYSTEM SHALL keep effect sound off until the player turns it on.
 8. WHEN a night starts THE SYSTEM SHALL avoid the cases of the previous night.
 9. WHEN a case appears THE SYSTEM SHALL draw its vital signs inside the case's safe ranges, AND the shift report SHALL show the vital signs the player saw.
+10. THE SYSTEM SHALL show an "ESI v4 in 2 minutes" lesson in the shift report, below the missed cases, as a collapsible section that is closed by default AND open WHEN the night had at least one under-triage. The lesson SHALL contain the four decision points (A–D), what does and does not count as a resource, a danger-zone vital-sign table built from the engine's thresholds, the decision point behind each missed case with a one-line count, a note that the numeric level-1 cut-offs are teaching simplifications, and its source. It SHALL be fully translated, keyboard and screen-reader accessible, free of animation, readable at 360 px, and never covered by the haunting stains.
 
 ## Requirement 3: Triage Desk calculator
 1. THE SYSTEM SHALL accept age, AVPU, HR, RR, SBP, SpO2, temperature, pain, expected resources and three flags.

@@ -1,5 +1,6 @@
 import { triage, scoreGuess, dangerThresholds, hypotensionThreshold } from './triage.js';
-import { summarizeShift } from './shift.js';
+import { summarizeShift, decisionPointFor } from './shift.js';
+import { lessonHtml } from './lesson.js';
 import { CASES } from './cases.js';
 import { portraitSvg, eyeGlowSvg } from './portraits.js';
 import { dripsHtml, stainsHtml } from './haunt.js';
@@ -211,7 +212,7 @@ $('#levelButtons').addEventListener('click', (e) => {
   const truth = triage(nightCases[idx].patient);
   const s = scoreGuess(guess, truth.level);
   score += s.points;
-  answers.push({ case: nightCases[idx], guess, level: truth.level });
+  answers.push({ case: nightCases[idx], guess, level: truth.level, step: decisionPointFor(truth) });
   current = { guess, truth, s };
   if (s.underTriage) { stainCount += 1; renderStains(); }
   renderScore();
@@ -228,18 +229,31 @@ function missedHtml(m) {
   const text = c ? caseText(c, lang) : { name: m.name, teachingPoint: m.teachingPoint };
   const kind = m.kind === 'under' ? tr('report.under') : tr('report.overTriaged');
   // The vitals this player saw for this case (they vary each appearance), so the lesson matches.
+  const step = m.step ? ` <span class="step-tag">${tr('lesson.stepTag', { step: m.step })}</span>` : '';
   return `<li class="missed ${m.kind}">
     <div class="who"><span aria-hidden="true">${m.emoji}</span> ${text.name}</div>
-    <div>${tr('report.missedLine', { kind, guess: m.guess, badge: badge(m.correctLevel) })}</div>
+    <div>${tr('report.missedLine', { kind, guess: m.guess, badge: badge(m.correctLevel) })}${step}</div>
     <p class="seen">${tr('report.seenVitals')}</p>${vitalsHtml(m.patient)}
     <p class="teach">${text.teachingPoint}</p>
   </li>`;
+}
+
+// The lesson opens by itself after any under-triage. Once shown, a language switch keeps whatever
+// open or closed state the player left it in.
+function lessonOpen(r, firstShow) {
+  if (firstShow) return r.underTriage > 0;
+  return $('#lesson')?.open ?? r.underTriage > 0;
 }
 
 function renderReport() {
   const firstShow = !reportShown;
   reportShown = true;
   const r = summarizeShift(answers);
+  const open = lessonOpen(r, firstShow);
+  const missed = r.missed.map((m) => {
+    const c = CASES.find((x) => x.id === m.id);
+    return { ...m, displayName: c ? caseText(c, lang).name : m.name };
+  });
   $('#caseNo').textContent = tr('report.over');
   $('#play').hidden = true;
   setEffect(null);
@@ -254,6 +268,7 @@ function renderReport() {
     ${r.missed.length
       ? `<h3>${tr('report.missed')}</h3><ul class="missed-list">${r.missed.map(missedHtml).join('')}</ul>`
       : `<p>${tr('report.flawless')}</p>`}
+    ${lessonHtml({ tr, badge, missed, open })}
     <button id="newNight" class="ghost">${tr('report.newNight')}</button>`;
   report.hidden = false;
   if (firstShow) $('#reportTitle').focus();
