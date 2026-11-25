@@ -22,4 +22,4 @@
   - _Requirements: 5.3_
 - [x] 11. Accessibility pass: contrast check, focus order, screen-reader labels
   - _Requirements: 4.2, 4.3_
-- [ ] 12. Deploy to Vercel; add live URL and screenshots to README
+- [x] 12. Deploy to Vercel; add live URL and screenshots to README
