@@ -12,6 +12,11 @@ Learn real emergency-department triage by sorting monsters. The costume is fake.
 - **Night Shift (game):** a vampire with a bleeding fang, a dehydrated mummy, an unresponsive ghost… pick the triage level, get instant feedback with the exact rule that fired. Under-triage costs extra, because that is the dangerous mistake in a real ED.
 - **Triage Desk (calculator):** type vital signs and flags, get an ESI v4-style level with reasons and danger-zone warnings.
 
+## Screenshots
+| Triage board | Haunting effect (under-triage) | Shift report |
+|---|---|---|
+| ![Triage board: Grimwald the Gargoyle, patient 1 of 22](docs/screenshots/triage-board.png) | ![The Sandman under-triaged: blood drips and ESI 1 feedback](docs/screenshots/haunting-effect.png) | ![Shift report with score and missed cases](docs/screenshots/shift-report.png) |
+
 ## Run locally
 ```bash
 npm install
