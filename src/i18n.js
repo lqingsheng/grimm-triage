@@ -28,6 +28,7 @@ export const STRINGS = {
   'nav.game': { en: 'Night Shift (game)', 'zh-CN': '夜班（游戏）' },
   'nav.calc': { en: 'Triage Desk (calculator)', 'zh-CN': '分诊台（计算器）' },
   'lang.label': { en: 'Language', 'zh-CN': '语言' },
+  'sound.toggle': { en: 'Sound effects', 'zh-CN': '音效' },
   'skip.main': { en: 'Skip to main content', 'zh-CN': '跳到主要内容' },
   'section.game': { en: 'Night Shift game', 'zh-CN': '夜班游戏' },
   'section.calc': { en: 'Triage Desk calculator', 'zh-CN': '分诊台计算器' },

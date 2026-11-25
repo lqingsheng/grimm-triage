@@ -1,7 +1,9 @@
 import { triage, scoreGuess, dangerThresholds, hypotensionThreshold } from './triage.js';
 import { summarizeShift } from './shift.js';
 import { CASES } from './cases.js';
-import { portraitSvg } from './portraits.js';
+import { portraitSvg, eyeGlowSvg } from './portraits.js';
+import { dripsHtml, stainsHtml } from './haunt.js';
+import { SOUND_KEY, soundOnFrom, playHaunt } from './sound.js';
 import { t, levelName, caseText, translateReason, translateError, normalizeLang, STORAGE_KEY, DEFAULT_LANG } from './i18n.js';
 
 const $ = (s) => document.querySelector(s);
@@ -95,17 +97,64 @@ function vitalsHtml(p) {
 }
 
 // ---- haunting effects ----
-// CSS does all the animation (styles.css, "Haunting effects"); JS only swaps classes on the game panel.
-// Under prefers-reduced-motion the same classes give a static colour change, and the .fx-note text
-// in the feedback becomes visible instead of the motion.
+// CSS does all the animation (styles.css, "Haunting effects"); JS only swaps classes on the game panel
+// (and .haunted on <body> for the full-screen vignette). Under prefers-reduced-motion the same classes
+// give a static colour change and the static stains, and the .fx-note text in the feedback becomes
+// visible instead of the motion.
 const FX_CLASSES = ['fx-under', 'fx-correct'];
+let stainCount = 0; // under-triages this night; each leaves a stain until "Start a new night"
+let haunt = null;   // the playing sound sequence, if any
+
 function setEffect(kind) {
   const panel = $('#game');
   panel.classList.remove(...FX_CLASSES);
+  document.body.classList.remove('haunted');
+  haunt?.stop();
+  haunt = null;
   if (!kind) return;
   void panel.offsetWidth; // restart the CSS animation even if the same class was just removed
   panel.classList.add(`fx-${kind}`);
+  if (kind === 'under') {
+    document.body.classList.add('haunted');
+    playSound();
+  }
 }
+
+function renderStains() {
+  $('#stains').innerHTML = stainsHtml(stainCount);
+}
+
+// ---- optional sound: OFF unless the player turns it on; the choice is remembered ----
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let soundOn = false;
+let audio = null; // created on the first click that turns sound on (browsers need a user gesture)
+try { soundOn = soundOnFrom(localStorage.getItem(SOUND_KEY)); } catch { /* storage blocked: stay off */ }
+
+function audioContext() {
+  if (!audio && AudioCtx) audio = new AudioCtx();
+  if (audio?.state === 'suspended') audio.resume();
+  return audio;
+}
+
+function playSound() {
+  if (!soundOn) return;
+  const ctx = audioContext();
+  if (ctx) haunt = playHaunt(ctx);
+}
+
+function renderSoundToggle() {
+  const btn = $('#soundToggle');
+  btn.hidden = !AudioCtx; // no Web Audio: no sound, so no toggle
+  btn.setAttribute('aria-pressed', String(soundOn));
+}
+
+$('#soundToggle').addEventListener('click', () => {
+  soundOn = !soundOn;
+  try { localStorage.setItem(SOUND_KEY, soundOn ? 'on' : 'off'); } catch { /* not persisted */ }
+  if (soundOn) audioContext(); // unlock audio inside this click
+  else { haunt?.stop(); haunt = null; }
+  renderSoundToggle();
+});
 const effectFor = (s) => (s.points === 100 ? 'correct' : s.underTriage ? 'under' : null);
 
 function renderScore() {
@@ -116,7 +165,8 @@ function renderCaseCard() {
   const c = nightCases[idx];
   const text = caseText(c, lang);
   $('#caseNo').textContent = tr('game.caseNo', { n: idx + 1, total: nightCases.length });
-  const art = portraitSvg(c.id, lang) || `<span class="emoji" aria-hidden="true">${c.emoji}</span>`;
+  const svg = portraitSvg(c.id, lang);
+  const art = svg ? svg + eyeGlowSvg(c.id) : `<span class="emoji" aria-hidden="true">${c.emoji}</span>`;
   $('#caseCard').innerHTML = `<div class="card-head"><div class="portrait">${art}</div>
     <div class="who" id="caseName">${text.name}</div></div><p>${text.story}</p>${vitalsHtml(c.patient)}`;
 }
@@ -161,6 +211,7 @@ $('#levelButtons').addEventListener('click', (e) => {
   score += s.points;
   answers.push({ case: nightCases[idx], guess, level: truth.level });
   current = { guess, truth, s };
+  if (s.underTriage) { stainCount += 1; renderStains(); }
   renderScore();
   renderFeedback();
   setEffect(effectFor(s));
@@ -211,6 +262,8 @@ function startNight() {
   idx = 0;
   score = 0;
   answers = [];
+  stainCount = 0;
+  renderStains();
   reportShown = false;
   renderScore();
   $('#shiftReport').hidden = true;
@@ -260,6 +313,8 @@ $('#calcForm').addEventListener('submit', (e) => {
 });
 
 // ---- start ----
+$('#drips').innerHTML = dripsHtml();
+renderSoundToggle();
 applyStaticStrings();
 renderScore();
 renderCase();

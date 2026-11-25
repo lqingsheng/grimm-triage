@@ -87,7 +87,8 @@ test('live feedback regions are labelled status regions, landmarks are labelled,
   assert.match(html, /<a class="skip-link" href="#main"/);
   assert.match(html, /<main id="main" tabindex="-1">/);
   assert.match(html, /<div class="fog" aria-hidden="true">/);
-  assert.match(html, /<div class="drips" aria-hidden="true">/);
+  for (const cls of ['vignette', 'stains', 'fx-layer']) assert.match(html, new RegExp(`<div class="${cls}"[^>]*aria-hidden="true"`), `.${cls}`);
+  assert.match(html, /<svg class="ecg"[^>]*aria-hidden="true"/);
 });
 
 test('every form field is wrapped in a label with translated text', () => {

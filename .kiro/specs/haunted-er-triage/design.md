@@ -22,7 +22,22 @@ Night start → shuffle cases → for each: render card → player picks level �
 Portraits live in `src/portraits.js` as `PORTRAITS[id] = { label, art }` (inline SVG shapes only, `aria-label` from `label`); `test/portraits.test.js` checks every case has one.
 
 ## Haunting effects
-`app.js` adds `fx-under` (flicker + blood-drip) or `fx-correct` (candle flare) to `#game` after an answer and removes it on the next case. All motion is CSS keyframes; the flicker dims twice in ~1 s (below the WCAG 2.3.1 three-flashes-per-second limit). Under `prefers-reduced-motion` the same classes give a static panel tint and reveal a `.fx-note` text message in the `aria-live` feedback.
+`app.js` adds `fx-under` or `fx-correct` to `#game` after an answer and removes it on the next case; `fx-under` also puts `haunted` on `<body>` for the screen vignette. All motion is CSS keyframes. Correct answers get the candle flare (`fx-correct`).
+
+Under-triage (`fx-under`, task 13). Decorative only (`aria-hidden`), inline CSS/SVG, no images and no gore:
+- **Flicker:** a dark red overlay (`.fx-dim`) dims the panel twice in 1 s. It is an overlay, not a `filter`, so `#game` never becomes a stacking context.
+- **Drips:** 12 streaks, 4–14 px wide with a glossy highlight (`DRIPS` in `src/haunt.js`). Each streak grows from the top edge, its drop falls to the bottom and a scalloped pool rises along the bottom edge. After 4 s the streaks recede to 25% opacity (0.8 s fade) so the story and vitals are readable while the player studies the feedback; the pool stays at full strength.
+- **Handprint:** inline SVG on the right side, slapped on and smeared down; recedes to 25% with the drips.
+- **Vignette:** fixed, full screen, dark red (`--vignette`), one pulse per second for 3 s, starting at 1.1 s after the flicker has ended, peak opacity 0.55 (`heartbeat 1s … 1.1s 3`).
+- **ECG:** a trace across the top of the card, starting at 1.1 s with the heartbeat: three beats, the last one weak, then a flat line.
+- **Portrait:** desaturates for about 2 s while the eyes glow red (`eyeGlowSvg()`; eye centres in `PORTRAITS[id].eyes`).
+- **Escalation:** one dried stain per under-triage this night (`stainLayout(count)` in `src/haunt.js`, deterministic). Older stains grow by 14 px per later under-triage, capped at 160 px. The stains persist through the night and the shift report, and only "Start a new night" clears them.
+- **Sound (optional):** OFF by default. The header "Sound effects" toggle (`aria-pressed`, stored as `grimm-triage-sound`) turns it on. `src/sound.js` synthesises three lub-dub heartbeats in step with the vignette, then a 960 Hz flatline beep, using Web Audio oscillators only (no audio files, no recordings). The master gain is 0.25 or lower, and the sound stops within 50 ms on the next case or when toggled off. The toggle is hidden when Web Audio is unavailable.
+
+Rules:
+- **Flashes (WCAG 2.3.1):** only the flicker (peaks at 0.15 and 0.55 s) and the vignette (peaks at 1.25, 2.25 and 3.25 s) change the brightness of a large area. That makes at most 2 flashes in any 1 s window. WCAG allows 3; we hold to 2 because red flashes are the riskiest kind. The vignette colour is not a "saturated red" (R/(R+G+B) < 0.8). No haunting animation loops. `test/haunt.test.js` recomputes all of this from `styles.css`.
+- **Readability:** the stacking order is stains (1) < case text (2) < effects and ECG (3) < vignette (5) < level buttons, feedback and Next (6). During `fx-under` the feedback gets a near-opaque backing. Text tokens keep at least 4.5:1 contrast over `--stain`.
+- **Reduced motion:** under `prefers-reduced-motion` the effect layer, vignette, ECG and eye glow are `display: none` and the portrait does not animate. The player sees only the static stains (no grow transition), the panel tint and the `.fx-note` text in the `aria-live` feedback.
 
 ## Theme tokens
 `--bg --ink --blood --ecto --pumpkin --l1..--l5`. Motion only via CSS; disabled under `prefers-reduced-motion`.
@@ -30,3 +45,4 @@ Portraits live in `src/portraits.js` as `PORTRAITS[id] = { label, art }` (inline
 ## Testing strategy
 - Unit tests for each decision point and every case's expected level.
 - Property tests: range/explanation (P1), determinism (P2), level-1 triggers (P3), monotonic safety for high-risk (P4), SpO2 (P5), resources (P6). Add P7 for pediatric thresholds.
+- Haunting effect (`test/haunt.test.js`): drip and stain layout, flash count and vignette colour parsed from `styles.css`, layer order, reduced-motion rules, eye positions, and the sound schedule run against a fake `AudioContext`.
