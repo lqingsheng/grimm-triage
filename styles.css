@@ -102,8 +102,10 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
      6  .levels .feedback #nextCase   always above every effect, so feedback text stays readable
 
    Flash safety (WCAG 2.3.1): only two animations change the brightness of a large area: the panel
-   flicker (2 dims in 1 s) and the vignette heartbeat (1 pulse per second, 3 times, starting at
-   0.2 s). In any 1 s window that is at most 3 flashes; test/haunt.test.js checks it from this file.
+   flicker (2 dims, both before 0.75 s) and the vignette heartbeat (1 pulse per second, 3 times,
+   starting at 1.1 s, after the flicker has ended, peak opacity .55). In any 1 s window that is at
+   most 2 flashes, below the limit of 3, because red flashes are the riskiest kind;
+   test/haunt.test.js checks it from this file.
    The vignette red is dark and not a "saturated red" (R / (R+G+B) < 0.8). */
 #game { position: relative; }
 #play { position: relative; }
@@ -163,6 +165,10 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
 .handprint .smear path { stroke-dasharray: 100; stroke-dashoffset: 100; }
 .fx-under .handprint .hand { animation: hand-drag 2.2s cubic-bezier(.3, 0, .6, 1) .5s forwards; }
 .fx-under .handprint .smear path { animation: smear 2.2s cubic-bezier(.3, 0, .6, 1) .5s forwards; }
+/* After about 4 s the drips and handprint recede to 25% so the story and vitals are readable
+   while the player studies the feedback. The pool and the stains stay at full strength. */
+.fx-under .drips, .fx-under .handprint { animation: recede .8s ease-in-out 4s forwards; }
+@keyframes recede { to { opacity: .25; } }
 @keyframes hand-drag {
   0% { opacity: 0; transform: translateY(0); }
   6% { opacity: 1; transform: translateY(0); }
@@ -170,18 +176,19 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
 }
 @keyframes smear { 0%, 6% { stroke-dashoffset: 100; } 100% { stroke-dashoffset: 0; } }
 
-/* Dark red vignette around the whole screen: one slow heartbeat per second for 3 seconds. */
+/* Dark red vignette around the whole screen: one slow heartbeat per second for 3 seconds,
+   starting after the flicker. The ECG beats and the optional sound use the same timing. */
 .vignette { position: fixed; inset: 0; z-index: 5; pointer-events: none; opacity: 0;
   background: radial-gradient(ellipse at center, #0000 50%, var(--vignette) 100%); }
-.haunted .vignette { animation: heartbeat 1s ease-out .2s 3; }
-@keyframes heartbeat { 0%, 100% { opacity: 0; } 15% { opacity: .9; } 55% { opacity: .3; } }
+.haunted .vignette { animation: heartbeat 1s ease-out 1.1s 3; }
+@keyframes heartbeat { 0%, 100% { opacity: 0; } 15% { opacity: .55; } 55% { opacity: .18; } }
 
 /* ECG trace across the top of the card: three beats, the last one weak, then flat. */
 .ecg { position: absolute; left: 0; top: .1rem; width: 100%; height: 36px; z-index: 3; pointer-events: none;
   overflow: visible; visibility: hidden; filter: drop-shadow(0 0 3px var(--ecto)); }
 .ecg path { fill: none; stroke: var(--ecto); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 /* Revealed left to right with a clip (dash offsets break on a stretched, non-scaling stroke). */
-.fx-under .ecg { visibility: visible; clip-path: inset(0 100% 0 0); animation: ecg-trace 3.6s linear .2s forwards; }
+.fx-under .ecg { visibility: visible; clip-path: inset(0 100% 0 0); animation: ecg-trace 3.6s linear 1.1s forwards; }
 @keyframes ecg-trace { to { clip-path: inset(0 0 0 0); } }
 
 /* Portrait: drains to grey while the eyes glow red (eyeGlowSvg() in src/portraits.js). */

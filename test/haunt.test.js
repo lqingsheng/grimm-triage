@@ -106,19 +106,43 @@ test('stains are cleared only by "Start a new night"', () => {
 });
 
 // ---- flash safety (WCAG 2.3.1) ----
-test('large-area flashes stay at or below 3 in any one-second window', () => {
+// WCAG allows 3 flashes per second; we hold red effects to 2 because red flashes are the riskiest.
+const FLASH_LIMIT = 2;
+
+function largeAreaFlashes() {
   const flashes = [];
   for (const [selector, name] of [['.fx-under .fx-dim', 'flicker'], ['.haunted .vignette', 'heartbeat']]) {
     const { duration, delay, count } = animation(selector, name);
     for (let c = 0; c < count; c += 1) for (const p of opacityPeaks(name)) flashes.push(delay + duration * (c + p));
   }
-  flashes.sort((a, b) => a - b);
+  return flashes.sort((a, b) => a - b);
+}
+
+test(`large-area flashes stay at or below ${FLASH_LIMIT} in any one-second window`, () => {
+  const flashes = largeAreaFlashes();
   assert.equal(flashes.length, 5, 'flicker twice + three heartbeats');
   const worst = Math.max(...flashes.map((t) => flashes.filter((u) => u >= t && u < t + 1).length));
-  assert.ok(worst <= 3, `${worst} flashes in one second`);
+  assert.ok(worst <= FLASH_LIMIT, `${worst} flashes in one second`);
+  const flicker = animation('.fx-under .fx-dim', 'flicker');
   const beats = animation('.haunted .vignette', 'heartbeat');
+  assert.ok(beats.delay >= flicker.delay + flicker.duration, 'heartbeat starts after the flicker ends');
   assert.equal(beats.duration, 1, 'one beat per second');
   assert.equal(beats.duration * beats.count, 3, 'pulses for 3 seconds');
+});
+
+test('the heartbeat vignette peaks at no more than 0.55 opacity', () => {
+  const values = [...block(css, '@keyframes heartbeat ').matchAll(/opacity:\s*([\d.]+)/g)].map((m) => Number(m[1]));
+  assert.ok(Math.max(...values) <= 0.55, `peak ${Math.max(...values)}`);
+});
+
+test('sound beats and the ECG start in step with the vignette heartbeat', () => {
+  const beatTimes = largeAreaFlashes().slice(-3);
+  for (let i = 0; i < HAUNT_SOUND.beats; i += 1) {
+    assert.ok(Math.abs(HAUNT_SOUND.firstBeat + i * HAUNT_SOUND.beatPeriod - beatTimes[i]) < 1e-9, `beat ${i + 1}`);
+  }
+  const ecg = rule('.fx-under .ecg').match(/ecg-trace\s+([\d.]+)s\s+\w+\s+([\d.]+)s/);
+  assert.equal(Number(ecg[2]), animation('.haunted .vignette', 'heartbeat').delay, 'ECG starts with the heartbeat');
+  assert.ok(HAUNT_SOUND.flatlineAt > beatTimes.at(-1) + 0.4, 'flatline after the last lub-dub');
 });
 
 test('no endless animation besides the slow fog drift, and the panel flicker uses no filter', () => {
@@ -155,6 +179,15 @@ test('feedback, level buttons and Next sit above every effect layer', () => {
     if (sel.includes('@')) continue;
     assert.doesNotMatch(body, /\b(filter|transform|opacity|isolation|contain|will-change):/, `${sel.trim()} creates a stacking context`);
   }
+});
+
+test('drips and handprint recede to 25% after about 4 s; the pool and stains stay', () => {
+  const recede = rule('.fx-under .drips, .fx-under .handprint').match(/animation:\s*recede\s+([\d.]+)s\s+[\w-]+\s+([\d.]+)s\s+forwards/);
+  assert.ok(recede, 'drips and handprint need the recede animation');
+  assert.ok(Number(recede[2]) >= 3.5 && Number(recede[2]) <= 4.5, `starts at ${recede[2]}s`);
+  assert.match(block(css, '@keyframes recede '), /to\s*{\s*opacity:\s*\.25;\s*}/);
+  assert.doesNotMatch(rule('.fx-under .pool'), /recede/);
+  assert.doesNotMatch(css, /\.stains?\b[^{}]*{[^}]*recede/);
 });
 
 test('text stays AA-readable over a dried stain', () => {

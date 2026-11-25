@@ -11,13 +11,13 @@ export const SOUND_KEY = 'grimm-triage-sound';
 export const soundOnFrom = (stored) => stored === 'on';
 
 // Timing in seconds after the answer. The beats line up with the vignette pulse in styles.css
-// (animation: heartbeat 1s ... .2s 3, peaking 0.15 s into each cycle), and the beep starts when the
-// ECG trace (3.6 s from 0.2 s) has gone flat.
+// (animation: heartbeat 1s ... 1.1s 3, peaking 0.15 s into each cycle), and the beep starts when the
+// ECG trace (3.6 s from 1.1 s) has gone flat. test/haunt.test.js checks the beats against the CSS.
 export const HAUNT_SOUND = {
-  firstBeat: 0.35,
+  firstBeat: 1.25,
   beatPeriod: 1,
   beats: 3,
-  flatlineAt: 2.9,
+  flatlineAt: 3.8,
   flatlineLength: 1.6,
   flatlineHz: 960, // a plain monitor-style sine tone
   maxGain: 0.25,   // master level: audible, never loud
