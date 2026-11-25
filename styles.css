@@ -90,6 +90,37 @@ input, select { font: inherit; background: #00000066; color: var(--ink); border:
 /* Vitals the player saw for a missed case (task 14): they vary each appearance. */
 .missed .seen { margin: .4rem 0 0; color: var(--muted); font-size: .9rem; }
 .missed .vitals { margin-top: .3rem; }
+/* Decision point that decided a missed case's level (task 15). Text, not colour, carries the step. */
+.step-tag { display: inline-block; margin-left: .35rem; padding: 0 .5rem; border: 1px solid var(--ecto); border-radius: 999px;
+  color: var(--ecto); font-size: .85rem; white-space: nowrap; }
+
+/* "ESI v4 in 2 minutes" (task 15). An opaque card inside .report (z-index 2, above the stains at 1),
+   so the haunting stains never sit under or over its text. No animation or transition at all. */
+.lesson { margin: 1.25rem 0 .5rem; background: var(--btn-bg); border: 1px solid #ffffff26; border-radius: 12px; }
+.lesson > summary { cursor: pointer; padding: .75rem 1rem; color: var(--pumpkin); font-weight: bold; font-size: 1.1rem; }
+.lesson[open] > summary { border-bottom: 1px solid #ffffff1a; }
+.lesson-body { padding: .25rem 1rem 1rem; }
+.lesson h3 { color: var(--ecto); margin: 1rem 0 .4rem; font-size: 1.05rem; }
+.lesson h4 { color: var(--ink); margin: .5rem 0 .25rem; font-size: 1rem; }
+.lesson ul, .lesson ol { margin: .25rem 0; padding-left: 1.4rem; }
+.lesson li { margin: .2rem 0; }
+.lesson-steps li { margin: .5rem 0; }
+.lesson-steps .step-label { display: block; color: var(--pumpkin); font-weight: bold; }
+.lesson-steps .step-a { display: block; color: var(--candle); }
+.resource-lists { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .25rem 1rem; }
+.danger-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.danger-table caption { text-align: left; color: var(--muted); padding-bottom: .4rem; caption-side: top; }
+.danger-table th, .danger-table td { border: 1px solid #ffffff26; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+.danger-table thead th { color: var(--ecto); }
+.danger-table td { font-family: ui-monospace, monospace; white-space: nowrap; }
+.wrong-count { font-weight: bold; }
+.lesson-note, .lesson-source { color: var(--muted); font-size: .9rem; }
+.lesson-note { margin-top: 1rem; }
+@media (max-width: 400px) {
+  .lesson-body { padding: .25rem .6rem .75rem; }
+  .danger-table { font-size: .85rem; }
+  .danger-table th, .danger-table td { padding: .3rem .35rem; }
+}
 footer { color: var(--muted); font-size: .85rem; text-align: center; }
 
 /* ---- Haunting effects (tasks 7 and 13) ----

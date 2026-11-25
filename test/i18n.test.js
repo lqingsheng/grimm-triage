@@ -25,7 +25,7 @@ test('every string key has both en and zh-CN values with the same placeholders',
 });
 
 // Values that are only symbols or units in both languages.
-const NO_CJK_NEEDED = new Set(['game.reasonSep', 'vital.bpValue']);
+const NO_CJK_NEEDED = new Set(['game.reasonSep', 'vital.bpValue', 'lesson.above', 'lesson.belowPct']);
 
 test('Chinese strings are actually Chinese, except symbols and units', () => {
   for (const [key, entry] of Object.entries(STRINGS)) {

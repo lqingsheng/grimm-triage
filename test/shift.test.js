@@ -35,8 +35,8 @@ test('missed cases keep play order, correct level, guess, kind and teaching poin
     { case: c('c', 4), guess: 2, level: 4 },
   ]);
   assert.deepEqual(r.missed, [
-    { id: 'b', name: 'Monster b', emoji: '👻', guess: 3, correctLevel: 1, kind: 'under', teachingPoint: 'Lesson b', patient: vitals('b') },
-    { id: 'c', name: 'Monster c', emoji: '👻', guess: 2, correctLevel: 4, kind: 'over', teachingPoint: 'Lesson c', patient: vitals('c') },
+    { id: 'b', name: 'Monster b', emoji: '👻', guess: 3, correctLevel: 1, kind: 'under', teachingPoint: 'Lesson b', patient: vitals('b'), step: null },
+    { id: 'c', name: 'Monster c', emoji: '👻', guess: 2, correctLevel: 4, kind: 'over', teachingPoint: 'Lesson c', patient: vitals('c'), step: null },
   ]);
 });
 
