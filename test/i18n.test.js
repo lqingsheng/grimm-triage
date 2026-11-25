@@ -5,11 +5,12 @@ import { STRINGS, LANGS, t, levelName, caseText, translateReason, translateError
 import { CASES } from '../src/cases.js';
 import { PORTRAITS, portraitSvg } from '../src/portraits.js';
 import { triage, LEVEL_NAMES } from '../src/triage.js';
+import { instantiate, mulberry32, NIGHT_SIZE } from '../src/night.js';
 
 const CJK = /[\u4e00-\u9fff]/;
 const placeholders = (s) => [...s.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort();
 // Latin words allowed inside Chinese text: abbreviations and units used as-is in Chinese EDs.
-const LATIN_OK = new Set(['ESI', 'AVPU', 'mmHg', 'CT', 'mg', 'mL', 'cm']);
+const LATIN_OK = new Set(['ESI', 'AVPU', 'mmHg', 'CT', 'mg', 'mL', 'cm', 'kg']);
 const latinWords = (s) => (s.match(/[A-Za-z]{2,}/g) || []).filter((w) => !LATIN_OK.has(w));
 const nonEmpty = (s) => typeof s === 'string' && s.trim().length > 0;
 
@@ -41,8 +42,8 @@ test('every data-i18n key in index.html exists in the strings table', () => {
 });
 
 test('t() fills placeholders, defaults to English and returns unknown keys as-is', () => {
-  assert.equal(t('game.caseNo', 'en', { n: 2, total: 22 }), 'Patient 2 of 22');
-  assert.equal(t('game.caseNo', 'zh-CN', { n: 2, total: 22 }), '第 2 位患者，共 22 位');
+  assert.equal(t('game.caseNo', 'en', { n: 2, total: NIGHT_SIZE }), 'Patient 2 of 15');
+  assert.equal(t('game.caseNo', 'zh-CN', { n: 2, total: NIGHT_SIZE }), '第 2 位患者，共 15 位');
   assert.equal(t('game.score', 'xx', { score: 5 }), 'Score 5');
   assert.equal(normalizeLang(null), 'en');
   assert.equal(t('no.such.key', 'zh-CN'), 'no.such.key');
@@ -67,6 +68,23 @@ test('every case has Chinese name, story and teaching point', () => {
     }
     assert.equal(caseText(c, 'zh-CN').story, c.zh.story);
     assert.equal(caseText(c, 'en').story, c.story);
+  }
+});
+
+test('every alternative opening is translated, and a drawn case reads in Chinese', () => {
+  const random = mulberry32(4);
+  for (const c of CASES) {
+    for (const o of c.variants.openings ?? []) {
+      assert.match(o.zh, CJK, `${c.id}: opening has no Chinese`);
+      assert.deepEqual(latinWords(o.zh), [], `${c.id}: English left in "${o.zh}"`);
+      assert.ok(nonEmpty(o.en), `${c.id}: empty English opening`);
+    }
+    for (let i = 0; i < 6; i += 1) {
+      const seen = instantiate(c, random);
+      assert.match(caseText(seen, 'zh-CN').story, CJK);
+      assert.deepEqual(latinWords(caseText(seen, 'zh-CN').story), [], `${c.id}: drawn Chinese story`);
+      assert.equal(caseText(seen, 'en').story, seen.story);
+    }
   }
 });
 

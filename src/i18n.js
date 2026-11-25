@@ -99,6 +99,7 @@ export const STRINGS = {
   'report.under': { en: '🩸 Under-triaged', 'zh-CN': '🩸 分诊不足' },
   'report.overTriaged': { en: '🕸️ Over-triaged', 'zh-CN': '🕸️ 分诊过度' },
   'report.missed': { en: 'Missed cases', 'zh-CN': '判断失误的病例' },
+  'report.seenVitals': { en: 'Vital signs you saw:', 'zh-CN': '你看到的生命体征：' },
   'report.missedLine': {
     en: '{kind}: you chose ESI {guess}, correct is {badge}',
     'zh-CN': '{kind}：你选择了 ESI {guess} 级，正确答案是 {badge}',

@@ -3,6 +3,7 @@ import { summarizeShift } from './shift.js';
 import { CASES } from './cases.js';
 import { portraitSvg, eyeGlowSvg } from './portraits.js';
 import { dripsHtml, stainsHtml } from './haunt.js';
+import { planNight, parseLastNight, LAST_NIGHT_KEY } from './night.js';
 import { SOUND_KEY, soundOnFrom, playHaunt } from './sound.js';
 import { t, levelName, caseText, translateReason, translateError, normalizeLang, STORAGE_KEY, DEFAULT_LANG } from './i18n.js';
 
@@ -66,16 +67,17 @@ let answers = []; // { case, guess, level } for the shift report
 let current = null; // { guess, truth, s } once the current case is answered, so a language switch can redraw it
 let reportShown = false;
 
-// Fisher-Yates shuffle on a copy, so each night presents the cases in a new order.
-function shuffled(list) {
-  const a = [...list];
-  for (let i = a.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
+// Each night: 3 cases per ESI level, none from the previous night, each with freshly drawn vitals
+// and opening line (src/night.js). Last night's ids live in localStorage; if storage is blocked
+// the draw simply cannot avoid them.
+function newNight() {
+  let avoid = [];
+  try { avoid = parseLastNight(localStorage.getItem(LAST_NIGHT_KEY)); } catch { /* storage blocked */ }
+  const night = planNight(CASES, { random: Math.random, avoid });
+  try { localStorage.setItem(LAST_NIGHT_KEY, JSON.stringify(night.map((c) => c.id))); } catch { /* not persisted */ }
+  return night;
 }
-let nightCases = shuffled(CASES);
+let nightCases = newNight();
 
 function vitalsHtml(p) {
   // Age-appropriate danger-zone cut-offs (pediatric bands for age <= 8), plus the level-1 lows.
@@ -225,9 +227,11 @@ function missedHtml(m) {
   const c = CASES.find((x) => x.id === m.id);
   const text = c ? caseText(c, lang) : { name: m.name, teachingPoint: m.teachingPoint };
   const kind = m.kind === 'under' ? tr('report.under') : tr('report.overTriaged');
+  // The vitals this player saw for this case (they vary each appearance), so the lesson matches.
   return `<li class="missed ${m.kind}">
     <div class="who"><span aria-hidden="true">${m.emoji}</span> ${text.name}</div>
     <div>${tr('report.missedLine', { kind, guess: m.guess, badge: badge(m.correctLevel) })}</div>
+    <p class="seen">${tr('report.seenVitals')}</p>${vitalsHtml(m.patient)}
     <p class="teach">${text.teachingPoint}</p>
   </li>`;
 }
@@ -236,13 +240,12 @@ function renderReport() {
   const firstShow = !reportShown;
   reportShown = true;
   const r = summarizeShift(answers);
-  const max = r.total * 100;
   $('#caseNo').textContent = tr('report.over');
   $('#play').hidden = true;
   setEffect(null);
   const report = $('#shiftReport');
   report.innerHTML = `<h2 id="reportTitle" tabindex="-1">${tr('report.title')}</h2>
-    <p class="final">${tr('report.final', { score: r.score, max })}</p>
+    <p class="final">${tr('report.final', { score: r.score, max: r.max })}</p>
     <dl class="tally">
       <div><dt>${tr('report.correct')}</dt><dd>${r.correct}</dd></div>
       <div><dt>${tr('report.under')}</dt><dd>${r.underTriage}</dd></div>
@@ -258,7 +261,7 @@ function renderReport() {
 }
 
 function startNight() {
-  nightCases = shuffled(CASES);
+  nightCases = newNight();
   idx = 0;
   score = 0;
   answers = [];
