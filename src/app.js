@@ -1,6 +1,7 @@
 import { triage, scoreGuess, dangerThresholds, hypotensionThreshold } from './triage.js';
 import { summarizeShift, decisionPointFor } from './shift.js';
 import { lessonHtml } from './lesson.js';
+import { helpButtonHtml, helpPanelHtml, countResources } from './deskhelp.js';
 import { CASES } from './cases.js';
 import { portraitSvg, eyeGlowSvg } from './portraits.js';
 import { dripsHtml, stainsHtml } from './haunt.js';
@@ -43,6 +44,7 @@ function setLang(next) {
   if (reportShown) renderReport();
   else { renderCaseCard(); renderFeedback(); renderNextButton(); }
   renderCalcResult();
+  renderDeskHelp();
 }
 
 document.querySelectorAll('.lang-toggle button').forEach((b) =>
@@ -300,6 +302,54 @@ $('#nextCase').addEventListener('click', () => {
   $('#caseCard').focus();
 });
 
+// ---- Triage Desk inline help (task 16) ----
+// Each judgement field gets an ⓘ button and a panel under it (src/deskhelp.js builds the markup).
+// The resource checklist fills the number field; the number stays editable.
+const helpOpen = new Set();
+let ticked = [];
+
+function renderDeskHelp() {
+  document.querySelectorAll('#calcForm .field').forEach((el) => {
+    const field = el.dataset.field;
+    el.querySelectorAll('.help-btn, .help-panel').forEach((n) => n.remove());
+    const open = helpOpen.has(field);
+    el.querySelector('label').insertAdjacentHTML('afterend', helpButtonHtml(field, tr, open) + helpPanelHtml(field, tr, { open, ticked }));
+    el.classList.toggle('help-open', open);
+  });
+}
+
+function toggleHelp(field, open = !helpOpen.has(field)) {
+  if (open) helpOpen.add(field); else helpOpen.delete(field);
+  const el = document.querySelector(`#calcForm .field[data-field="${field}"]`);
+  el.classList.toggle('help-open', open);
+  el.querySelector('.help-btn').setAttribute('aria-expanded', String(open));
+  el.querySelector('.help-panel').hidden = !open;
+}
+
+$('#calcForm').addEventListener('click', (e) => {
+  const btn = e.target.closest('.help-btn');
+  if (btn) toggleHelp(btn.dataset.help);
+});
+
+$('#calcForm').addEventListener('change', (e) => {
+  const box = e.target.closest('input[data-resource]');
+  if (!box) return;
+  ticked = [...document.querySelectorAll('#calcForm input[data-resource]:checked')].map((b) => b.dataset.resource);
+  const count = countResources(ticked);
+  $('#calcForm input[name="resources"]').value = count;
+  box.closest('.help-panel').querySelector('.resource-total').textContent = tr('help.resources.total', { count });
+});
+
+// Escape inside an open panel closes it and returns focus to its button.
+$('#calcForm').addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  const panel = e.target.closest('.help-panel');
+  if (!panel) return;
+  const field = panel.closest('.field').dataset.field;
+  toggleHelp(field, false);
+  panel.closest('.field').querySelector('.help-btn').focus();
+});
+
 // ---- calculator ----
 let calc = null; // { result } or { error } from the last submit, so a language switch can redraw it
 
@@ -334,5 +384,6 @@ $('#calcForm').addEventListener('submit', (e) => {
 $('#drips').innerHTML = dripsHtml();
 renderSoundToggle();
 applyStaticStrings();
+renderDeskHelp();
 renderScore();
 renderCase();

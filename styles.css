@@ -75,6 +75,27 @@ h1 .h1-sub:lang(zh-CN) { letter-spacing: .3em; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .75rem; }
 label { display: flex; flex-direction: column; gap: .25rem; color: var(--muted); }
 label.chk { flex-direction: row; align-items: center; gap: .5rem; }
+/* Triage Desk inline help (task 16). The ⓘ button sits beside the label; an open panel spans the
+   whole form row underneath. No animation or transition. */
+.field { display: grid; grid-template-columns: 1fr auto; align-items: start; column-gap: .4rem; }
+.field > label { grid-column: 1; }
+.field.help-open { grid-column: 1 / -1; }
+.help-btn { grid-column: 2; min-width: 44px; min-height: 44px; padding: 0; border-radius: 50%; font-size: 1.15rem; line-height: 1;
+  color: var(--ecto); background: var(--btn-bg); }
+.help-btn[aria-expanded="true"] { border-color: var(--ecto); box-shadow: inset 0 0 0 1px var(--ecto); }
+.help-panel { grid-column: 1 / -1; margin-top: .5rem; padding: .6rem .8rem; background: var(--btn-bg); border: 1px solid #ffffff26;
+  border-radius: 10px; color: var(--ink); overflow-wrap: anywhere; }
+.help-panel h3 { margin: 0 0 .4rem; font-size: 1rem; color: var(--pumpkin); }
+.help-panel h4 { margin: .6rem 0 .2rem; font-size: .95rem; color: var(--ecto); }
+.help-panel p { margin: .3rem 0; }
+.help-panel ul { margin: .2rem 0; padding-left: 1.2rem; }
+.help-panel .help-rule, .help-panel .help-esi { color: var(--candle); }
+.resource-check { border: 1px solid #ffffff26; border-radius: 8px; margin: .4rem 0; padding: .3rem .6rem; }
+.resource-check legend { color: var(--ecto); padding: 0 .3rem; }
+.resource-check ul { list-style: none; padding-left: 0; }
+.resource-check label.chk { color: var(--ink); align-items: flex-start; min-height: 32px; }
+.resource-check input { margin-top: .25rem; flex: none; width: 1.1rem; height: 1.1rem; }
+.resource-total { font-weight: bold; }
 input, select { font: inherit; background: #00000066; color: var(--ink); border: 1px solid #ffffff33; border-radius: 8px; padding: .45rem; }
 .report h2 { color: var(--pumpkin); margin: .25rem 0; }
 .report h3 { color: var(--ecto); margin-bottom: .5rem; }

@@ -7,7 +7,7 @@
 // lists every file in src/.
 
 const CACHE_PREFIX = 'grimm-triage-';
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -23,6 +23,7 @@ const PRECACHE_URLS = [
   'icons/apple-touch-icon.png',
   'src/app.js',
   'src/cases.js',
+  'src/deskhelp.js',
   'src/haunt.js',
   'src/i18n.js',
   'src/lesson.js',

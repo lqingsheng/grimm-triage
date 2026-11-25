@@ -206,6 +206,66 @@ export const STRINGS = {
   'calc.submit': { en: 'Summon triage level 🔮', 'zh-CN': '召唤分诊级别 🔮' },
   'calc.form': { en: 'Patient findings', 'zh-CN': '患者检查结果' },
   'calc.result': { en: 'Triage result', 'zh-CN': '分诊结果' },
+  // ---- Triage Desk inline help (task 16, src/deskhelp.js). Our own words; no handbook text or figures. ----
+  'help.button': { en: 'Help: {field}', 'zh-CN': '帮助：{field}' },
+  'help.close': { en: 'Close help', 'zh-CN': '关闭帮助' },
+
+  'help.pain.title': { en: 'Scoring pain', 'zh-CN': '如何评估疼痛' },
+  'help.pain.ask': {
+    en: 'Ask: “0 is no pain, 10 is the worst pain you can imagine.” 1 to 3 is mild, 4 to 6 moderate, 7 to 10 severe.',
+    'zh-CN': '询问患者：“0 表示不痛，10 表示你能想象到的最剧烈的疼痛。”1 至 3 分为轻度，4 至 6 分为中度，7 至 10 分为重度。',
+  },
+  'help.pain.ageTitle': { en: 'Choose the scale by age', 'zh-CN': '按年龄选择量表' },
+  'help.pain.age.numeric': { en: 'Adults and children aged about 8 and older: the 0 to 10 number scale.', 'zh-CN': '成人及约 8 岁以上儿童：0 至 10 数字评分。' },
+  'help.pain.age.faces': { en: 'Children aged about 3 to 7: a faces scale, from a face with no hurt to a face that hurts worst. The child points to the face that matches.', 'zh-CN': '约 3 至 7 岁儿童：面部表情量表，从“不痛”的脸到“最痛”的脸，让孩子指出与自己感受相符的那张脸。' },
+  'help.pain.age.flacc': { en: 'Infants, toddlers and anyone who cannot tell you: score behaviour instead. Face, legs, activity, cry and consolability are each scored 0 to 2, for a total of 0 to 10 (the FLACC scale, validated for about 2 months to 7 years).', 'zh-CN': '婴幼儿及无法表达的患者：改为评估行为。面部表情、双腿、活动、哭闹和可安抚程度各计 0 至 2 分，总分 0 至 10 分（FLACC 量表，适用于约 2 月龄至 7 岁）。' },
+  'help.pain.look': { en: 'Record the patient’s own rating, and look at the patient too: if the vital signs or behaviour do not match the number, note it.', 'zh-CN': '记录患者自己给出的分数，同时观察患者：若生命体征或行为与分数不符，应记录下来。' },
+  'help.pain.esi': { en: 'ESI v4: severe pain or distress (7 or more) means consider ESI 2 at step B. This game always assigns ESI 2 at 7 or more.', 'zh-CN': 'ESI 第 4 版：剧烈疼痛或明显痛苦（7 分及以上）时，在第 B 步考虑 ESI 2 级。本游戏在 7 分及以上时一律判为 ESI 2 级。' },
+
+  'help.resources.title': { en: 'Counting resources', 'zh-CN': '如何计算资源' },
+  'help.resources.rule': { en: 'Count different types of resources, not tests: a blood count and electrolytes are one resource (labs).', 'zh-CN': '按资源的种类计数，而不是按检查项目计数：血常规加电解质只算 1 项资源（化验）。' },
+  'help.resources.tick': { en: 'Tick what this patient will need. The number above fills in for you, and you can still change it.', 'zh-CN': '勾选这位患者需要的项目，上方的数字会自动填写，你仍可手动修改。' },
+  'help.resources.total': { en: 'Ticked: {count}', 'zh-CN': '已勾选：{count} 项' },
+
+  'help.highRisk.title': { en: 'High-risk complaint', 'zh-CN': '高危主诉' },
+  'help.highRisk.what': {
+    en: 'A situation where waiting could cost a life, a limb or an organ, even if the patient looks well. Ask yourself: would I give my last open bed to this patient?',
+    'zh-CN': '即使患者看起来状况良好，延误也可能危及生命、肢体或器官的情况。问问自己：我会把最后一张空床给这位患者吗？',
+  },
+  'help.highRisk.examples': { en: 'Examples', 'zh-CN': '举例' },
+  'help.highRisk.ex.chest': { en: 'Chest pain that could be acute coronary syndrome or aortic dissection', 'zh-CN': '可能为急性冠脉综合征或主动脉夹层的胸痛' },
+  'help.highRisk.ex.stroke': { en: 'Signs of stroke', 'zh-CN': '卒中征象' },
+  'help.highRisk.ex.suicidal': { en: 'Thoughts of suicide or of harming others', 'zh-CN': '有自杀或伤害他人的念头' },
+  'help.highRisk.ex.ectopic': { en: 'Possible ectopic pregnancy', 'zh-CN': '疑似异位妊娠' },
+  'help.highRisk.ex.torsion': { en: 'Possible testicular torsion', 'zh-CN': '疑似睾丸扭转' },
+  'help.highRisk.ex.headache': { en: 'Sudden, severe headache', 'zh-CN': '突发剧烈头痛' },
+  'help.highRisk.ex.immuno': { en: 'Fever in a patient with weak immunity (for example, on chemotherapy)', 'zh-CN': '免疫力低下患者（例如正在化疗）出现发热' },
+  'help.highRisk.ex.sepsis': { en: 'Suspected sepsis', 'zh-CN': '疑似脓毒症' },
+  'help.highRisk.ex.overdose': { en: 'A significant overdose or poisoning', 'zh-CN': '严重的药物过量或中毒' },
+  'help.highRisk.ex.trauma': { en: 'A major trauma mechanism', 'zh-CN': '高能量创伤机制' },
+  'help.highRisk.ex.assault': { en: 'Possible sexual assault', 'zh-CN': '可能遭受性侵犯' },
+  'help.highRisk.ex.eye': { en: 'An eye injury that could threaten sight', 'zh-CN': '可能危及视力的眼外伤' },
+
+  'help.lifesaving.title': { en: 'Immediate life-saving intervention', 'zh-CN': '立即抢救性干预' },
+  'help.lifesaving.ask': { en: 'Does the patient need one of these right now?', 'zh-CN': '患者现在是否需要以下任一项？' },
+  'help.lifesaving.airway': { en: 'Airway and breathing: bag-valve-mask ventilation, intubation, a surgical airway, emergency CPAP or BiPAP', 'zh-CN': '气道与呼吸：球囊面罩通气、气管插管、外科气道、紧急无创正压通气（CPAP 或 BiPAP）' },
+  'help.lifesaving.electrical': { en: 'Electrical: defibrillation, emergency cardioversion, external pacing', 'zh-CN': '电治疗：除颤、紧急电复律、体外起搏' },
+  'help.lifesaving.procedures': { en: 'Procedures: needle decompression of the chest, pericardiocentesis', 'zh-CN': '操作：胸腔穿刺针减压、心包穿刺' },
+  'help.lifesaving.circulation': { en: 'Circulation: major IV fluid resuscitation, blood transfusion, control of major bleeding', 'zh-CN': '循环：大量静脉液体复苏、输血、控制大出血' },
+  'help.lifesaving.meds': { en: 'Medicines: naloxone, IV glucose (D50 in adults, D10 in children), atropine, adenosine, vasopressors', 'zh-CN': '药物：纳洛酮、静脉葡萄糖（成人 50%、儿童 10%）、阿托品、腺苷、血管活性药物' },
+  'help.lifesaving.notTitle': { en: 'Not life-saving on their own', 'zh-CN': '单独使用时不算抢救性干预' },
+  'help.lifesaving.not': {
+    en: 'Oxygen by mask or nasal cannula, a cardiac monitor, an ECG, labs, IV access, a nebuliser, IV fluids at a maintenance rate.',
+    'zh-CN': '面罩或鼻导管吸氧、心电监护、心电图、化验、建立静脉通路、雾化、维持速度的静脉补液。',
+  },
+
+  'help.confusion.title': { en: 'New confusion or lethargy', 'zh-CN': '新发意识混乱或嗜睡' },
+  'help.confusion.what': {
+    en: 'New confusion, lethargy (sleepy and hard to keep awake) or disorientation compared with the patient’s usual state. Ask family or carers what is normal for this patient.',
+    'zh-CN': '与患者平时的状态相比，新出现的意识混乱、嗜睡（昏昏欲睡、难以保持清醒）或定向障碍。向家属或照护者了解患者平时的状态。',
+  },
+  'help.confusion.avpu': { en: 'A patient who responds only to voice or to pain belongs in the AVPU field.', 'zh-CN': '只对声音或疼痛刺激有反应的患者，请在意识（AVPU）一栏中记录。' },
+
   'calc.dangerZone': { en: '⚠️ Danger-zone vitals.', 'zh-CN': '⚠️ 生命体征处于危险区。' },
   'calc.error': { en: 'The spirits reject this input: {message}', 'zh-CN': '幽灵拒绝了这些输入：{message}' },
 };
