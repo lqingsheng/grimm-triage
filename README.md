@@ -2,6 +2,8 @@
 
 Learn real emergency-department triage by sorting monsters. The costume is fake. The logic is real.
 
+**▶ Live demo: [grimm-triage.vercel.app](https://grimm-triage.vercel.app/)**
+
 **Kiroween 2026 · Costume Contest** · Built with [Kiro](https://kiro.dev) by an emergency physician.
 
 > ⚠️ Educational demo only. Not a medical device. Never use for real patient care.
