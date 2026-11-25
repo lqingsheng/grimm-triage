@@ -29,3 +29,5 @@
   - _Requirements: 2.1–2.4, 2.8, 2.9_
 - [x] 15. "ESI v4 in 2 minutes" lesson in the shift report: collapsible `<details>` (open after any under-triage) with the A–D steps, resource lists, a danger-zone table built from `ADULT_DANGER` / `PEDIATRIC_DANGER`, "where your shift went wrong" via a pure `decisionPointFor()` in `src/shift.js` (also tagged on each missed case), the level-1 simplification note and source line; English and Chinese
   - _Requirements: 2.3, 2.10, 4.2, 4.3, 5.2_
+- [x] 16. Triage Desk inline help: an ⓘ button (`aria-expanded`, `aria-controls`) and panel for pain score, expected resources, high-risk complaint, life-saving intervention and new confusion / lethargy; a resource checklist that fills the number field, reusing `RESOURCE_COUNTS` / `RESOURCE_NOT` and their strings (complex procedure = 2); English and Chinese
+  - _Requirements: 2.11, 3.1, 4.2, 4.3, 5.2, 5.3_
