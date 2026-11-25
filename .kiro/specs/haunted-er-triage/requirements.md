@@ -19,7 +19,7 @@ A spooky, educational web app that teaches five-level ED triage. Players triage 
 1. THE SYSTEM SHALL show one monster at a time with story, emoji/art and vital signs, flagging abnormal vitals.
 2. WHEN the player picks a level THE SYSTEM SHALL reveal the correct level, the reasons, and points (exact 100, off by one 50, under-triage −25 extra).
 3. THE SYSTEM SHALL show a shift report at the end: score, number of under- and over-triages, and the cases missed.
-4. THE SYSTEM SHALL offer at least 60 cases covering every level 12 times, with at least 12 pediatric cases, and draw 15 per night (3 per level) in shuffled order.
+4. THE SYSTEM SHALL offer at least 60 cases covering every level at least 12 times, with at least 12 pediatric cases, and draw 15 per night (3 per level) in shuffled order.
 5. WHEN a case is under-triaged THE SYSTEM SHALL play a haunting effect (screen flicker, blood-drip) that respects reduced-motion settings.
 6. WHILE a night is in progress THE SYSTEM SHALL keep one visible stain per under-triage, and clear them when a new night starts.
 7. THE SYSTEM SHALL keep effect sound off until the player turns it on.

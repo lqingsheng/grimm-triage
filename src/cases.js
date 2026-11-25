@@ -509,6 +509,28 @@ export const CASES = [
     },
   },
 
+  {
+    id: 'raven-paracetamol',
+    name: 'Poe the Raven, 38',
+    emoji: '🐦‍⬛',
+    story: 'Toothache all week, so he took extra paracetamol, plus cold-and-flu sachets, for 3 days. No intent to harm himself. Mild nausea, otherwise well.',
+    patient: { ageYears: 38, avpu: 'A', newConfusion: false, hr: 84, rr: 16, sbp: 126, spo2: 98, tempC: 37.0, pain: 4, highRisk: true, needsLifesaving: false, resources: 2 },
+    expectedLevel: 2,
+    teachingPoint: 'A staggered paracetamol overdose is high risk even when he looks well: the treatment nomogram cannot be used when the tablets were taken over more than one sitting, so IV acetylcysteine is started at once, without waiting for the paracetamol level. ESI 2. The liver can be failing silently.',
+    zh: {
+      name: '渡鸦坡，38 岁',
+      story: '牙痛了一整周，于是 3 天来额外多吃了对乙酰氨基酚，还冲了感冒冲剂。没有伤害自己的意图。轻微恶心，其他方面良好。',
+      teachingPoint: '分次过量服用对乙酰氨基酚属于高危，即使他看起来状况良好：药物分多次服下时无法使用治疗列线图，因此应立即开始静脉乙酰半胱氨酸，不必等待血药浓度结果。ESI 2 级。肝脏可能正在悄无声息地衰竭。',
+    },
+    variants: {
+      vitals: { hr: [76, 94], rr: [14, 18], sbp: [118, 134], spo2: [97, 100], tempC: [36.6, 37.4], pain: [3, 5] },
+      openings: [
+        { en: 'A cracked beak hurt all week, so he took extra paracetamol, plus cold-and-flu sachets, for 3 days.', zh: '喙裂了一整周都在痛，于是 3 天来额外多吃了对乙酰氨基酚，还冲了感冒冲剂。' },
+        { en: 'Nursing a fever for 3 days, he doubled up on paracetamol and cold-and-flu sachets.', zh: '发热 3 天，他把对乙酰氨基酚和感冒冲剂都吃了双倍。' },
+      ],
+    },
+  },
+
   // ---------------- ESI 3: Urgent ----------------
   {
     id: 'goblin-abdopain',
@@ -595,23 +617,23 @@ export const CASES = [
     },
   },
   {
-    id: 'raven-paracetamol',
-    name: 'Poe the Raven, 38',
-    emoji: '🐦‍⬛',
-    story: 'Toothache all week, so he took extra paracetamol, plus cold-and-flu sachets, for 3 days. No intent to harm himself. Mild nausea, otherwise well.',
-    patient: { ageYears: 38, avpu: 'A', newConfusion: false, hr: 84, rr: 16, sbp: 126, spo2: 98, tempC: 37.0, pain: 4, highRisk: false, needsLifesaving: false, resources: 2 },
+    id: 'golem-renal-colic',
+    name: 'Granite the Golem, 44',
+    emoji: '🗿',
+    story: 'Sudden, gripping pain in his left flank an hour ago, shooting down to the groin in waves. Cannot keep still, but the pain has eased a little since he arrived. No fever, passing urine.',
+    patient: { ageYears: 44, avpu: 'A', newConfusion: false, hr: 90, rr: 18, sbp: 138, spo2: 98, tempC: 36.9, pain: 6, highRisk: false, needsLifesaving: false, resources: 3 },
     expectedLevel: 3,
-    teachingPoint: 'A staggered paracetamol overdose can look completely well while the liver is being damaged. A paracetamol level and liver tests plus IV acetylcysteine are 2 resources: ESI 3 with normal vitals. An intentional overdose would be high risk: ESI 2.',
+    teachingPoint: 'Sudden one-sided flank pain spreading to the groin suggests a kidney stone. Labs, a CT and IV pain relief are 3 resources; with normal vitals and pain under 7, that is ESI 3. A fever with a stone means an infected, blocked kidney: high risk, re-triage to ESI 2.',
     zh: {
-      name: '渡鸦坡，38 岁',
-      story: '牙痛了一整周，于是 3 天来额外多吃了对乙酰氨基酚，还冲了感冒冲剂。没有伤害自己的意图。轻微恶心，其他方面良好。',
-      teachingPoint: '分次过量服用对乙酰氨基酚时，患者可能看起来完全正常，而肝脏正在受损。血药浓度和肝功能检查加静脉乙酰半胱氨酸共 2 项资源：生命体征正常时为 ESI 3 级。若是故意过量服药，则属于高危：ESI 2 级。',
+      name: '石魔格拉尼特，44 岁',
+      story: '一小时前左侧腰部突发绞痛，阵阵向下放射至腹股沟。坐立不安，但到院后疼痛稍有缓解。无发热，能排尿。',
+      teachingPoint: '突发一侧腰痛并向腹股沟放射，提示肾结石。化验、CT 和静脉镇痛共 3 项资源；生命体征正常且疼痛低于 7 分，为 ESI 3 级。结石伴发热提示感染性梗阻肾：属于高危，应重新分诊为 ESI 2 级。',
     },
     variants: {
-      vitals: { hr: [76, 94], rr: [14, 18], sbp: [118, 134], spo2: [97, 100], tempC: [36.6, 37.4], pain: [3, 5] },
+      vitals: { hr: [80, 98], rr: [14, 20], sbp: [126, 148], spo2: [97, 100], tempC: [36.5, 37.3], pain: [4, 6] },
       openings: [
-        { en: 'A cracked beak hurt all week, so he took extra paracetamol, plus cold-and-flu sachets, for 3 days.', zh: '喙裂了一整周都在痛，于是 3 天来额外多吃了对乙酰氨基酚，还冲了感冒冲剂。' },
-        { en: 'Nursing a fever for 3 days, he doubled up on paracetamol and cold-and-flu sachets.', zh: '发热 3 天，他把对乙酰氨基酚和感冒冲剂都吃了双倍。' },
+        { en: 'Sudden, gripping pain in his left flank while hauling stones at the quarry, shooting down to the groin in waves.', zh: '在采石场搬石头时左侧腰部突发绞痛，阵阵向下放射至腹股沟。' },
+        { en: 'Woke at midnight with a gripping pain in his left flank, shooting down to the groin in waves.', zh: '半夜被左侧腰部的绞痛痛醒，疼痛阵阵向下放射至腹股沟。' },
       ],
     },
   },

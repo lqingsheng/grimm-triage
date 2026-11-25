@@ -8,10 +8,21 @@ import { RANGED_VITALS, INTEGER_VITALS, splitOpening } from '../src/night.js';
 
 const LEVELS = [1, 2, 3, 4, 5];
 
-test('60 cases, 12 per ESI level, unique ids', () => {
-  assert.equal(CASES.length, 60);
-  assert.equal(new Set(CASES.map((c) => c.id)).size, 60);
-  for (const l of LEVELS) assert.equal(CASES.filter((c) => c.expectedLevel === l).length, 12, `level ${l}`);
+// 12 per level, plus Poe the Raven, moved from ESI 3 to ESI 2 after clinical review.
+const PER_LEVEL_COUNT = { 1: 12, 2: 13, 3: 12, 4: 12, 5: 12 };
+
+test('61 cases with the reviewed level spread (at least 12 per ESI level), unique ids', () => {
+  assert.equal(CASES.length, 61);
+  assert.equal(new Set(CASES.map((c) => c.id)).size, CASES.length);
+  for (const l of LEVELS) assert.equal(CASES.filter((c) => c.expectedLevel === l).length, PER_LEVEL_COUNT[l], `level ${l}`);
+});
+
+test('Poe the Raven (staggered paracetamol overdose) is high risk, ESI 2', () => {
+  const poe = CASES.find((c) => c.id === 'raven-paracetamol');
+  assert.equal(poe.expectedLevel, 2);
+  assert.equal(poe.patient.highRisk, true);
+  assert.match(poe.teachingPoint, /nomogram/);
+  assert.match(poe.zh.teachingPoint, /列线图/);
 });
 
 test('at least 12 pediatric cases, with at least 2 in every pediatric age band', () => {
@@ -41,6 +52,7 @@ const COVERAGE = {
   'organophosphate poisoning': ['mothman-organophosphate'],
   'elderly fall on anticoagulants': ['grimalkin-fall-anticoag'],
   'head injury': ['horseman-head-injury'],
+  'renal colic': ['golem-renal-colic'],
   burns: ['dragon-keeper-burn'],
   asthma: ['wraith-asthma', 'hag-asthma-mild'],
   'febrile infant under 3 months': ['baby-bat-febrile-infant'],

@@ -7,7 +7,7 @@ inclusion: always
 - `styles.css` – theme tokens in `:root`; level colours `--l1`..`--l5`
 - `src/triage.js` – engine: `validate`, `isDangerZone`, `triage`, `scoreGuess`, `LEVEL_NAMES`, plus display-only `hypotensionThreshold` (PALS)
 - `src/shift.js` – pure `summarizeShift` for the end-of-night shift report
-- `src/cases.js` – monster case bank (`CASES`, 60 templates), each with real vitals and `variants` (vital ranges, alternative openings)
+- `src/cases.js` – monster case bank (`CASES`, 61 templates), each with real vitals and `variants` (vital ranges, alternative openings)
 - `src/night.js` – pure nightly draw: `planNight`, `drawNight`, `instantiate`, seeded `mulberry32`
 - `src/i18n.js` – pure English / 中文 strings table (`STRINGS[key] = { en, 'zh-CN' }`), `t()`, and translators for engine reasons and errors; case Chinese text lives in `cases.js` as `zh`, portrait labels as `labelZh`
 - `src/haunt.js` – pure layout data for the under-triage effect: `DRIPS`, `stainLayout(count)`, markup helpers

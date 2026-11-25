@@ -24,7 +24,7 @@ Night start → plan the night → for each: render card → player picks level 
 ## Data model (case)
 `{ id, name, emoji, story, patient, expectedLevel, teachingPoint, zh, variants }` — `patient` matches the engine input (the case's typical values); `expectedLevel` is the author's intended ESI level, checked against `triage()` by a unit test. `variants.vitals` gives a `[low, high]` range for hr, rr, sbp, spo2 and tempC (and optionally pain); every value inside must give `expectedLevel` (P8). `variants.openings` lists optional `{ en, zh }` alternatives for the story's first sentence. Stories and teaching points quote thresholds, never the patient's own values.
 
-Case bank: 60 cases, 12 per ESI level, 18 pediatric (at least 2 in each age band: < 3 months, 3 months–3 years, 3–8 years).
+Case bank: 61 cases (12 per ESI level, 13 at ESI 2 after the clinical review moved the staggered paracetamol overdose up), 18 pediatric (at least 2 in each age band: < 3 months, 3 months–3 years, 3–8 years).
 Portraits live in `src/portraits.js` as `PORTRAITS[id] = { label, art }` (inline SVG shapes only, `aria-label` from `label`); `test/portraits.test.js` checks every case has one.
 
 ## Haunting effects

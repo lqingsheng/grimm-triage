@@ -9,7 +9,7 @@ Learn real emergency-department triage by sorting monsters. The costume is fake.
 > ⚠️ Educational demo only. Not a medical device. Never use for real patient care.
 
 ## What it does
-- **Night Shift (game):** a vampire with a bleeding fang, a dehydrated mummy, an unresponsive ghost… pick the triage level, get instant feedback with the exact rule that fired. Under-triage costs extra, because that is the dangerous mistake in a real ED. Each night draws 15 of 60 monsters (3 per ESI level, none from the previous night), with vital signs and opening lines that vary on every replay.
+- **Night Shift (game):** a vampire with a bleeding fang, a dehydrated mummy, an unresponsive ghost… pick the triage level, get instant feedback with the exact rule that fired. Under-triage costs extra, because that is the dangerous mistake in a real ED. Each night draws 15 of 61 monsters (3 per ESI level, none from the previous night), with vital signs and opening lines that vary on every replay.
 - **Triage Desk (calculator):** type vital signs and flags, get an ESI v4-style level with reasons and danger-zone warnings.
 
 ## Screenshots

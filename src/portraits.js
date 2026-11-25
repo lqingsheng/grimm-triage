@@ -433,6 +433,19 @@ export const PORTRAITS = {
       <path d="M32.5 32l-1.5 3" stroke="${INK}" stroke-width="1"/>
       <ellipse cx="52" cy="56" rx="5" ry="3" fill="#e9e4f0"/><path d="M52 53v6" stroke="#9a92a8" stroke-width="1"/>`,
   },
+  'golem-renal-colic': {
+    label: 'Granite the Golem: a grey stone golem with glowing amber eyes, clutching his side, a small pebble beside him',
+    labelZh: '石魔格拉尼特：一个眼睛发出琥珀色光的灰色石魔，捂着腰侧，身旁有一颗小石子',
+    eyes: [[26, 26], [38, 26]],
+    art: `<rect x="17" y="12" width="30" height="26" rx="5" fill="#8a8694"/>
+      <path d="M22 16l6 4M40 14l-3 6M44 30l-5 2" stroke="#6b6778" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="26" cy="26" r="2.6" fill="#ffb347"/><circle cx="38" cy="26" r="2.6" fill="#ffb347"/>
+      <path d="M27 34q5-3 10 0" stroke="${INK}" stroke-width="1.8" fill="none"/>
+      <rect x="14" y="40" width="36" height="22" rx="6" fill="#7a7684"/>
+      <path d="M50 46q-8 2-10 8" stroke="#9a96a4" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M44 50l3-3M45 53l3-1" stroke="#ff6b81" stroke-width="1.2" stroke-linecap="round"/>
+      <ellipse cx="9" cy="52" rx="3" ry="2.2" fill="#b8b4c0"/>`,
+  },
   'ghoul-gi-bleed': {
     label: 'Gus the Ghoul: a grey-green ghoul with sunken eyes, next to a roll of toilet paper',
     labelZh: '食尸鬼格斯：灰绿色食尸鬼，眼窝深陷，旁边有一卷卫生纸',
