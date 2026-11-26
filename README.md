@@ -65,6 +65,9 @@ Target: WCAG 2.2 AA, in English and 中文.
 - Buttons, inputs, portraits, landmarks and the `role="status"` feedback regions all have translated labels.
 - Checked with axe-core 4.10.2 in headless Chromium in both languages, with and without reduced motion, across a full night of cases, the shift report and the calculator: 0 violations.
 
+## Maintenance
+- YouTube statistics for the demo video are recorded every 3 hours by `.github/workflows/youtube-stats.yml` into `data/youtube-stats.json` on the branch `stats` ([raw JSON](https://raw.githubusercontent.com/lqingsheng/grimm-triage/stats/data/youtube-stats.json)); the API key is the repository secret `YOUTUBE_API_KEY`.
+
 ## How Kiro was used
 - **Spec-driven development:** `.kiro/specs/haunted-er-triage/` (EARS requirements → design → tasks).
 - **Steering:** product, tech, structure, and a file-scoped `clinical-safety.md` that loads only when the engine is edited.
