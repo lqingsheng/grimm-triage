@@ -14,6 +14,7 @@ inclusion: always
 - `src/i18n.js` – pure English / 中文 strings table (`STRINGS[key] = { en, 'zh-CN' }`), `t()`, and translators for engine reasons and errors; case Chinese text lives in `cases.js` as `zh`, portrait labels as `labelZh`
 - `src/haunt.js` – pure layout data for the under-triage effect: `DRIPS`, `stainLayout(count)`, markup helpers
 - `src/sound.js` – optional Web Audio heartbeat + flatline (`playHaunt(ctx)`), off by default; no audio files
+- `src/analytics.js` – optional, cookie-free Umami events: `track(name, props)` with an allow-list of four events, one property each; no-op without `window.umami`, with `?seed=` or Do Not Track
 - `src/app.js` – DOM wiring only
 - `manifest.webmanifest`, `icons/` – PWA manifest and original icon set (SVG + PNG)
 - `sw.js` – service worker: versioned precache of the shell and every `src/` file (bump `CACHE_VERSION` when any precached file changes)

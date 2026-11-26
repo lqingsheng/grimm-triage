@@ -43,6 +43,20 @@ After the first visit the game and calculator work with no network: `sw.js` prec
 
 When you change any precached file, bump `CACHE_VERSION` in `sw.js`; the new worker installs a fresh cache and deletes the old one on activate. Adding a file to `src/` without listing it in `PRECACHE_URLS` fails `npm test`.
 
+## Privacy
+The live site counts visits with [Umami Cloud](https://umami.is), a privacy-friendly analytics service. It sets no cookies and stores no personal data.
+- **Counted:** page views, country or region, time on site, referrer, and device, browser and OS type. Plus four anonymous game events, one small value each:
+
+  | Event | Property | Example |
+  |---|---|---|
+  | `night-complete` | `score` when the shift report opens | `1150` |
+  | `under-triage` | `step`: the ESI decision point (A–D) of the missed case | `D` |
+  | `desk-submit` | `level`: the computed Triage Desk level, `P` when provisional | `2P` |
+  | `lang-switch` | `lang` | `zh-CN` |
+- **Never sent:** ages, vital signs, case or monster names, free text, or anything typed into the Triage Desk. `src/analytics.js` drops any other property and `test/analytics.test.js` checks it.
+- **Not counted:** localhost and preview deploys (`data-domains`), browsers with Do Not Track on, and demo recordings (`?seed=`; the recorder also blocks the script).
+- **Optional:** if the script is blocked (ad blockers, some networks) or you are offline, the app works exactly the same. The service worker never caches it.
+
 ## Accessibility
 Target: WCAG 2.2 AA, in English and 中文.
 - Every text colour, ESI badge and level-button outline meets AA contrast (`test/a11y.test.js` checks the theme tokens).

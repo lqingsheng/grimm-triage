@@ -8,6 +8,7 @@ import { dripsHtml, stainsHtml } from './haunt.js';
 import { planNight, parseLastNight, seedFromSearch, mulberry32, LAST_NIGHT_KEY } from './night.js';
 import { SOUND_KEY, soundOnFrom, playHaunt } from './sound.js';
 import { t, levelName, caseText, translateReason, translateError, normalizeLang, STORAGE_KEY, DEFAULT_LANG } from './i18n.js';
+import { track, deskLevel } from './analytics.js';
 
 const $ = (s) => document.querySelector(s);
 
@@ -48,7 +49,11 @@ function setLang(next) {
 }
 
 document.querySelectorAll('.lang-toggle button').forEach((b) =>
-  b.addEventListener('click', () => { if (b.dataset.lang !== lang) setLang(b.dataset.lang); }),
+  b.addEventListener('click', () => {
+    if (b.dataset.lang === lang) return;
+    setLang(b.dataset.lang);
+    track('lang-switch', { lang });
+  }),
 );
 
 // ---- mode switch ----
@@ -222,6 +227,8 @@ $('#levelButtons').addEventListener('click', (e) => {
   answers.push({ case: nightCases[idx], guess, level: truth.level, step: decisionPointFor(truth) });
   current = { guess, truth, s };
   if (s.underTriage) { stainCount += 1; renderStains(); }
+  // Statistics: only the ESI step (A-D) of the missed case, never the case or its vitals.
+  if (s.underTriage) track('under-triage', { step: decisionPointFor(truth) });
   renderScore();
   renderFeedback();
   setEffect(effectFor(s));
@@ -278,7 +285,10 @@ function renderReport() {
     ${lessonHtml({ tr, badge, missed, open })}
     <button id="newNight" class="ghost">${tr('report.newNight')}</button>`;
   report.hidden = false;
-  if (firstShow) $('#reportTitle').focus();
+  if (firstShow) {
+    $('#reportTitle').focus();
+    track('night-complete', { score: r.score });
+  }
   $('#newNight').addEventListener('click', startNight);
 }
 
@@ -396,6 +406,8 @@ $('#calcForm').addEventListener('submit', (e) => {
     calc = { error: err.message };
   }
   renderCalcResult();
+  // Only the computed level is sent (e.g. "2P"), never the age, vitals or anything typed here.
+  if (calc.result) track('desk-submit', { level: deskLevel(calc.result) });
 });
 
 // Choosing a "not measured" reason clears that vital; typing a value clears the reason.

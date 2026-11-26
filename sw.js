@@ -7,7 +7,7 @@
 // lists every file in src/.
 
 const CACHE_PREFIX = 'grimm-triage-';
-const CACHE_VERSION = 'v7';
+const CACHE_VERSION = 'v8';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -21,6 +21,7 @@ const PRECACHE_URLS = [
   'icons/icon-512.png',
   'icons/maskable-512.png',
   'icons/apple-touch-icon.png',
+  'src/analytics.js',
   'src/app.js',
   'src/cases.js',
   'src/deskhelp.js',
@@ -56,7 +57,8 @@ self.addEventListener('activate', (event) => {
 });
 
 // Cache first for this app's own files; anything not precached goes to the network and a
-// successful same-origin response is added to the cache. Page navigations fall back to the cached
+// successful same-origin response is added to the cache. Cross-origin requests (the Umami
+// statistics script and its beacons) are never handled or cached, so blocking them changes nothing. Page navigations fall back to the cached
 // index.html, so a reload while offline still opens the game.
 self.addEventListener('fetch', (event) => {
   const { request } = event;

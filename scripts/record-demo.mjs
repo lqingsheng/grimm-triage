@@ -16,7 +16,7 @@ import { performance } from 'node:perf_hooks';
 import path from 'node:path';
 import { triage } from '../src/triage.js';
 import { mulberry32 } from '../src/night.js';
-import { DEMO_SEED, STAR_CASE, CORRECT_BEFORE_MISS, nightFor, planAnswers, pauseMs, buildTimeline } from './demo-helpers.mjs';
+import { DEMO_SEED, STAR_CASE, CORRECT_BEFORE_MISS, UMAMI_SCRIPT_PATTERN, nightFor, planAnswers, pauseMs, buildTimeline } from './demo-helpers.mjs';
 
 const WIDTH = 1280;
 const HEIGHT = 720;
@@ -77,6 +77,9 @@ try {
     serviceWorkers: 'block', // record the files being served now, never a cached copy
     recordVideo: { dir: rawDir, size: { width: WIDTH, height: HEIGHT } },
   });
+  // Keep recordings out of the visit statistics even with --url pointing at the live site, and
+  // independent of the network: the Umami script is never loaded (the app works the same without it).
+  await context.route(UMAMI_SCRIPT_PATTERN, (route) => route.abort());
   const page = await context.newPage();
   videoStart = performance.now(); // the video starts with the page
 
