@@ -40,6 +40,10 @@ export const STRINGS = {
     en: 'Based on the logic of the Emergency Severity Index (ESI) v4.',
     'zh-CN': '基于急诊严重指数（ESI）第 4 版的分诊逻辑。',
   },
+  'footer.analytics': {
+    en: 'Anonymous, cookie-free visit statistics (Umami).',
+    'zh-CN': '匿名、无 Cookie 的访问统计（Umami）。',
+  },
 
   // ---- triage levels (numbers stay the same in every language) ----
   'level.1': { en: 'Resuscitation', 'zh-CN': '复苏' },

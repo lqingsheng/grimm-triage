@@ -9,6 +9,8 @@ import { planNight, mulberry32 } from '../src/night.js';
 export const DEMO_SEED = 87;
 export const STAR_CASE = 'sandman-overdose';
 export const CORRECT_BEFORE_MISS = 3; // shot 2: patients 1-3 triaged correctly, shot 3: patient 4 under-triaged
+// Requests the recorder aborts (Playwright glob): the Umami statistics script and anything else on its host.
+export const UMAMI_SCRIPT_PATTERN = 'https://cloud.umami.is/**';
 
 // The night the app draws for ?seed=<seed>: the same call app.js makes (avoid is empty when seeded).
 export const nightFor = (seed, cases = CASES) => planNight(cases, { random: mulberry32(seed), avoid: [] });

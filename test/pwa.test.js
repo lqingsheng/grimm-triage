@@ -53,7 +53,11 @@ test('index.html links the manifest, theme colour and icons, and registers sw.js
   assert.ok(html.includes(`<meta name="theme-color" content="${manifest.theme_color}"`), 'theme-color must match the manifest');
   assert.match(html, /<link rel="apple-touch-icon" href="icons\/apple-touch-icon\.png"/);
   assert.match(html, /navigator\.serviceWorker\.register\('sw\.js'\)/);
-  for (const [, url] of html.matchAll(/(?:href|src)="([^"#]+)"/g)) assert.ok(isRelative(url), `index.html: ${url} must be relative`);
+  // The one allowed absolute URL is the optional Umami statistics script (task 19, test/analytics.test.js).
+  for (const [, url] of html.matchAll(/(?:href|src)="([^"#]+)"/g)) {
+    if (url === 'https://cloud.umami.is/script.js') continue;
+    assert.ok(isRelative(url), `index.html: ${url} must be relative`);
+  }
 });
 
 // ---- service worker, run in a small fake ServiceWorkerGlobalScope ----
