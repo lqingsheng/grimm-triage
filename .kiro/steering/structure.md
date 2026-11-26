@@ -17,5 +17,6 @@ inclusion: always
 - `src/app.js` – DOM wiring only
 - `manifest.webmanifest`, `icons/` – PWA manifest and original icon set (SVG + PNG)
 - `sw.js` – service worker: versioned precache of the shell and every `src/` file (bump `CACHE_VERSION` when any precached file changes)
+- `scripts/record-demo.mjs` – dev-only Playwright demo recorder (`npm run demo:record`); its pure helpers live in `scripts/demo-helpers.mjs`. Never imported by the app or `sw.js`
 - `test/*.test.js` – unit and property tests
 - `.kiro/specs/haunted-er-triage/` – requirements, design, tasks
