@@ -9,8 +9,9 @@ inclusion: always
 - `src/shift.js` – pure `summarizeShift` for the end-of-night shift report, plus `decisionPointFor` (triage result → ESI step A–D) and `stepSummary`
 - `src/deskhelp.js` – pure inline-help markup for the Triage Desk judgement fields, and `countResources` for the resource checklist (reuses the lesson's resource lists)
 - `src/lesson.js` – pure "ESI v4 in 2 minutes" lesson markup for the shift report, built from the engine's danger-zone thresholds
-- `src/cases.js` – monster case bank (`CASES`, 61 templates), each with real vitals and `variants` (vital ranges, alternative openings)
-- `src/night.js` – pure nightly draw: `planNight`, `drawNight`, `instantiate`, seeded `mulberry32`
+- `src/cases.js` – monster case bank (`CASES`, 71 templates: 61 regular and 10 flagged `storyline`), each with real vitals and `variants` (vital ranges, alternative openings)
+- `src/storylines.js` – storylines (task 21): `STORYLINES` (2 linked case ids, title and epilogue in both languages) and pure badge and shift-report helpers
+- `src/night.js` – pure nightly draw: `planNight`, `drawNight` (adds a storyline on about half of nights via `addStoryline`), `instantiate`, seeded `mulberry32`
 - `src/i18n.js` – pure English / 中文 strings table (`STRINGS[key] = { en, 'zh-CN' }`), `t()`, and translators for engine reasons and errors; case Chinese text lives in `cases.js` as `zh`, portrait labels as `labelZh`
 - `src/haunt.js` – pure layout data for the under-triage effect: `DRIPS`, `stainLayout(count)`, markup helpers
 - `src/sound.js` – optional Web Audio heartbeat + flatline (`playHaunt(ctx)`), off by default; no audio files

@@ -7,7 +7,7 @@
 // lists every file in src/.
 
 const CACHE_PREFIX = 'grimm-triage-';
-const CACHE_VERSION = 'v8';
+const CACHE_VERSION = 'v9';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -31,6 +31,7 @@ const PRECACHE_URLS = [
   'src/night.js',
   'src/portraits.js',
   'src/shift.js',
+  'src/storylines.js',
   'src/sound.js',
   'src/triage.js',
 ];

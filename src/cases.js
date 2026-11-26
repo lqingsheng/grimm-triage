@@ -11,6 +11,8 @@
 //     vitals   { hr, rr, sbp, spo2, tempC, pain? }: [low, high] ranges. Every value inside them must give
 //              expectedLevel (property test P8 and the boundary grid in test/cases.test.js check this)
 //     openings [{ en, zh }]: optional alternatives for the story's first sentence
+//   storyline     - optional (task 21): the id of a storyline in src/storylines.js. Such a case is
+//                   never drawn on its own; it arrives only with its partner case, in storyline order
 //   Stories and teaching points never quote the patient's own vital values, because those vary;
 //   they quote the thresholds instead. The shift report shows the values the player actually saw.
 // Each case's SVG portrait lives in src/portraits.js under the same id (test/portraits.test.js checks this).
@@ -1262,6 +1264,203 @@ export const CASES = [
         { en: 'Woke with sticky, pink eyes and lashes glued together.', zh: '醒来时双眼发红、有黏性分泌物，睫毛粘在了一起。' },
         { en: 'Her glow is dim behind sticky, pink eyes this morning.', zh: '今天早上双眼发红、有黏性分泌物，连光芒都暗淡了。' },
       ],
+    },
+  },
+
+  // ---------------- Storylines (task 21, src/storylines.js) ----------------
+  // Pairs of patients from the same incident. Each case is flagged storyline: '<id>' and only ever
+  // arrives with its partner, in the order listed in STORYLINES, so a later story may refer to the
+  // earlier patient. No alternative openings: the opening sentence carries the link.
+  // The humour lives in the characters and the narration, never in the illness; the clinical
+  // facts and teaching points are as serious as in any other case.
+
+  // Moonlight Brawl
+  {
+    id: 'werewolf-brawl-bite',
+    storyline: 'moonlight-brawl',
+    name: 'Wilfred the Werewolf, 34',
+    emoji: '🐺',
+    story: 'Terribly sorry to be a bother. A bit of a scuffle in the car park under the full moon, entirely his own fault, he says. Deep bite wounds across his left forearm, oozing but not spurting; his fingers move and feel normal. Keeps offering to mop his own blood off your floor.',
+    patient: { ageYears: 34, avpu: 'A', newConfusion: false, hr: 88, rr: 16, sbp: 132, spo2: 98, tempC: 36.8, pain: 5, highRisk: false, needsLifesaving: false, resources: 1 },
+    expectedLevel: 4,
+    teachingPoint: 'Triage the wound, not the fight. Alert, normal vital signs, and fingers that move and feel normally: this bite needs washing out and a repair, 1 resource, so ESI 4. Bites carry a high infection risk: irrigate well, check tendons and nerves, and give tetanus cover and antibiotics.',
+    zh: {
+      name: '狼人威尔弗雷德，34 岁',
+      story: '实在不好意思，给您添麻烦了。满月下在停车场跟人起了点小冲突，他说全怪自己。左前臂有几处很深的咬伤，在渗血但没有喷血；手指活动和感觉都正常。他一个劲儿地要自己把地板上的血擦干净。',
+      teachingPoint: '要分诊的是伤口，不是那场架。意识清醒、生命体征正常、手指活动和感觉正常：这处咬伤需要彻底冲洗并缝合，1 项资源，因此为 ESI 4 级。咬伤感染风险高：要充分冲洗，检查肌腱和神经，预防破伤风并使用抗生素。',
+    },
+    variants: {
+      vitals: { hr: [76, 98], rr: [14, 18], sbp: [122, 142], spo2: [97, 100], tempC: [36.5, 37.2], pain: [4, 6] },
+    },
+  },
+  {
+    id: 'vampire-stake-wound',
+    storyline: 'moonlight-brawl',
+    name: 'Sir Mortimer Fang, 318',
+    emoji: '🪵',
+    story: 'The other party from the car-park scuffle, with a wooden stake still in the left side of his chest. Pale, sweating and breathing fast. Insists, very politely, on waiting his turn: “The werewolf was here first, and one does not jump the queue.”',
+    patient: { ageYears: 318, avpu: 'A', newConfusion: false, hr: 134, rr: 30, sbp: 78, spo2: 90, tempC: 36.0, pain: 4, highRisk: true, needsLifesaving: true, resources: 4 },
+    expectedLevel: 1,
+    teachingPoint: 'A penetrating chest wound with a fast heart rate and low blood pressure is shock: think tension pneumothorax, cardiac tamponade or major bleeding. It needs the resuscitation room and the trauma team now, so ESI 1. Leave the impaled stake in place, and never let a calm, polite patient talk you into a lower level.',
+    zh: {
+      name: '莫蒂默·獠牙爵士，318 岁',
+      story: '停车场那场冲突的另一方，左胸还插着一根木桩。面色苍白、满头冷汗、呼吸急促。却非常客气地坚持排队：“狼人先来的，插队可不是绅士所为。”',
+      teachingPoint: '胸部穿透伤伴心率快、血压低，就是休克：要想到张力性气胸、心脏压塞或大出血。需要立即进入抢救室并启动创伤团队，因此为 ESI 1 级。插在胸口的木桩要留在原位，不要拔出；患者再冷静、再客气，也不能因此降低分诊级别。',
+    },
+    variants: {
+      vitals: { hr: [124, 146], rr: [26, 34], sbp: [70, 86], spo2: [86, 93], tempC: [35.6, 36.4], pain: [3, 5] },
+    },
+  },
+
+  // The Count's Toothache (Stoker's Dracula and Renfield)
+  {
+    id: 'renfield-blister',
+    storyline: 'counts-toothache',
+    name: 'Mr Renfield, 48',
+    emoji: '🦶',
+    story: 'The Count’s long-suffering assistant. A raw blister on his right heel from running the master’s errands across London all night, since the master does not do daylight. Mentions, on his way out, that the master “has a touch of toothache and does not do waiting rooms”.',
+    patient: { ageYears: 48, avpu: 'A', newConfusion: false, hr: 78, rr: 14, sbp: 128, spo2: 98, tempC: 36.7, pain: 2, highRisk: false, needsLifesaving: false, resources: 0 },
+    expectedLevel: 5,
+    teachingPoint: 'Triage the patient in front of you: a blister on a well patient needs a dressing and advice, 0 resources, ESI 5. Before he goes, give him a message for his employer: toothache with swelling of the face or neck, fever, trouble swallowing or a muffled voice needs the emergency department straight away.',
+    zh: {
+      name: '伦菲尔德先生，48 岁',
+      story: '伯爵那位任劳任怨的助手。主人白天从不出门，他只好整夜在伦敦城里替主人跑腿，右脚后跟磨出了一个破皮的水疱。临走时顺口提了一句：主人“有点牙疼，而且主人是不坐候诊室的”。',
+      teachingPoint: '分诊眼前的这位患者：生命体征正常的患者脚上磨了个水疱，只需包扎和健康指导，0 项资源，ESI 5 级。他走之前，请他给主人带句话：牙疼伴面部或颈部肿胀、发热、吞咽困难或说话含糊，必须立即来急诊。',
+    },
+    variants: {
+      vitals: { hr: [68, 90], rr: [12, 18], sbp: [118, 138], spo2: [97, 100], tempC: [36.4, 37.1], pain: [1, 3] },
+    },
+  },
+  {
+    id: 'dracula-ludwigs',
+    storyline: 'counts-toothache',
+    name: 'Count Dracula, age not disclosed',
+    emoji: '🦇',
+    story: 'Renfield’s employer, who does not do waiting rooms, has come in after all. Sits bolt upright, leaning forward, drooling into a silk handkerchief. The floor of his mouth is swollen and board-hard beneath a rotten lower molar, and he speaks in a muffled “hot potato” voice. Feverish, refuses to lie down, and makes a high-pitched noise with every breath in. He calls it “a slight indisposition”.',
+    patient: { ageYears: 480, avpu: 'A', newConfusion: false, hr: 124, rr: 28, sbp: 112, spo2: 93, tempC: 39.1, pain: 7, highRisk: true, needsLifesaving: true, resources: 4 },
+    expectedLevel: 1,
+    teachingPoint: 'Ludwig’s angina: a dental infection spreading into the floor of the mouth, which can close the airway within hours. Drooling, a muffled voice, refusing to lie flat and stridor mean the airway is already narrowing: ESI 1. Keep him sitting up, call the most experienced airway team, prepare for a difficult airway including front-of-neck access, and start IV antibiotics.',
+    zh: {
+      name: '德古拉伯爵，年龄保密',
+      story: '那位“不坐候诊室”的主人，终究还是来了。他笔直地坐着、身体前倾，口水不停地流进一块丝绸手帕里。一颗坏掉的下磨牙下方，口底肿得硬如木板；说话含糊不清，像嘴里含着烫土豆。发热，不肯躺下，每次吸气都发出尖细的声音。他本人称之为“略感不适”。',
+      teachingPoint: '路德维希咽峡炎：牙源性感染扩散到口底，数小时内就可能堵塞气道。流口水、说话含糊、不肯平躺、出现喘鸣，说明气道已经在变窄：ESI 1 级。让他保持坐位，呼叫最有经验的气道团队，按困难气道做好准备（包括颈前紧急气道），并开始静脉抗生素治疗。',
+    },
+    variants: {
+      vitals: { hr: [116, 134], rr: [24, 32], sbp: [102, 124], spo2: [90, 95], tempC: [38.6, 39.6], pain: [6, 8] },
+    },
+  },
+
+  // The Cauldron Hut (carbon monoxide)
+  {
+    id: 'witch-cauldron-co',
+    storyline: 'cauldron-hut',
+    name: 'Hepzibah Mossbottom, 64',
+    emoji: '🧹',
+    story: 'Has been brewing all evening in her hut with the door and shutters closed, as one does in this weather. A thumping headache, queasy, and the room “goes a bit swimmy” when she stands. Apologises for the smell of the cauldron. The pulse oximeter reads perfectly normal.',
+    patient: { ageYears: 64, avpu: 'A', newConfusion: false, hr: 96, rr: 18, sbp: 134, spo2: 99, tempC: 36.8, pain: 5, highRisk: true, needsLifesaving: false, resources: 2 },
+    expectedLevel: 2,
+    teachingPoint: 'Headache, nausea and dizziness after hours beside a fire in a closed room is carbon monoxide poisoning until proven otherwise: high risk, ESI 2. A pulse oximeter cannot tell carboxyhaemoglobin from oxygenated haemoglobin, so its normal reading is false comfort. Give high-flow oxygen now and measure carboxyhaemoglobin on a blood gas.',
+    zh: {
+      name: '赫普兹巴·苔底，64 岁',
+      story: '这种天气嘛，她整晚都在小屋里熬药，门和百叶窗关得严严实实。头痛得一跳一跳的，恶心，一站起来就觉得“屋子有点晃”。还为坩埚的气味连声道歉。脉搏血氧仪的读数完全正常。',
+      teachingPoint: '在门窗紧闭的屋里守着火待了几个小时，出现头痛、恶心、头晕，在排除之前都要按一氧化碳中毒处理：属于高危情况，ESI 2 级。脉搏血氧仪分不清碳氧血红蛋白和氧合血红蛋白，所以读数正常只是假象。立即给予高流量吸氧，并通过血气分析测定碳氧血红蛋白。',
+    },
+    variants: {
+      vitals: { hr: [86, 100], rr: [16, 20], sbp: [122, 146], spo2: [97, 100], tempC: [36.5, 37.2], pain: [4, 6] },
+    },
+  },
+  {
+    id: 'apprentice-co-coma',
+    storyline: 'cauldron-hut',
+    name: 'Tobias the Apprentice, 17',
+    emoji: '🕯️',
+    story: 'From the same hut: the apprentice who stayed behind to mind the cauldron. Carried in by a neighbour, who apologises for not ringing ahead. Does not respond to voice or pain. Breathing shallowly, and the pulse oximeter still reads normal.',
+    patient: { ageYears: 17, avpu: 'U', newConfusion: true, hr: 118, rr: 10, sbp: 104, spo2: 98, tempC: 36.6, pain: 0, highRisk: true, needsLifesaving: true, resources: 4 },
+    expectedLevel: 1,
+    teachingPoint: 'Unresponsive is always ESI 1, whatever the pulse oximeter says. Secure the airway, give 100% oxygen, check carboxyhaemoglobin, blood glucose and an ECG, and discuss hyperbaric oxygen with a specialist for severe carbon monoxide poisoning. Then ask who else was in the hut.',
+    zh: {
+      name: '学徒托比亚斯，17 岁',
+      story: '来自同一间小屋：留下来看着坩埚的那个学徒。由邻居抱进来，邻居还为没有提前打电话而道歉。对呼唤和疼痛刺激均无反应。呼吸浅，脉搏血氧仪的读数却依然正常。',
+      teachingPoint: '无论脉搏血氧仪显示什么，无反应一律为 ESI 1 级。立即保护气道、给予纯氧，检查碳氧血红蛋白、血糖和心电图；严重一氧化碳中毒应与专科医生讨论是否行高压氧治疗。然后问清楚小屋里还有谁。',
+    },
+    variants: {
+      vitals: { hr: [108, 128], rr: [9, 14], sbp: [96, 114], spo2: [96, 100], tempC: [36.2, 37.0] },
+    },
+  },
+
+  // The Strange Case at Mrs Poole's (after Stevenson's Dr Jekyll, Mr Hyde and Poole)
+  {
+    id: 'poole-scald',
+    storyline: 'mrs-pooles',
+    name: 'Mrs Poole, 56',
+    emoji: '🫖',
+    story: 'Housekeeper to a certain doctor, and terribly sorry to bother anyone. A flask in the laboratory boiled over onto the back of her right hand: red, weeping blisters across the knuckles and fingers. “It barely tingles,” she says, holding it very still. Asks if she might have a cup of tea while she waits.',
+    patient: { ageYears: 56, avpu: 'A', newConfusion: false, hr: 84, rr: 16, sbp: 136, spo2: 98, tempC: 36.8, pain: 5, highRisk: false, needsLifesaving: false, resources: 1 },
+    expectedLevel: 4,
+    teachingPoint: 'A small partial-thickness scald (blisters) is usually simple wound care, but burns across the hand and fingers can scar and stiffen the joints, so they need the burns team’s opinion: 1 resource (specialty consult), ESI 4. Cool it under running water for 20 minutes, even now, and give pain relief.',
+    zh: {
+      name: '普尔太太，56 岁',
+      story: '某位医生家的管家，一个劲儿地说给大家添麻烦了。实验室里一只烧瓶沸腾溢出，洒在她右手背上：指节和手指上满是发红、渗液的水疱。“就有一点点刺痛。”她说着，那只手却一动也不敢动。还问能不能边等边喝杯茶。',
+      teachingPoint: '小面积浅二度烫伤（起水疱）通常只需简单伤口处理，但累及手部和手指的烧伤可能留下瘢痕、导致关节僵硬，需要烧伤科会诊：1 项资源（专科会诊），ESI 4 级。即使现在，也要用流动的凉水冲洗 20 分钟，并给予止痛。',
+    },
+    variants: {
+      vitals: { hr: [74, 96], rr: [14, 18], sbp: [124, 146], spo2: [97, 100], tempC: [36.5, 37.1], pain: [3, 6] },
+    },
+  },
+  {
+    id: 'hyde-tincture',
+    storyline: 'mrs-pooles',
+    name: 'Mr Edward Hyde, age uncertain',
+    emoji: '🧪',
+    story: 'From the same household: brought in by Mrs Poole, who apologises on his behalf. Drank “the doctor’s tincture” an hour ago. Pacing, shouting and pulling at the drip stand, hot to the touch and drenched in sweat, with huge pupils and a racing heart. Does not know where he is.',
+    patient: { ageYears: 30, avpu: 'A', newConfusion: true, hr: 138, rr: 24, sbp: 172, spo2: 96, tempC: 39.3, pain: 2, highRisk: true, needsLifesaving: false, resources: 4 },
+    expectedLevel: 2,
+    teachingPoint: 'Agitation, hyperthermia, sweating, dilated pupils, a fast heart rate and high blood pressure are the sympathomimetic toxidrome: high risk with new confusion, ESI 2. Sweating tells it apart from the anticholinergic toxidrome, where the skin is dry. Give benzodiazepines, cool actively, avoid prolonged physical restraint, and check glucose and an ECG. A temperature of 40 °C or more, seizures or a falling blood pressure need immediate resuscitation: ESI 1.',
+    zh: {
+      name: '爱德华·海德先生，年龄不详',
+      story: '来自同一户人家：由普尔太太送来，她不停地替他道歉。一小时前喝了“医生的药酒”。来回踱步、大喊大叫、拽着输液架不放，摸上去滚烫、浑身大汗，瞳孔散大，心跳飞快。分不清自己身在何处。',
+      teachingPoint: '躁动、高热、大汗、瞳孔散大、心率快、血压高，是拟交感神经中毒综合征：高危且新发意识混乱，ESI 2 级。有汗是它与抗胆碱能中毒综合征（皮肤干燥）的区别。给予苯二氮䓬类药物，积极降温，避免长时间身体约束，并检查血糖和心电图。体温达到 40 °C 或以上、出现抽搐或血压下降，需要立即复苏：ESI 1 级。',
+    },
+    variants: {
+      vitals: { hr: [126, 148], rr: [20, 28], sbp: [156, 186], spo2: [94, 98], tempC: [38.8, 39.8], pain: [0, 3] },
+    },
+  },
+
+  // Trick-or-Treat Twins (pediatric)
+  {
+    id: 'ghost-twin-sweets',
+    storyline: 'trick-or-treat-twins',
+    name: 'Peggy the Little Ghost, 5',
+    emoji: '🍭',
+    story: 'One of the trick-or-treat twins, still in her sheet. Tummy ache after eating most of a treat bag in one sitting. Bouncing round the waiting room, no vomiting, no fever, and the ache is already easing. She would like it noted that her brother ate more.',
+    patient: { ageYears: 5, avpu: 'A', newConfusion: false, hr: 102, rr: 22, sbp: 100, spo2: 99, tempC: 36.9, pain: 2, highRisk: false, needsLifesaving: false, resources: 0 },
+    expectedLevel: 5,
+    teachingPoint: 'A well, playful child with a soft tummy after too many sweets needs only an exam and advice: 0 resources, ESI 5. Red flags that change this: green or persistent vomiting, pain that moves to the lower right, a fever, or a child who will not walk or jump.',
+    zh: {
+      name: '小幽灵佩吉，5 岁',
+      story: '讨糖双胞胎中的姐姐，身上还披着床单。一口气吃掉了大半袋糖，肚子疼。在候诊室里蹦来蹦去，没有呕吐、没有发热，肚子疼也已经在缓解。她郑重声明：弟弟吃得比她还多。',
+      teachingPoint: '精神好、爱玩、腹部柔软的孩子，吃糖太多肚子疼，只需检查和健康指导：0 项资源，ESI 5 级。出现以下危险信号就要重新评估：呕吐物呈绿色或持续呕吐、疼痛转移到右下腹、发热，或孩子不肯走路、不肯跳。',
+    },
+    variants: {
+      vitals: { hr: [88, 116], rr: [18, 24], sbp: [94, 106], spo2: [98, 100], tempC: [36.6, 37.3], pain: [1, 3] },
+    },
+  },
+  {
+    id: 'ghost-twin-battery',
+    storyline: 'trick-or-treat-twins',
+    name: 'Percy the Little Ghost, 5',
+    emoji: '🔋',
+    story: 'Peggy’s twin brother, from the same treat bag. Smiling, running laps of the waiting room and eating crisps. Mentions he swallowed “a shiny coin from the treat bag” about an hour ago. The bag is full of flashing novelty toys, and one is missing its battery.',
+    patient: { ageYears: 5, avpu: 'A', newConfusion: false, hr: 104, rr: 22, sbp: 100, spo2: 99, tempC: 36.8, pain: 0, highRisk: true, needsLifesaving: false, resources: 2 },
+    expectedLevel: 2,
+    teachingPoint: 'A swallowed button battery is high risk even in a smiling child: stuck in the oesophagus it can burn through the wall within 2 hours. ESI 2. Get an x-ray from neck to abdomen at once (a double ring or halo edge tells it from a coin), and arrange urgent removal if it is in the oesophagus. If it was swallowed within 12 hours and the child is over 1 year, poison-centre guidance is to give honey while removal is arranged.',
+    zh: {
+      name: '小幽灵珀西，5 岁',
+      story: '佩吉的双胞胎弟弟，吃的是同一袋糖。笑嘻嘻的，绕着候诊室一圈圈地跑，还在吃薯片。他说大约一小时前吞了“糖袋里一枚亮晶晶的硬币”。袋子里装满了会闪光的小玩具，其中一个的电池不见了。',
+      teachingPoint: '误吞纽扣电池，哪怕孩子笑眯眯的也属于高危：卡在食管里，2 小时内就可能烧穿食管壁。ESI 2 级。立即拍从颈部到腹部的 X 线片（双环征或“光晕”边缘可与硬币区分），若位于食管内，需紧急取出。若在 12 小时内吞下且孩子已满 1 岁，中毒控制中心建议在安排取出期间喂蜂蜜。',
+    },
+    variants: {
+      vitals: { hr: [90, 118], rr: [18, 26], sbp: [94, 106], spo2: [98, 100], tempC: [36.5, 37.2], pain: [0, 1] },
     },
   },
 ];
