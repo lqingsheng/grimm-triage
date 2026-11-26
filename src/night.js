@@ -6,6 +6,7 @@
 // instantiate - turns a case template into what the player sees: vitals drawn inside
 //               case.variants.vitals and, when the case has alternatives, one opening line
 // planNight   - both of the above with the same random source
+// seedFromSearch - the optional ?seed= of the page URL (demo recorder), or null
 
 export const LEVELS = [1, 2, 3, 4, 5];
 export const PER_LEVEL = 3;
@@ -98,6 +99,16 @@ export function instantiate(c, random) {
     zh = { ...c.zh, story: joinStory(alt.zh, splitOpening(c.zh.story, 'zh')[1], 'zh') };
   }
   return { ...c, patient, story, zh, variant: { opening } };
+}
+
+// Optional ?seed= in the page URL (task 18, used by scripts/record-demo.mjs) for a reproducible
+// night. Returns the seed as an unsigned 32-bit integer, or null when there is no seed or it is
+// not a whole number. app.js only uses a seed when this returns a number; otherwise it draws
+// with Math.random exactly as before.
+export function seedFromSearch(search) {
+  const raw = new URLSearchParams(search ?? '').get('seed');
+  if (raw === null || !/^\d{1,10}$/.test(raw)) return null;
+  return Number(raw) >>> 0;
 }
 
 export function planNight(cases, { random, avoid = [] } = {}) {

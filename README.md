@@ -24,6 +24,20 @@ npm test        # unit + property-based tests
 npm start       # serves the static site
 ```
 
+## Recording the demo
+A dev-only Playwright script plays one night by itself and records the real app for the video.
+```bash
+npm install
+npx playwright install chromium   # once
+npm start                         # terminal 1: http://localhost:3000
+npm run demo:record               # terminal 2; or: npm run demo:record -- --url <url> [--seed 87]
+```
+It opens the app with `?seed=87` (a fixed night with The Sandman as patient 4), triages three patients correctly, under-triages The Sandman so the haunting effect plays, fast-forwards through the rest of the night, shows the shift report and lesson, gets a provisional ESI 2 on the Triage Desk with HR, RR and SpO₂ missing, and switches to 中文 for 3 s. Every answer comes from `src/triage.js`, never a hard-coded list.
+
+Output in `demo-output/` (git-ignored): `demo.webm` (1280x720, no audio track: Playwright records video only) and `timeline.json` with each shot's `name`, `start` and `end` in seconds from the start of the video, for subtitles and voice-over. Cut the `fast-forward` shot in editing. Record on a machine with Chinese and emoji fonts installed, or those characters show as boxes.
+
+Without `?seed=` the app draws a random night exactly as before.
+
 ## Offline (PWA)
 After the first visit the game and calculator work with no network: `sw.js` precaches `index.html`, `styles.css`, the manifest, icons and every file in `src/`. It can be installed to a home screen (`manifest.webmanifest`). All paths are relative, so it works at a domain root (Vercel) or in a sub-folder.
 

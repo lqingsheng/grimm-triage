@@ -5,7 +5,7 @@ import { helpButtonHtml, helpPanelHtml, countResources, parseVital, missingWarni
 import { CASES } from './cases.js';
 import { portraitSvg, eyeGlowSvg } from './portraits.js';
 import { dripsHtml, stainsHtml } from './haunt.js';
-import { planNight, parseLastNight, LAST_NIGHT_KEY } from './night.js';
+import { planNight, parseLastNight, seedFromSearch, mulberry32, LAST_NIGHT_KEY } from './night.js';
 import { SOUND_KEY, soundOnFrom, playHaunt } from './sound.js';
 import { t, levelName, caseText, translateReason, translateError, normalizeLang, STORAGE_KEY, DEFAULT_LANG } from './i18n.js';
 
@@ -73,10 +73,15 @@ let reportShown = false;
 // Each night: 3 cases per ESI level, none from the previous night, each with freshly drawn vitals
 // and opening line (src/night.js). Last night's ids live in localStorage; if storage is blocked
 // the draw simply cannot avoid them.
+// With ?seed=<n> in the URL (demo recorder, task 18) the night comes from mulberry32(n) and
+// ignores and leaves untouched last night's ids, so the same seed always gives the same night.
+const seed = seedFromSearch(location.search);
+const nightRandom = seed === null ? Math.random : mulberry32(seed);
 function newNight() {
+  if (seed !== null) return planNight(CASES, { random: nightRandom, avoid: [] });
   let avoid = [];
   try { avoid = parseLastNight(localStorage.getItem(LAST_NIGHT_KEY)); } catch { /* storage blocked */ }
-  const night = planNight(CASES, { random: Math.random, avoid });
+  const night = planNight(CASES, { random: nightRandom, avoid });
   try { localStorage.setItem(LAST_NIGHT_KEY, JSON.stringify(night.map((c) => c.id))); } catch { /* not persisted */ }
   return night;
 }
