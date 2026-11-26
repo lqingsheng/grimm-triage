@@ -1,0 +1,68 @@
+# Task 20: record the Kiroween demo video's YouTube statistics every 3 hours.
+# The history lives on the orphan branch `stats` (data/youtube-stats.json, plus a copy of
+# vercel.json so Vercel skips that branch). It only ever pushes to refs/heads/stats,
+# never to the default branch.
+name: YouTube stats
+
+on:
+  schedule:
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: youtube-stats
+  cancel-in-progress: false
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out the default branch (script only)
+        uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Check out or create the stats branch
+        run: |
+          rc=0
+          git ls-remote --exit-code --heads origin stats > /dev/null || rc=$?
+          if [ "$rc" -eq 0 ]; then
+            git fetch --depth=1 origin +refs/heads/stats:refs/remotes/origin/stats
+            git worktree add -B stats stats-data origin/stats
+          elif [ "$rc" -eq 2 ]; then
+            echo "No stats branch yet: creating an orphan branch."
+            git worktree add --detach stats-data
+            git -C stats-data checkout --orphan stats
+            git -C stats-data rm -r -q --cached .
+            find stats-data -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          else
+            echo "::error::git ls-remote failed (exit $rc)"
+            exit "$rc"
+          fi
+          # Vercel reads vercel.json from the pushed commit, so the stats branch needs its own copy.
+          cp vercel.json stats-data/vercel.json
+
+      - name: Fetch statistics
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: node scripts/youtube-stats.mjs --file stats-data/data/youtube-stats.json
+
+      - name: Commit and push if changed
+        working-directory: stats-data
+        run: |
+          test "$(git symbolic-ref --short HEAD)" = stats
+          git add data/youtube-stats.json vercel.json
+          if git diff --cached --quiet; then
+            echo "No change."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "stats: update YouTube statistics"
+          git push origin HEAD:refs/heads/stats
