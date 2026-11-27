@@ -256,6 +256,10 @@ revoke all on function public.results_before_insert() from public, anon, authent
 revoke all on function public.my_progress() from public, anon, authenticated;
 revoke all on function public.leaderboard() from public, anon, authenticated;
 revoke all on function public.delete_account() from public, anon, authenticated;
+-- Postgres checks EXECUTE for the current user when a CHECK constraint calls a function, so the
+-- profiles_display_name_valid constraint needs this for a player's profile insert and rename.
+-- It is immutable and only answers whether a name is allowed.
+grant execute on function public.valid_display_name(text) to anon, authenticated;
 grant execute on function public.my_progress() to authenticated;
 grant execute on function public.leaderboard() to anon, authenticated;
 grant execute on function public.delete_account() to authenticated;

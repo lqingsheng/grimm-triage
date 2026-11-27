@@ -677,6 +677,35 @@ test('the migration enables row level security on every table it creates', () =>
   assert.match(sql, /^commit;$/m);
 });
 
+// Postgres checks EXECUTE for the current user when a CHECK constraint calls a function, so a
+// player's insert or update fails with "permission denied for function" unless it is granted.
+test('every function used in a CHECK constraint is granted to authenticated, after any revoke', () => {
+  const code = sql.replace(/--.*$/gm, '');
+  // Each CHECK expression, with balanced parentheses.
+  const checks = [];
+  // Table CHECK constraints only: a policy's `with check (...)` is not one.
+  for (const m of code.matchAll(/(?<!\bwith\s+)\bcheck\s*\(/gi)) {
+    let depth = 1;
+    let i = m.index + m[0].length;
+    for (; i < code.length && depth > 0; i += 1) {
+      if (code[i] === '(') depth += 1;
+      if (code[i] === ')') depth -= 1;
+    }
+    checks.push(code.slice(m.index + m[0].length, i - 1));
+  }
+  assert.ok(checks.length >= 6, `found ${checks.length} CHECK constraints`);
+  const used = new Set(checks.flatMap((c) => [...c.matchAll(/\b(\w+\.\w+)\s*\(/g)].map((m) => m[1].toLowerCase())));
+  assert.ok(used.has('public.valid_display_name'), 'profiles_display_name_valid calls valid_display_name');
+  for (const fn of used) {
+    const name = fn.replace('.', '\\.');
+    const grants = [...code.matchAll(new RegExp(`grant execute on function ${name}\\([^)]*\\) to ([^;]+);`, 'gi'))];
+    const grant = grants.find((g) => /\bauthenticated\b/.test(g[1]));
+    assert.ok(grant, `${fn} is used in a CHECK constraint but not granted to authenticated`);
+    const revokes = [...code.matchAll(new RegExp(`revoke [^;]* on function ${name}\\([^)]*\\) from [^;]*\\bauthenticated\\b[^;]*;`, 'gi'))];
+    for (const r of revokes) assert.ok(r.index < grant.index, `${fn}: a revoke after the grant would undo it`);
+  }
+});
+
 test('the migration\'s limits match the game constants', () => {
   assert.equal(NIGHT_MAX_SCORE, 1500);
   assert.match(sql, new RegExp(`check \\(score between 0 and ${NIGHT_MAX_SCORE}\\)`));
