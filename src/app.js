@@ -9,7 +9,11 @@ import { planNight, parseLastNight, seedFromSearch, mulberry32, LAST_NIGHT_KEY }
 import { SOUND_KEY, soundOnFrom, playHaunt } from './sound.js';
 import { t, levelName, caseText, translateReason, translateError, normalizeLang, STORAGE_KEY, DEFAULT_LANG } from './i18n.js';
 import { track, deskLevel } from './analytics.js';
-import { storylineBadgeHtml, storylineReportHtml, BADGE_ID as STORYLINE_BADGE_ID } from './storylines.js';
+import { storylineBadgeHtml, storylineReportHtml, storylineReport, BADGE_ID as STORYLINE_BADGE_ID } from './storylines.js';
+import { supabaseConfig } from './config.js';
+import { createAccountService } from './accounts.js';
+import { redirectTarget } from './supabase.js';
+import { accountButtonHtml, signInDialogHtml, accountDialogHtml, saveStatusHtml, progressHtml, leaderboardHtml } from './accountview.js';
 
 const $ = (s) => document.querySelector(s);
 
@@ -47,6 +51,7 @@ function setLang(next) {
   else { renderCaseCard(); renderFeedback(); renderNextButton(); }
   renderCalcResult();
   renderDeskHelp();
+  if (accounts.enabled) renderAccounts();
 }
 
 document.querySelectorAll('.lang-toggle button').forEach((b) =>
@@ -58,14 +63,19 @@ document.querySelectorAll('.lang-toggle button').forEach((b) =>
 );
 
 // ---- mode switch ----
+// Night Shift and Triage Desk always; Progress and Leaderboard only with accounts (task 22).
+const MODES = ['game', 'calc', 'progress', 'board'];
+let mode = 'game';
 document.querySelectorAll('nav button').forEach((b) =>
   b.addEventListener('click', () => {
+    mode = b.dataset.mode;
     document.querySelectorAll('nav button').forEach((x) => {
       x.classList.toggle('active', x === b);
       x.setAttribute('aria-pressed', String(x === b));
     });
-    $('#game').hidden = b.dataset.mode !== 'game';
-    $('#calc').hidden = b.dataset.mode !== 'calc';
+    for (const m of MODES) $(`#${m}`).hidden = mode !== m;
+    if (mode === 'progress') loadProgress();
+    if (mode === 'board') loadBoard();
   }),
 );
 
@@ -270,6 +280,7 @@ function renderReport() {
   reportShown = true;
   const r = summarizeShift(answers);
   const open = lessonOpen(r, firstShow);
+  if (firstShow) saveNight(r);
   const missed = r.missed.map((m) => {
     const c = CASES.find((x) => x.id === m.id);
     return { ...m, displayName: c ? caseText(c, lang).name : m.name };
@@ -280,6 +291,7 @@ function renderReport() {
   const report = $('#shiftReport');
   report.innerHTML = `<h2 id="reportTitle" tabindex="-1">${tr('report.title')}</h2>
     <p class="final">${tr('report.final', { score: r.score, max: r.max })}</p>
+    ${accounts.enabled ? saveStatusHtml(tr, saveState) : ''}
     <dl class="tally">
       <div><dt>${tr('report.correct')}</dt><dd>${r.correct}</dd></div>
       <div><dt>${tr('report.under')}</dt><dd>${r.underTriage}</dd></div>
@@ -304,6 +316,7 @@ function startNight() {
   idx = 0;
   score = 0;
   answers = [];
+  saveState = null;
   stainCount = 0;
   renderStains();
   reportShown = false;
@@ -427,6 +440,196 @@ $('#calcForm').addEventListener('input', (e) => {
   if (input && input.value !== '') $(`#calcForm select[name="${input.name}Reason"]`).value = '';
 });
 
+// ---- optional accounts (task 22) ----
+// Everything here runs only when src/config.js has both Supabase values (accounts.enabled). With an
+// empty config the service is inert, mountAccounts() never runs, the [data-account-feature]
+// elements stay hidden and nothing is sent to Supabase: the app behaves exactly as before.
+// Guests never see a prompt that blocks play; signing in is offered only from the header button.
+const accounts = createAccountService({ config: supabaseConfig() });
+let saveState = null;      // the shift report's save line: 'saving' | 'saved' | 'queued' | ...
+let dialog = null;         // null, { view: 'sign-in', error?, note? } or { view: 'account', ... }
+let progressData = null;   // last progress() result, null while loading
+let boardData = null;      // last leaderboard() result, null while loading
+let refreshTimer = null;
+
+function renderAccountButton() {
+  const name = accounts.state.profile?.displayName ?? null;
+  $('#accountSlot').innerHTML = accountButtonHtml(tr, { session: Boolean(accounts.session), name });
+}
+
+function renderDialog() {
+  if (!dialog) return;
+  const d = $('#accountDialog');
+  d.innerHTML = dialog.view === 'sign-in'
+    ? signInDialogHtml(tr, dialog)
+    : accountDialogHtml(tr, { ...dialog, name: accounts.state.profile?.displayName ?? '', offline: accounts.state.status === 'offline' });
+}
+
+function openDialog(next) {
+  dialog = next;
+  renderDialog();
+  const d = $('#accountDialog');
+  if (!d.open) d.showModal();
+}
+
+function renderSaveStatus() {
+  const el = $('#saveStatus');
+  if (!el) return;
+  const html = saveStatusHtml(tr, saveState);
+  if (!html) { el.remove(); return; }
+  // Update in place so the role="status" region announces the change.
+  el.className = `save-status ${saveState}`;
+  el.textContent = tr(`save.${saveState}`);
+}
+
+function renderProgress() {
+  $('#progress').innerHTML = progressHtml(tr, progressData);
+}
+
+function renderBoard() {
+  $('#board').innerHTML = leaderboardHtml(tr, boardData, { signedIn: accounts.signedIn });
+}
+
+function renderAccounts() {
+  renderAccountButton();
+  renderDialog();
+  renderSaveStatus();
+  if (mode === 'progress') renderProgress();
+  if (mode === 'board') renderBoard();
+}
+
+function notice(text) {
+  const el = $('#accountNotice');
+  el.textContent = text;
+  el.hidden = !text;
+}
+
+async function loadProgress() {
+  if (!accounts.enabled) return;
+  progressData = null;
+  renderProgress();
+  progressData = await accounts.progress();
+  if (mode === 'progress') renderProgress();
+}
+
+async function loadBoard() {
+  if (!accounts.enabled) return;
+  boardData = null;
+  renderBoard();
+  boardData = await accounts.leaderboard();
+  if (mode === 'board') renderBoard();
+}
+
+// A finished night. Seeded nights (?seed=) are never saved. The report is already on screen and
+// never waits for this.
+function saveNight(r) {
+  if (!accounts.enabled) return;
+  saveState = seed !== null ? 'seeded' : accounts.session ? 'saving' : 'guest';
+  const night = answers;
+  accounts.saveNight(r, { storyline: Boolean(storylineReport(answers)), seeded: seed !== null }).then((res) => {
+    if (res?.dropped) notice(tr('account.dropped', { count: res.dropped }));
+    if (answers !== night) return; // a new night has started meanwhile
+    if (seed === null && res?.saved !== 'invalid') saveState = res?.saved ?? 'queued';
+    renderSaveStatus();
+  });
+}
+
+// Refresh the access token shortly before it expires. If a refresh fails while offline, try again
+// in a minute instead of in a tight loop.
+function scheduleRefresh() {
+  clearTimeout(refreshTimer);
+  const delay = accounts.refreshDelay();
+  if (delay === null) return;
+  refreshTimer = setTimeout(async () => {
+    const ok = await accounts.refresh();
+    renderAccountButton();
+    if (ok || !accounts.session) scheduleRefresh();
+    else refreshTimer = setTimeout(scheduleRefresh, 60_000);
+  }, Math.min(delay, 2 ** 31 - 1));
+}
+
+async function mountAccounts() {
+  document.querySelectorAll('[data-account-feature]').forEach((el) => { el.hidden = el.id === 'accountNotice'; });
+  renderAccountButton();
+  const res = await accounts.init(location.href, lang);
+  if (res?.signIn) {
+    // Remove ?code= (or the error) from the address bar and history.
+    history.replaceState(history.state, '', redirectTarget(location.href));
+    if (res.signIn.provider) track('sign-in', { provider: res.signIn.provider });
+    else if (res.signIn.error !== 'no_pending_sign_in') openDialog({ view: 'sign-in', error: true });
+  }
+  if (res?.flushed?.dropped) notice(tr('account.dropped', { count: res.flushed.dropped }));
+  renderAccounts();
+  scheduleRefresh();
+}
+
+function afterAccountChange() {
+  renderAccountButton();
+  scheduleRefresh();
+  if (mode === 'progress') loadProgress();
+  if (mode === 'board') loadBoard();
+}
+
+$('#accountSlot').addEventListener('click', (e) => {
+  if (!e.target.closest('#accountButton')) return;
+  openDialog(accounts.session ? { view: 'account' } : { view: 'sign-in' });
+});
+
+$('#accountDialog').addEventListener('close', () => {
+  dialog = null;
+  $('#accountButton')?.focus();
+});
+
+$('#accountDialog').addEventListener('click', async (e) => {
+  const d = $('#accountDialog');
+  const provider = e.target.closest('button[data-provider]')?.dataset.provider;
+  if (provider) {
+    d.querySelectorAll('button[data-provider]').forEach((b) => { b.disabled = true; });
+    try {
+      location.assign(await accounts.signIn(provider, location.href));
+    } catch {
+      openDialog({ view: 'sign-in', error: true });
+    }
+    return;
+  }
+  const action = e.target.closest('button[data-account]')?.dataset.account;
+  if (action === 'close') d.close();
+  if (action === 'sign-out') {
+    await accounts.signOut();
+    d.close();
+    afterAccountChange();
+  }
+  if (action === 'delete' || action === 'delete-cancel') {
+    openDialog({ view: 'account', confirmDelete: action === 'delete' });
+    d.querySelector(action === 'delete' ? '[data-account="delete-confirm"]' : '[data-account="delete"]')?.focus();
+  }
+  if (action === 'delete-confirm') {
+    const r = await accounts.deleteAccount();
+    if (r?.ok) {
+      openDialog({ view: 'sign-in', note: tr('account.deleted') });
+      afterAccountChange();
+    } else {
+      openDialog({ view: 'account', note: tr('account.deleteFailed'), noteKind: 'error' });
+    }
+  }
+});
+
+$('#accountDialog').addEventListener('submit', async (e) => {
+  const form = e.target.closest('form[data-account="rename"]');
+  if (!form) return;
+  e.preventDefault();
+  const r = await accounts.rename(new FormData(form).get('displayName'));
+  openDialog(r?.ok
+    ? { view: 'account', note: tr('account.nameSaved') }
+    : { view: 'account', note: tr(`account.nameError.${r?.error ?? 'network'}`), noteKind: 'error' });
+  renderAccountButton();
+  $('#accountDialog input[name="displayName"]')?.focus();
+});
+
+$('#board').addEventListener('click', (e) => {
+  if (e.target.closest('[data-board="retry"]')) loadBoard();
+});
+
 // ---- start ----
 $('#drips').innerHTML = dripsHtml();
 renderSoundToggle();
@@ -434,3 +637,4 @@ applyStaticStrings();
 renderDeskHelp();
 renderScore();
 renderCase();
+if (accounts.enabled) mountAccounts();

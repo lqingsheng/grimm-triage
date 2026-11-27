@@ -12,6 +12,7 @@ Learn real emergency-department triage by sorting monsters. The costume is fake.
 - **Night Shift (game):** a vampire with a bleeding fang, a dehydrated mummy, an unresponsive ghost… pick the triage level, get instant feedback with the exact rule that fired. Under-triage costs extra, because that is the dangerous mistake in a real ED. Each night draws 15 monsters (3 per ESI level, none from the previous night), with vital signs and opening lines that vary on every replay. The bank has 71 cases: 61 regular monsters and 10 storyline patients.
 - **Storylines:** on about half of nights, two patients from the same incident arrive a few patients apart, and the second card says so ("same incident as patient 10"). There are 5 storylines, such as a Moonlight Brawl between an apologetic werewolf and a vampire who insists on queueing with a stake in his chest, or a Cauldron Hut where a pulse oximeter reads normal in carbon monoxide poisoning. The shift report ends the story with a teaching point: triage the patient in front of you, not the story.
 - **Triage Desk (calculator):** type vital signs and flags, get an ESI v4-style level with reasons and danger-zone warnings.
+- **Accounts (optional):** sign in with Google or GitHub to save each night's score, see your progress on any device and appear on the leaderboard (top 50 by best single-night score). Guests play everything exactly as before; the Progress panel then shows the nights played on this device, and the Leaderboard is visible to everyone.
 
 ## Screenshots
 | Triage board | Haunting effect (under-triage) | Shift report |
@@ -57,6 +58,16 @@ The live site counts visits with [Umami Cloud](https://umami.is), a privacy-frie
 - **Never sent:** ages, vital signs, case or monster names, free text, or anything typed into the Triage Desk. `src/analytics.js` drops any other property and `test/analytics.test.js` checks it.
 - **Not counted:** localhost and preview deploys (`data-domains`), browsers with Do Not Track on, and demo recordings (`?seed=`; the recorder also blocks the script).
 - **Optional:** if the script is blocked (ad blockers, some networks) or you are offline, the app works exactly the same. The service worker never caches it.
+- **Sign-in event:** one more event, `sign-in` with `provider` (`google` or `github`), after a successful sign-in. No user id, display name or email is ever sent to Umami.
+
+### Accounts
+Signing in is optional; the game never asks for it before you play. Accounts use [Supabase](https://supabase.com) (Auth and Postgres, Singapore region).
+- **What the game stores:** your display name (a generated nickname such as "Night Nurse 4821" until you change it) and one row per finished night: score, number correct, under-triaged and over-triaged, whether a storyline appeared, and the time. Never the cases, vital signs or anything typed into the Triage Desk. Demo nights (`?seed=`) are never saved.
+- **What Supabase Auth keeps:** the sign-in record it receives from Google or GitHub, which includes the provider account id, your email address and the name on that account. The game never reads, shows or shares the email; the browser keeps only the session tokens and your user id in `localStorage`.
+- **Who can see what:** the leaderboard shows display names, best scores and nights played to everyone. Everything else is readable only by you (row level security).
+- **Delete account:** Account → Delete account → confirm. It deletes your profile, your results and your Supabase Auth user.
+- **Offline:** a result that cannot be saved stays on this device and is sent the next time you open the game.
+- If `src/config.js` is empty, all of this is hidden and nothing is sent to Supabase.
 
 ## Accessibility
 Target: WCAG 2.2 AA, in English and 中文.
@@ -67,6 +78,11 @@ Target: WCAG 2.2 AA, in English and 中文.
 - Checked with axe-core 4.10.2 in headless Chromium in both languages, with and without reduced motion, across a full night of cases, the shift report and the calculator: 0 violations.
 
 ## Maintenance
+- **Accounts database:** the schema is `supabase/migrations/0001_accounts.sql`. Run it once in the Supabase dashboard (SQL Editor → New query → paste → Run). It is one transaction and safe to run again. Its self-test stops it if the database would reject Chinese display names.
+- **Managing users:** Supabase dashboard → **Authentication → Users** lists every account (provider, created, last sign-in). Deleting a user there also deletes their profile and results (foreign keys cascade).
+- **Managing data:** **Table Editor → `profiles`** (display names) and **`results`** (one row per saved night). Players cannot edit or delete results themselves except by deleting their account.
+- **Removing an offensive display name:** Table Editor → `profiles` → find the row (filter `display_name`) → edit the cell to a neutral name such as `Night Nurse 0000` → Save. Or in the SQL Editor: `update public.profiles set display_name = 'Night Nurse 0000' where display_name = '<the name>';`. To stop the player from using the account again, delete the user in Authentication → Users (this removes their results too).
+- **Limits enforced by the database:** scores 0–1500 and consistent with the counts, 15 patients per night, at most 30 saved nights per player per 24 hours.
 - YouTube statistics for the demo video are recorded every 3 hours by `.github/workflows/youtube-stats.yml` into `data/youtube-stats.json` on the branch `stats` ([raw JSON](https://raw.githubusercontent.com/lqingsheng/grimm-triage/stats/data/youtube-stats.json)); the API key is the repository secret `YOUTUBE_API_KEY`.
 
 ## How Kiro was used

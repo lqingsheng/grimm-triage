@@ -6,7 +6,8 @@
 //   nothing. It never throws, so the app works exactly the same without it.
 // - Off for demo recordings (?seed= in the URL) and when the browser sends Do Not Track.
 // - Each event carries at most one small property, checked against an allow-list. Ages, vital
-//   signs, case names, free text and anything typed into the Triage Desk are never sent.
+//   signs, case names, free text and anything typed into the Triage Desk are never sent, and
+//   neither is any account data (user id, display name or email).
 //
 // Pure apart from reading `scope` (globalThis in the browser), so tests can pass a fake window.
 
@@ -18,6 +19,8 @@ export const EVENTS = {
   'under-triage': { key: 'step', valid: (v) => typeof v === 'string' && /^[A-D]$/.test(v) },
   'desk-submit': { key: 'level', valid: (v) => typeof v === 'string' && /^[1-5]P?$/.test(v) },
   'lang-switch': { key: 'lang', valid: (v) => LANGS.includes(v) },
+  // Optional accounts (task 22): only which provider was used. Never a user id, name or email.
+  'sign-in': { key: 'provider', valid: (v) => v === 'google' || v === 'github' },
 };
 
 // Triage Desk level as sent: "2", or "2P" when the result is provisional (missing vitals).

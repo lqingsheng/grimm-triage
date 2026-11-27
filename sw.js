@@ -7,7 +7,7 @@
 // lists every file in src/.
 
 const CACHE_PREFIX = 'grimm-triage-';
-const CACHE_VERSION = 'v9';
+const CACHE_VERSION = 'v10';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -21,9 +21,12 @@ const PRECACHE_URLS = [
   'icons/icon-512.png',
   'icons/maskable-512.png',
   'icons/apple-touch-icon.png',
+  'src/accounts.js',
+  'src/accountview.js',
   'src/analytics.js',
   'src/app.js',
   'src/cases.js',
+  'src/config.js',
   'src/deskhelp.js',
   'src/haunt.js',
   'src/i18n.js',
@@ -33,6 +36,7 @@ const PRECACHE_URLS = [
   'src/shift.js',
   'src/storylines.js',
   'src/sound.js',
+  'src/supabase.js',
   'src/triage.js',
 ];
 
@@ -58,9 +62,12 @@ self.addEventListener('activate', (event) => {
 });
 
 // Cache first for this app's own files; anything not precached goes to the network and a
-// successful same-origin response is added to the cache. Cross-origin requests (the Umami
-// statistics script and its beacons) are never handled or cached, so blocking them changes nothing. Page navigations fall back to the cached
-// index.html, so a reload while offline still opens the game.
+// successful same-origin response is added to the cache. Cross-origin requests are never handled
+// or cached: the Umami statistics script and its beacons, and every Supabase request (sign-in,
+// tokens, saved results, progress, leaderboard; task 22), so tokens and account data never land
+// in the cache and blocking them changes nothing. Page navigations fall back to the cached
+// index.html, so a reload while offline still opens the game (including the ?code= return from
+// sign-in, which is matched with ignoreSearch).
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;

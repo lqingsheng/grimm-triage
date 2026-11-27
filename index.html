@@ -20,6 +20,8 @@
   <div class="vignette" aria-hidden="true"></div>
   <header>
     <div class="tools">
+      <!-- Optional accounts (task 22): filled and shown by src/app.js only when src/config.js is set. -->
+      <span id="accountSlot" class="account-slot" data-account-feature hidden></span>
       <button type="button" id="soundToggle" class="sound-toggle" aria-pressed="false" data-i18n="sound.toggle">Sound effects</button>
       <div class="lang-toggle" role="group" aria-label="Language" data-i18n-aria="lang.label">
         <button type="button" data-lang="en" lang="en" aria-pressed="true">English</button>
@@ -27,10 +29,13 @@
       </div>
     </div>
     <h1><span aria-hidden="true">🕯️</span> <span class="h1-title" data-i18n="header.title">St. Grimm's ER</span> <span class="h1-sub" data-i18n="header.subtitle">Night Shift</span></h1>
+    <p id="accountNotice" class="account-notice" role="status" data-account-feature hidden></p>
     <p class="tag" data-i18n="header.tag">Learn real emergency triage by sorting monsters. The costume is fake. The logic is real.</p>
     <nav aria-label="Mode" data-i18n-aria="nav.label">
       <button type="button" data-mode="game" class="active" aria-pressed="true" aria-controls="game" data-i18n="nav.game">Night Shift (game)</button>
       <button type="button" data-mode="calc" aria-pressed="false" aria-controls="calc" data-i18n="nav.calc">Triage Desk (calculator)</button>
+      <button type="button" data-mode="progress" aria-pressed="false" aria-controls="progress" data-i18n="nav.progress" data-account-feature hidden>Progress</button>
+      <button type="button" data-mode="board" aria-pressed="false" aria-controls="board" data-i18n="nav.board" data-account-feature hidden>Leaderboard</button>
     </nav>
   </header>
 
@@ -119,12 +124,18 @@
       </form>
       <div id="calcResult" class="feedback" role="status" aria-live="polite" aria-label="Triage result" data-i18n-aria="calc.result"></div>
     </section>
+
+    <section id="progress" class="panel account-panel" aria-label="Your progress" data-i18n-aria="section.progress" hidden></section>
+    <section id="board" class="panel account-panel" aria-label="Leaderboard" data-i18n-aria="section.board" hidden></section>
   </main>
+
+  <dialog id="accountDialog" class="account-dialog" aria-labelledby="accountDialogTitle"></dialog>
 
   <footer>
     <span data-i18n="footer.disclaimer">Educational demo only. Not a medical device. Never use for real patient care.</span>
     <span data-i18n="footer.basis">Based on the logic of the Emergency Severity Index (ESI) v4.</span>
     <span data-i18n="footer.analytics">Anonymous, cookie-free visit statistics (Umami).</span>
+    <span data-i18n="footer.accounts" data-account-feature hidden>Signing in is optional. The game stores only your display name and game results; Supabase Auth keeps the sign-in record from Google or GitHub (account id, email address, name), which the game never shows or shares.</span>
   </footer>
   <script type="module" src="src/app.js"></script>
   <script>
