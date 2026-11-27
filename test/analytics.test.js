@@ -14,7 +14,7 @@ const html = read('index.html');
 const app = read('src/app.js');
 
 const UMAMI_TAG = '<script defer src="https://cloud.umami.is/script.js" data-website-id="6b8fea6f-a40a-4285-90b8-f6de1798fdfd" data-domains="grimm-triage.vercel.app" data-do-not-track="true"></script>';
-const ALLOWED = { 'night-complete': 'score', 'under-triage': 'step', 'desk-submit': 'level', 'lang-switch': 'lang' };
+const ALLOWED = { 'night-complete': 'score', 'under-triage': 'step', 'desk-submit': 'level', 'lang-switch': 'lang', 'sign-in': 'provider' };
 
 // A fake browser window that records what reaches umami.track.
 function fakeWindow({ search = '', doNotTrack = null, umami = true, throws = false } = {}) {
@@ -79,13 +79,13 @@ test('track() never throws, even when umami.track throws or the scope is hostile
 
 // ---- payloads ----
 
-test('the event list is exactly the four documented events, one property each', () => {
+test('the event list is exactly the five documented events, one property each', () => {
   assert.deepEqual(Object.fromEntries(Object.entries(EVENTS).map(([name, e]) => [name, e.key])), ALLOWED);
 });
 
 test('payloads contain only the allowed key; clinical fields and extra props are dropped', () => {
   const clinical = { ageYears: 45, hr: 130, rr: 30, sbp: 80, spo2: 88, tempC: 39.4, pain: 8, name: 'The Sandman', story: 'free text', avpu: 'V' };
-  const valid = { 'night-complete': { score: 1150 }, 'under-triage': { step: 'D' }, 'desk-submit': { level: '2P' }, 'lang-switch': { lang: 'zh-CN' } };
+  const valid = { 'night-complete': { score: 1150 }, 'under-triage': { step: 'D' }, 'desk-submit': { level: '2P' }, 'lang-switch': { lang: 'zh-CN' }, 'sign-in': { provider: 'github' } };
   for (const [name, props] of Object.entries(valid)) {
     const { scope, calls } = fakeWindow();
     assert.equal(track(name, { ...clinical, ...props }, scope), true, name);
@@ -110,6 +110,11 @@ test('unknown events and invalid values are not sent at all', () => {
     ['desk-submit', { level: '2 HR 130' }],
     ['lang-switch', { lang: 'fr' }],
     ['lang-switch', { lang: 'zh-CN; age=45' }],
+    ['sign-in', { provider: 'apple' }],
+    ['sign-in', { provider: 'email' }],
+    ['sign-in', { provider: 'b6a7c3f0-1234-4cde-9abc-0123456789ab' }],
+    ['sign-in', { provider: 'Night Nurse 4821' }],
+    ['sign-in', {}],
   ];
   for (const [name, props] of rejected) {
     const { scope, calls } = fakeWindow();
@@ -133,7 +138,7 @@ test('desk level is the computed ESI level, with a P suffix only when provisiona
 
 // ---- call sites in src/app.js ----
 
-test('src/app.js sends only the four events, each with its one allowed property', () => {
+test('src/app.js sends only the five events, each with its one allowed property', () => {
   const calls = [...app.matchAll(/\btrack\(\s*'([^']+)'\s*,\s*\{([^}]*)\}\s*\)/g)];
   assert.equal([...app.matchAll(/\btrack\(/g)].length, calls.length, 'every track() call uses a literal event name and object');
   assert.deepEqual(calls.map((m) => m[1]).sort(), Object.keys(ALLOWED).sort(), 'each event is sent from exactly one place');
@@ -143,6 +148,8 @@ test('src/app.js sends only the four events, each with its one allowed property'
   }
   assert.match(app, /track\('desk-submit', \{ level: deskLevel\(calc\.result\) \}\)/, 'desk-submit sends only the computed level');
   assert.doesNotMatch(app, /umami/, 'app.js goes through src/analytics.js, never window.umami directly');
+  // Task 22: the sign-in event carries only the provider from the redirect, never account data.
+  assert.match(app, /track\('sign-in', \{ provider: res\.signIn\.provider \}\)/);
 });
 
 // ---- index.html ----
@@ -164,10 +171,17 @@ test('index.html loads no other third-party script or resource', () => {
   assert.doesNotMatch(html, /\bimport\s*\(\s*['"]https?:|@import\s+url\(\s*['"]?https?:/i);
 });
 
+// The one exception is src/supabase.js (task 22), which calls only the configured Supabase project
+// through its injected fetch; test/accounts.test.js checks every URL it requests.
 test('no file in src/ injects a script or calls another origin', () => {
   for (const file of readdirSync(new URL('src/', root))) {
     const code = read(`src/${file}`);
     assert.doesNotMatch(code, /createElement\(\s*['"]script['"]\s*\)/, `${file} injects a script`);
+    if (file === 'supabase.js') {
+      assert.doesNotMatch(code, /\b(?:sendBeacon|XMLHttpRequest|WebSocket|EventSource)\s*\(/, `${file} uses another transport`);
+      assert.doesNotMatch(code, /https?:\/\//, `${file} must not hard-code an origin; it uses config.url`);
+      continue;
+    }
     assert.doesNotMatch(code, /\b(?:fetch|sendBeacon|XMLHttpRequest|WebSocket|EventSource)\s*\(/, `${file} makes a network request`);
     assert.doesNotMatch(code, /\bimport\s*\(?\s*['"]https?:/, `${file} imports from another origin`);
   }
@@ -193,7 +207,7 @@ test('the service worker never handles or caches the Umami script', async () => 
     }
   }
   assert.deepEqual(opened, []);
-  assert.equal(vm.runInContext('CACHE_VERSION', context), 'v9'); // v8 in task 19, v9 in task 21
+  assert.equal(vm.runInContext('CACHE_VERSION', context), 'v10'); // v8 in task 19, v9 in task 21, v10 in task 22
   assert.ok(!vm.runInContext('PRECACHE_URLS', context).some((u) => /umami|https?:/.test(u)));
 });
 

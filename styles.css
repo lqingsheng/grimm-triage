@@ -169,6 +169,49 @@ input, select { font: inherit; background: #00000066; color: var(--ink); border:
 }
 footer { color: var(--muted); font-size: .85rem; text-align: center; }
 
+/* Optional accounts (task 22): header button, dialogs, save line, Progress and Leaderboard.
+   Hidden unless src/config.js is set. Static: no animation or transition. Text uses --ink, --muted,
+   --ecto and --candle on --btn-bg, all AA (test/a11y.test.js); the danger button is ink on blood. */
+.account-slot { display: flex; }
+.account-btn { padding: .3rem .75rem; font-size: .9rem; max-width: 16rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-notice { margin: .4rem 0 0; color: var(--candle); font-size: .9rem; }
+.account-dialog { width: min(28rem, calc(100vw - 2rem)); max-height: calc(100vh - 2rem); overflow: auto; padding: 1rem 1.25rem;
+  background: var(--btn-bg); color: var(--ink); border: 1px solid #ffffff33; border-radius: 14px; overflow-wrap: anywhere; }
+.account-dialog::backdrop { background: #0b0a10d9; }
+.account-dialog h2 { margin: .2rem 0 .6rem; color: var(--pumpkin); font-size: 1.25rem; }
+.account-dialog h3 { margin: .4rem 0; color: var(--ecto); font-size: 1rem; }
+.account-dialog label { color: var(--ink); }
+.account-dialog input { width: 100%; }
+.provider-list { display: grid; gap: .5rem; margin: .75rem 0; }
+.provider { min-height: 44px; text-align: left; }
+.account-note { color: var(--muted); font-size: .9rem; margin: .4rem 0; }
+.account-msg { margin: .5rem 0; padding: .4rem .6rem; border: 1px solid var(--ecto); border-radius: 8px; color: var(--ink); }
+.account-msg.error { border-color: var(--pumpkin); border-left-width: 4px; }
+.name-form { display: grid; gap: .4rem; margin: .5rem 0 1rem; }
+.name-form button { justify-self: start; }
+.account-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-items: flex-start; }
+.account-actions .danger-zone { flex-basis: 100%; padding: .5rem .75rem; border: 1px solid var(--l1-line); border-radius: 10px; }
+button.danger { background: var(--blood); border-color: var(--blood); color: var(--ink); }
+button.danger-outline { margin-top: 0; border-color: var(--l1-line); color: var(--ink); }
+.dialog-close { display: block; margin-top: 1rem; }
+.save-status { margin: .25rem 0 .75rem; color: var(--muted); }
+.save-status.saved { color: var(--ecto); }
+.save-status.queued, .save-status.rejected { color: var(--candle); }
+.account-panel h2 { color: var(--pumpkin); margin: .25rem 0 .75rem; }
+.account-panel h3 { color: var(--ecto); margin: 1rem 0 .4rem; }
+.sparkline { display: block; width: 100%; max-width: 360px; height: auto; }
+.sparkline polyline { fill: none; stroke: var(--ecto); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.sparkline circle { fill: var(--candle); }
+.sparkline .axis { stroke: var(--muted); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.board-wrap { overflow-x: auto; }
+.board-table { width: 100%; border-collapse: collapse; }
+.board-table caption { text-align: left; color: var(--muted); padding-bottom: .4rem; }
+.board-table th, .board-table td { border-bottom: 1px solid #ffffff1a; padding: .35rem .5rem; text-align: left; }
+.board-table thead th { color: var(--ecto); }
+.board-table tbody th { font-weight: normal; overflow-wrap: anywhere; }
+.board-table tr.me { background: #00000055; box-shadow: inset 4px 0 0 var(--candle); }
+.board-table .you, .board-me { color: var(--candle); font-weight: bold; }
+
 /* ---- Haunting effects (tasks 7 and 13) ----
    app.js adds .fx-under or .fx-correct to #game after an answer and removes it on the next case;
    .haunted on <body> drives the full-screen vignette. Everything below is decoration (aria-hidden).

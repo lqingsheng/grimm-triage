@@ -9,4 +9,5 @@ inclusion: always
 - Two modes: **Night Shift** (game: triage monster cases, score, explanation) and **Triage Desk** (calculator: enter vitals, get level + reasons).
 - Every screen shows the disclaimer: educational only, not a medical device.
 - Audience language: English UI first; Chinese (zh-CN) is a planned toggle.
-- Analytics (Umami, task 19) must stay cookie-free, anonymous and optional (the app works the same when it is blocked or offline), and must never carry clinical inputs: no ages, vital signs, case names, free text or anything typed into the Triage Desk. Send events only through `src/analytics.js`, at most one allow-listed property each.
+- Accounts (task 22) are optional: never block play or nag guests. Save only the six result fields (score, correct, under, over, storyline, time), never cases, vitals or free text, and never seeded nights. Show display names, never emails. Every table has row level security.
+- Analytics (Umami, task 19) must stay cookie-free, anonymous and optional (the app works the same when it is blocked or offline), and must never carry clinical inputs: no ages, vital signs, case names, free text, anything typed into the Triage Desk, or any account data (user id, display name, email). Send events only through `src/analytics.js`, at most one allow-listed property each.

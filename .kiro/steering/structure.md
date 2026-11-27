@@ -16,11 +16,16 @@ inclusion: always
 - `src/haunt.js` – pure layout data for the under-triage effect: `DRIPS`, `stainLayout(count)`, markup helpers
 - `src/sound.js` – optional Web Audio heartbeat + flatline (`playHaunt(ctx)`), off by default; no audio files
 - `src/analytics.js` – optional, cookie-free Umami events: `track(name, props)` with an allow-list of four events, one property each; no-op without `window.umami`, with `?seed=` or Do Not Track
+- `src/config.js` – public Supabase URL and publishable key (task 22); empty values hide every account feature. `supabaseConfig(override)`: the override is for tests only
+- `src/supabase.js` – the only module that calls `fetch`: Supabase Auth (OAuth + PKCE, session, refresh) and REST, with injected fetch/storage/clock
+- `src/accounts.js` – display-name rule, nicknames, result payload, retry queue, progress and leaderboard models, and the account service (no DOM)
+- `src/accountview.js` – pure markup for the account button, dialogs, save line, Progress and Leaderboard (escapes display names)
 - `src/app.js` – DOM wiring only
 - `manifest.webmanifest`, `icons/` – PWA manifest and original icon set (SVG + PNG)
 - `sw.js` – service worker: versioned precache of the shell and every `src/` file (bump `CACHE_VERSION` when any precached file changes)
 - `scripts/record-demo.mjs` – dev-only Playwright demo recorder (`npm run demo:record`); its pure helpers live in `scripts/demo-helpers.mjs`. Never imported by the app or `sw.js`
 - `scripts/youtube-stats.mjs` – run by `.github/workflows/youtube-stats.yml` every 3 hours: appends the demo video's YouTube statistics to `data/youtube-stats.json` on the orphan branch `stats` (never `main`); pure helpers in `scripts/youtube-stats-helpers.mjs`. The key comes only from the `YOUTUBE_API_KEY` secret
 - `vercel.json` – only turns off Vercel deploys of the `stats` branch
+- `supabase/migrations/0001_accounts.sql` – accounts schema (RLS, checks, functions); run by hand in the Supabase SQL editor, never from the app
 - `test/*.test.js` – unit and property tests
 - `.kiro/specs/haunted-er-triage/` – requirements, design, tasks
