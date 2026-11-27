@@ -193,7 +193,7 @@ test('the service worker never handles or caches the Umami script', async () => 
     }
   }
   assert.deepEqual(opened, []);
-  assert.equal(vm.runInContext('CACHE_VERSION', context), 'v8');
+  assert.equal(vm.runInContext('CACHE_VERSION', context), 'v9'); // v8 in task 19, v9 in task 21
   assert.ok(!vm.runInContext('PRECACHE_URLS', context).some((u) => /umami|https?:/.test(u)));
 });
 

@@ -9,6 +9,7 @@ import { planNight, parseLastNight, seedFromSearch, mulberry32, LAST_NIGHT_KEY }
 import { SOUND_KEY, soundOnFrom, playHaunt } from './sound.js';
 import { t, levelName, caseText, translateReason, translateError, normalizeLang, STORAGE_KEY, DEFAULT_LANG } from './i18n.js';
 import { track, deskLevel } from './analytics.js';
+import { storylineBadgeHtml, storylineReportHtml, BADGE_ID as STORYLINE_BADGE_ID } from './storylines.js';
 
 const $ = (s) => document.querySelector(s);
 
@@ -182,8 +183,13 @@ function renderCaseCard() {
   $('#caseNo').textContent = tr('game.caseNo', { n: idx + 1, total: nightCases.length });
   const svg = portraitSvg(c.id, lang);
   const art = svg ? svg + eyeGlowSvg(c.id) : `<span class="emoji" aria-hidden="true">${c.emoji}</span>`;
+  // The later patient of a storyline (task 21) carries a small static badge naming the earlier one;
+  // the card's description points at it so screen readers announce the link with the patient.
+  const link = storylineBadgeHtml(nightCases, idx, lang);
   $('#caseCard').innerHTML = `<div class="card-head"><div class="portrait">${art}</div>
-    <div class="who" id="caseName">${text.name}</div></div><p>${text.story}</p>${vitalsHtml(c.patient)}`;
+    <div class="who" id="caseName">${text.name}</div></div>${link}<p>${text.story}</p>${vitalsHtml(c.patient)}`;
+  if (link) $('#caseCard').setAttribute('aria-describedby', STORYLINE_BADGE_ID);
+  else $('#caseCard').removeAttribute('aria-describedby');
 }
 
 function renderFeedback() {
@@ -282,6 +288,7 @@ function renderReport() {
     ${r.missed.length
       ? `<h3>${tr('report.missed')}</h3><ul class="missed-list">${r.missed.map(missedHtml).join('')}</ul>`
       : `<p>${tr('report.flawless')}</p>`}
+    ${storylineReportHtml(answers, lang)}
     ${lessonHtml({ tr, badge, missed, open })}
     <button id="newNight" class="ghost">${tr('report.newNight')}</button>`;
   report.hidden = false;

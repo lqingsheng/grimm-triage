@@ -748,6 +748,138 @@ export const PORTRAITS = {
       <path d="M29 42q3 1.5 6 0" stroke="${INK}" stroke-width="1.2" fill="none"/>
       <circle cx="12" cy="50" r="1.5" fill="#7cc7ff"/><circle cx="52" cy="54" r="1.2" fill="#7cc7ff"/><circle cx="48" cy="12" r="1" fill="#7cc7ff"/>`,
   },
+
+  // ---------------- Storylines (task 21) ----------------
+  'werewolf-brawl-bite': {
+    label: 'Wilfred the Werewolf: a brown werewolf with apologetic eyebrows and a bandaged forearm',
+    labelZh: '狼人威尔弗雷德：一只棕色狼人，眉毛带着歉意，前臂缠着绷带',
+    eyes: [[25, 30], [39, 30]],
+    art: `<path d="M14 20l6-14 8 10h8l8-10 6 14v14a18 18 0 0 1-36 0z" fill="#8a6a4a"/>
+      <ellipse cx="32" cy="42" rx="9" ry="7" fill="#c9a888"/>
+      <path d="M21 27l7-3M43 27l-7-3" stroke="${INK}" stroke-width="1.8" stroke-linecap="round"/>
+      <circle cx="25" cy="30" r="2.5" fill="${INK}"/><circle cx="39" cy="30" r="2.5" fill="${INK}"/>
+      <circle cx="32" cy="39" r="2" fill="${INK}"/>
+      <path d="M29 45q3 2 6 0" stroke="${INK}" stroke-width="1.5" fill="none"/>
+      <rect x="8" y="53" width="48" height="8" rx="3" fill="#efe9dc"/>
+      <path d="M18 55v4M30 55v4M42 55v4" stroke="#b3122e" stroke-width="1.5"/>`,
+  },
+  'vampire-stake-wound': {
+    label: 'Sir Mortimer Fang: a pale, sweating vampire in a white cravat with a wooden stake in his chest',
+    labelZh: '莫蒂默·獠牙爵士：脸色苍白、满头冷汗的吸血鬼，系着白色领巾，胸口插着一根木桩',
+    eyes: [[26, 30], [38, 30]],
+    art: `<path d="M10 64q4-14 22-14t22 14z" fill="#2a2030"/>
+      <path d="M28 50l4 6 4-6z" fill="#efe9dc"/>
+      <path d="M18 26a14 16 0 0 1 28 0v8a14 14 0 0 1-28 0z" fill="#e6e0ec"/>
+      <path d="M18 26q0-14 14-14t14 14l-14-6z" fill="${INK}"/>
+      <circle cx="26" cy="30" r="2" fill="${DUSK}"/><circle cx="38" cy="30" r="2" fill="${DUSK}"/>
+      <path d="M27 41h10" stroke="${DUSK}" stroke-width="1.5"/>
+      <path d="M29 41l1.5 3 1.5-3zM33 41l1.5 3 1.5-3z" fill="#f4f0e0"/>
+      <path d="M47 24q2 3 0 5q-2-2 0-5z" fill="#7cc7ff"/>
+      <rect x="12" y="52" width="18" height="4" rx="1" fill="#8a5a2a" transform="rotate(-30 21 54)"/>`,
+  },
+  'renfield-blister': {
+    label: 'Mr Renfield: a weary, balding man in round spectacles carrying a brown paper parcel',
+    labelZh: '伦菲尔德先生：一位疲惫、头发稀疏、戴圆眼镜的男人，抱着一个牛皮纸包裹',
+    eyes: [[26, 31], [38, 31]],
+    art: `<ellipse cx="32" cy="32" rx="14" ry="17" fill="#e3cfb4"/>
+      <path d="M18 26q-3-6 2-10M46 26q3-6-2-10" stroke="#8a8a8a" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="26" cy="31" r="4" fill="none" stroke="${INK}" stroke-width="1.2"/><circle cx="38" cy="31" r="4" fill="none" stroke="${INK}" stroke-width="1.2"/>
+      <path d="M30 31h4" stroke="${INK}" stroke-width="1.2"/>
+      <circle cx="26" cy="31" r="1.4" fill="${INK}"/><circle cx="38" cy="31" r="1.4" fill="${INK}"/>
+      <path d="M23 37q3 1.5 6 0M35 37q3 1.5 6 0" stroke="#b49a7a" stroke-width="1.2" fill="none"/>
+      <path d="M28 43q4-2 8 0" stroke="${INK}" stroke-width="1.5" fill="none"/>
+      <rect x="40" y="48" width="16" height="12" rx="1" fill="#a07a4a"/><path d="M40 54h16M48 48v12" stroke="#5a3e20" stroke-width="1.2"/>`,
+  },
+  'dracula-ludwigs': {
+    label: 'Count Dracula: an old, pale nobleman with white hair and a long white moustache, his jaw swollen, holding a handkerchief',
+    labelZh: '德古拉伯爵：一位苍白的老贵族，白发、留着长长的白胡子，下颌肿胀，手拿一块手帕',
+    eyes: [[26, 29], [38, 29]],
+    art: `<path d="M17 28a15 15 0 0 1 30 0v6q0 16-15 18t-15-18z" fill="#e8e2ea"/>
+      <path d="M17 27q2-13 15-13t15 13q-6-6-15-6t-15 6z" fill="#d9d4e3"/>
+      <path d="M22 25l7 1M42 25l-7 1" stroke="#9a92a8" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="26" cy="29" r="2" fill="#7a1f2e"/><circle cx="38" cy="29" r="2" fill="#7a1f2e"/>
+      <path d="M32 30l-2 7h3" stroke="${DUSK}" stroke-width="1.2" fill="none"/>
+      <ellipse cx="32" cy="50" rx="13" ry="6" fill="#d98a8a"/>
+      <path d="M32 39q-6 0-12 6q6-2 12-3q6 1 12 3q-6-6-12-6z" fill="#f4f0e0"/>
+      <path d="M30 45q1 3 0 5q-1-2 0-5z" fill="#7cc7ff"/>
+      <path d="M44 50l10 4-4 8-9-4z" fill="#efe9dc"/>`,
+  },
+  'witch-cauldron-co': {
+    label: 'Hepzibah Mossbottom: a pale green witch in a pointed hat, looking dizzy, with grey fumes rising beside her',
+    labelZh: '赫普兹巴·苔底：戴尖顶帽的淡绿色女巫，一脸头晕，身旁升起灰色烟雾',
+    eyes: [[27, 35], [37, 35]],
+    art: `<circle cx="32" cy="36" r="13" fill="#b9cf9a"/>
+      <path d="M18 25l12-21 8 4-4 4 4 13z" fill="#2a2030"/>
+      <path d="M10 25h44l-4 3H14z" fill="${INK}"/>
+      <circle cx="27" cy="35" r="2" fill="${INK}"/><circle cx="37" cy="35" r="2" fill="${INK}"/>
+      <path d="M28 43q4-2 8 0" stroke="${INK}" stroke-width="1.5" fill="none"/>
+      <path d="M48 34q2-2 4 0t4 0" stroke="#ffcf6b" stroke-width="1.5" fill="none"/>
+      <path d="M8 60q3-4 0-8t0-8M16 62q3-4 0-8" stroke="#9a92a8" stroke-width="1.5" fill="none" opacity=".8"/>`,
+  },
+  'apprentice-co-coma': {
+    label: 'Tobias the Apprentice: a young apprentice with brown hair and closed eyes, beside a lit candle',
+    labelZh: '学徒托比亚斯：一位棕发的年轻学徒，双眼紧闭，身旁点着一支蜡烛',
+    eyes: [[26, 34.5], [38, 34.5]],
+    art: `<circle cx="32" cy="34" r="15" fill="#e3cfb4"/>
+      <path d="M17 30q2-14 15-14t15 14q-8-5-15-5t-15 5z" fill="#6a4a2a"/>
+      <path d="M23 34q3 2 6 0M35 34q3 2 6 0" stroke="${DUSK}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <circle cx="32" cy="43" r="1.6" fill="${DUSK}"/>
+      <rect x="50" y="46" width="5" height="12" fill="#efe9dc"/>
+      <path d="M52.5 39q3 3 0 6q-3-3 0-6z" fill="#ffcf6b"/>`,
+  },
+  'poole-scald': {
+    label: 'Mrs Poole: a worried housekeeper in a white cap, with a bandaged hand and a cup of tea',
+    labelZh: '普尔太太：戴白色帽子、一脸担忧的管家，一只手缠着绷带，旁边一杯茶',
+    eyes: [[27, 32], [37, 32]],
+    art: `<circle cx="32" cy="32" r="14" fill="#efd9c0"/>
+      <path d="M18 29q1-6 6-8M46 29q-1-6-6-8" stroke="#7a6a5a" stroke-width="3" fill="none"/>
+      <path d="M16 26q4-14 16-14t16 14q-2-4-16-4t-16 4z" fill="#f4f0e0"/>
+      <path d="M24 28l5-1.5M40 28l-5-1.5" stroke="${INK}" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="27" cy="32" r="1.8" fill="${INK}"/><circle cx="37" cy="32" r="1.8" fill="${INK}"/>
+      <path d="M28 39q4 2.5 8 0" stroke="${INK}" stroke-width="1.5" fill="none"/>
+      <rect x="6" y="50" width="16" height="10" rx="4" fill="#efe9dc"/><circle cx="12" cy="55" r="1.5" fill="#e0707f"/>
+      <path d="M40 50h14v4a7 7 0 0 1-14 0z" fill="#c9d8f0"/>
+      <path d="M54 52q4 0 4 3t-4 3" stroke="#c9d8f0" stroke-width="2" fill="none"/>
+      <path d="M44 47q1-2 0-4M50 47q1-2 0-4" stroke="#9a92a8" stroke-width="1.2" fill="none"/>`,
+  },
+  'hyde-tincture': {
+    label: 'Mr Hyde: a flushed, scowling man with wild dark hair, huge pupils and beads of sweat',
+    labelZh: '海德先生：满脸通红、怒目而视的男人，黑发凌乱，瞳孔巨大，满头汗珠',
+    eyes: [[26, 33], [38, 33]],
+    art: `<circle cx="32" cy="34" r="15" fill="#e0a890"/>
+      <path d="M16 30l-2-10 6 4 2-10 6 8 4-10 4 10 6-8 2 10 6-4-2 10q-8-6-16-6t-16 6z" fill="${INK}"/>
+      <circle cx="26" cy="33" r="4" fill="#f4f0e0"/><circle cx="38" cy="33" r="4" fill="#f4f0e0"/>
+      <circle cx="26" cy="33" r="3" fill="${INK}"/><circle cx="38" cy="33" r="3" fill="${INK}"/>
+      <path d="M21 27l9 3M43 27l-9 3" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/>
+      <rect x="25" y="41" width="14" height="4" fill="#f4f0e0" stroke="${INK}" stroke-width="1"/>
+      <path d="M14 38q2 3 0 5q-2-2 0-5zM50 36q2 3 0 5q-2-2 0-5zM47 22q2 3 0 5q-2-2 0-5z" fill="#7cc7ff"/>
+      <path d="M8 16q2-3 0-6M56 16q2-3 0-6" stroke="#ff8a1f" stroke-width="1.5" fill="none"/>`,
+  },
+  'ghost-twin-sweets': {
+    label: 'Peggy the Little Ghost: a small white sheet ghost with a pink bow, next to a wrapped sweet and a lollipop',
+    labelZh: '小幽灵佩吉：披着白床单、戴粉色蝴蝶结的小幽灵，旁边有一颗糖果和一根棒棒糖',
+    eyes: [[27, 31], [37, 31]],
+    art: `<path d="M18 58V30a14 14 0 0 1 28 0v28l-5-4-4 4-5-4-5 4-4-4z" fill="#f4f0e0"/>
+      <path d="M38 17l5-3v6zM38 17l-5-3v6z" fill="#ff9aa8"/>
+      <circle cx="27" cy="31" r="2.2" fill="${INK}"/><circle cx="37" cy="31" r="2.2" fill="${INK}"/>
+      <path d="M29 38q3 2 6 0" stroke="${INK}" stroke-width="1.5" fill="none"/>
+      <path d="M24 46q8 4 16 0" stroke="#d9d4e3" stroke-width="2" fill="none"/>
+      <rect x="4" y="48" width="8" height="5" rx="2" fill="#f2c230"/><path d="M4 50.5l-3-2v5zM12 50.5l3-2v5z" fill="#f2c230"/>
+      <path d="M54 55v6" stroke="#efe9dc" stroke-width="1.5"/><circle cx="54" cy="51" r="4" fill="#d9536b"/>`,
+  },
+  'ghost-twin-battery': {
+    label: 'Percy the Little Ghost: a small, smiling white sheet ghost with a blue bow, next to a shiny silver button battery',
+    labelZh: '小幽灵珀西：披着白床单、戴蓝色蝴蝶结、笑眯眯的小幽灵，旁边有一枚亮闪闪的银色纽扣电池',
+    eyes: [[27, 31], [37, 31]],
+    art: `<path d="M18 58V30a14 14 0 0 1 28 0v28l-5-4-4 4-5-4-5 4-4-4z" fill="#f4f0e0"/>
+      <path d="M26 17l5-3v6zM26 17l-5-3v6z" fill="#7cc7ff"/>
+      <circle cx="27" cy="31" r="2.2" fill="${INK}"/><circle cx="37" cy="31" r="2.2" fill="${INK}"/>
+      <path d="M27 37q5 4 10 0" stroke="${INK}" stroke-width="1.5" fill="none"/>
+      <circle cx="53" cy="51" r="6" fill="#c0c4cc" stroke="#6a6e78" stroke-width="1.5"/>
+      <circle cx="53" cy="51" r="3.5" fill="none" stroke="#9aa0a8" stroke-width="1"/>
+      <path d="M51 51h4M53 49v4" stroke="${DUSK}" stroke-width="1"/>
+      <path d="M58 39l1 2 2 1-2 1-1 2-1-2-2-1 2-1z" fill="#f2c230"/>`,
+  },
 };
 
 const escapeAttr = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');

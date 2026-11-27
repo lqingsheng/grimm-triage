@@ -1,8 +1,8 @@
 {
   "enabled": true,
   "name": "Review new monster cases",
-  "description": "When cases.js changes, check every case is clinically coherent and the level spread stays balanced.",
-  "version": "1",
-  "when": { "type": "fileEdited", "patterns": ["src/cases.js"] },
-  "then": { "type": "askAgent", "prompt": "For each case in src/cases.js, check that the story matches the vital signs, compute its level with the engine, and report the count per level. Flag any level with fewer than 3 cases and any story that would mislead a learner." }
+  "description": "When cases.js or storylines.js changes, check every case is clinically coherent, the level spread and storylines stay balanced, and the tone never mocks the illness.",
+  "version": "2",
+  "when": { "type": "fileEdited", "patterns": ["src/cases.js", "src/storylines.js"] },
+  "then": { "type": "askAgent", "prompt": "For each case in src/cases.js, check that the story matches the vital signs, compute its level with the engine, and report the count per level, separately for regular cases and storyline cases (flagged `storyline`). Flag any level with fewer than 12 regular cases and any story that would mislead a learner. Storylines (src/storylines.js): check that each has exactly 2 case ids, that both cases exist and carry its id in `storyline`, that every flagged case is listed in exactly one storyline, and that title and epilogue exist in English and Chinese. Report the storyline cases per level and flag a storyline whose two cases share a level, a level with more than 3 storyline cases, or a storyline whose later story does not make sense without the earlier patient. Tone: dry British humour in the characters and the narration only. Flag any line where the humour mocks the illness, the injury, mental illness or substance use, any teaching point that is not clinically accurate and serious, and any character that is not new or public domain (Stoker, Stevenson, generic werewolves, witches, ghosts), any film likeness, film quote or trademarked design. Check that the Chinese text reads naturally rather than word for word." }
 }

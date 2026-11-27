@@ -114,6 +114,28 @@ export const STRINGS = {
   },
   'report.newNight': { en: 'Start a new night 🌙', 'zh-CN': '开始新的夜班 🌙' },
 
+  // ---- storylines (task 21, src/storylines.js): titles and epilogues live in STORYLINES ----
+  'storyline.badge': {
+    en: 'Storyline “{title}”: same incident as patient {n}',
+    'zh-CN': '故事线「{title}」：与第 {n} 位患者来自同一事件',
+  },
+  'storyline.report.heading': { en: 'Storyline: {title}', 'zh-CN': '故事线：{title}' },
+  'storyline.report.patient': { en: 'Patient {n}: {name}', 'zh-CN': '第 {n} 位患者：{name}' },
+  'storyline.report.underTag': { en: '🩸 under-triaged', 'zh-CN': '🩸 分诊不足' },
+  'storyline.report.anyUnder': {
+    en: '🩸 A patient in this storyline was under-triaged.',
+    'zh-CN': '🩸 这条故事线里有患者被分诊不足。',
+  },
+  'storyline.report.noneUnder': {
+    en: '✅ No patient in this storyline was under-triaged.',
+    'zh-CN': '✅ 这条故事线里没有患者被分诊不足。',
+  },
+  'storyline.report.epilogue': { en: 'Epilogue:', 'zh-CN': '尾声：' },
+  'storyline.report.rule': {
+    en: 'Triage the patient in front of you, not the story. One incident can produce very different acuity, and a cluster of patients can reveal a hidden cause.',
+    'zh-CN': '分诊眼前的患者，而不是背后的故事。同一起事件可能带来轻重悬殊的病情，而一批相似的患者也可能揭示隐藏的病因。',
+  },
+
   // ---- "ESI v4 in 2 minutes" lesson in the shift report (task 15, src/lesson.js) ----
   // Written in our own words as a summary of the ESI Implementation Handbook v4; no handbook text.
   'lesson.summary': { en: 'Learn ESI v4 in 2 minutes', 'zh-CN': '2 分钟学会 ESI 第 4 版' },

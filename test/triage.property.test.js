@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 import fc from 'fast-check';
 import { triage, OPTIONAL_VITALS } from '../src/triage.js';
 import { CASES } from '../src/cases.js';
-import { INTEGER_VITALS } from '../src/night.js';
+import { INTEGER_VITALS, drawNight, mulberry32, NIGHT_SIZE, PER_LEVEL, LEVELS, STORYLINE_GAP } from '../src/night.js';
+import { STORYLINES } from '../src/storylines.js';
 
 const patientArb = fc.record({
   ageYears: fc.integer({ min: 9, max: 110 }),
@@ -157,3 +158,36 @@ test('P9b: with vitals missing, P1 still holds, missing is listed exactly, and o
   }), { numRuns: 1000 });
 });
 
+// ---- P10: storylines in the nightly draw (task 21) ----
+// For any seed and any list of last night's ids (including storyline cases), a drawn night has 15
+// different patients, exactly 3 per ESI level, and for every storyline its cases are either both
+// present, in order, with 2 to 5 other patients between them and never as patient 1, or both
+// absent. So a storyline case is never drawn alone. A storyline with a case in last night's list
+// is not drawn.
+const ALL_IDS = CASES.map((c) => c.id);
+const STORYLINE_IDS = STORYLINES.flatMap((s) => s.cases);
+const lastNightArb = fc.oneof(
+  fc.array(fc.constantFrom(...ALL_IDS), { maxLength: 30 }),
+  fc.array(fc.constantFrom(...STORYLINE_IDS), { maxLength: 6 }),
+  fc.constant([]),
+);
+
+test('P10: any seed and last night give 15 unique patients, 3 per level, and storylines whole, in order, 2 to 5 apart', () => {
+  fc.assert(fc.property(fc.integer({ min: 0, max: 0xffffffff }), lastNightArb, (seed, avoid) => {
+    const night = drawNight(CASES, { random: mulberry32(seed), avoid });
+    const ids = night.map((c) => c.id);
+    if (night.length !== NIGHT_SIZE || new Set(ids).size !== NIGHT_SIZE) return false;
+    for (const l of LEVELS) if (night.filter((c) => c.expectedLevel === l).length !== PER_LEVEL) return false;
+    let drawn = 0;
+    for (const s of STORYLINES) {
+      const [i, j] = s.cases.map((id) => ids.indexOf(id));
+      if (i === -1 && j === -1) continue;
+      if (i === -1 || j === -1) return false; // drawn alone
+      const between = j - i - 1;
+      if (i < 1 || between < STORYLINE_GAP[0] || between > STORYLINE_GAP[1]) return false;
+      if (s.cases.some((id) => avoid.includes(id))) return false; // used last night
+      drawn += 1;
+    }
+    return drawn <= 1 && night.filter((c) => c.storyline).length === drawn * 2;
+  }), { numRuns: 1000 });
+});

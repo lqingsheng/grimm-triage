@@ -8,13 +8,20 @@ import { RANGED_VITALS, INTEGER_VITALS, splitOpening } from '../src/night.js';
 
 const LEVELS = [1, 2, 3, 4, 5];
 
-// 12 per level, plus Poe the Raven, moved from ESI 3 to ESI 2 after clinical review.
+// Regular cases (drawn on their own): 12 per level, plus Poe the Raven, moved from ESI 3 to ESI 2
+// after clinical review. Storyline cases (task 21) only arrive in pairs and are counted apart.
 const PER_LEVEL_COUNT = { 1: 12, 2: 13, 3: 12, 4: 12, 5: 12 };
+const STORYLINE_PER_LEVEL = { 1: 3, 2: 3, 3: 0, 4: 2, 5: 2 };
 
-test('61 cases with the reviewed level spread (at least 12 per ESI level), unique ids', () => {
-  assert.equal(CASES.length, 61);
+test('71 cases: 61 regular with the reviewed level spread (at least 12 per ESI level) and 10 storyline cases, unique ids', () => {
+  assert.equal(CASES.length, 71);
   assert.equal(new Set(CASES.map((c) => c.id)).size, CASES.length);
-  for (const l of LEVELS) assert.equal(CASES.filter((c) => c.expectedLevel === l).length, PER_LEVEL_COUNT[l], `level ${l}`);
+  const regular = CASES.filter((c) => !c.storyline);
+  assert.equal(regular.length, 61);
+  for (const l of LEVELS) {
+    assert.equal(regular.filter((c) => c.expectedLevel === l).length, PER_LEVEL_COUNT[l], `level ${l}`);
+    assert.equal(CASES.filter((c) => c.storyline && c.expectedLevel === l).length, STORYLINE_PER_LEVEL[l], `storyline level ${l}`);
+  }
 });
 
 test('Poe the Raven (staggered paracetamol overdose) is high risk, ESI 2', () => {

@@ -128,6 +128,18 @@ input, select { font: inherit; background: #00000066; color: var(--ink); border:
 .step-tag { display: inline-block; margin-left: .35rem; padding: 0 .5rem; border: 1px solid var(--ecto); border-radius: 999px;
   color: var(--ecto); font-size: .85rem; white-space: nowrap; }
 
+/* Storylines (task 21). Static: no animation or transition. The badge text says the link in words,
+   so colour is never the only signal; --candle on --btn-bg is AA (test/a11y.test.js). */
+.storyline-badge { display: inline-block; margin: .6rem 0 0; padding: .15rem .6rem; border: 1px solid var(--candle);
+  border-radius: 999px; background: var(--btn-bg); color: var(--candle); font-size: .9rem; }
+/* Opaque like the lesson, so the haunting stains never sit under its text. */
+.storyline-report { margin: 1.25rem 0 .5rem; padding: .25rem 1rem .75rem; background: var(--btn-bg);
+  border: 1px solid #ffffff26; border-left: 4px solid var(--candle); border-radius: 12px; }
+.storyline-report h3 { margin-top: .6rem; }
+.storyline-patients { margin: .25rem 0; padding-left: 1.4rem; }
+.storyline-under { color: var(--l1-line); font-weight: bold; white-space: nowrap; }
+.storyline-rule { color: var(--muted); font-size: .9rem; }
+
 /* "ESI v4 in 2 minutes" (task 15). An opaque card inside .report (z-index 2, above the stains at 1),
    so the haunting stains never sit under or over its text. No animation or transition at all. */
 .lesson { margin: 1.25rem 0 .5rem; background: var(--btn-bg); border: 1px solid #ffffff26; border-radius: 12px; }
